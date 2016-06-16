@@ -23,7 +23,7 @@ class RepositoryEventListener
     /**
      * Register the listeners for the subscriber.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher $dispatcher
+     * @param \Illuminate\Contracts\Events\Dispatcher $dispatcher
      */
     public function subscribe(Dispatcher $dispatcher)
     {

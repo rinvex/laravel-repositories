@@ -32,7 +32,7 @@ interface RepositoryContract
     /**
      * Return the IoC container instance or any of it's services.
      *
-     * @param String $service
+     * @param string $service
      *
      * @return mixed
      */
@@ -93,6 +93,7 @@ interface RepositoryContract
      * @param array $data
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
+     *
      * @return mixed
      */
     public function retrieveModel($model = null, array $data = []);
@@ -107,7 +108,7 @@ interface RepositoryContract
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param  mixed  $relations
+     * @param mixed $relations
      *
      * @return $this
      */
@@ -116,8 +117,8 @@ interface RepositoryContract
     /**
      * Add an "order by" clause to the repository.
      *
-     * @param  string  $column
-     * @param  string  $direction
+     * @param string $column
+     * @param string $direction
      *
      * @return $this
      */
@@ -149,8 +150,8 @@ interface RepositoryContract
     /**
      * Find all entities.
      *
-     * @param  array $columns
-     * @param  array $with
+     * @param array $columns
+     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
@@ -159,13 +160,14 @@ interface RepositoryContract
     /**
      * Paginate all entities.
      *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param int      $perPage
+     * @param array    $columns
+     * @param string   $pageName
+     * @param int|null $page
      *
      * @throws \InvalidArgumentException
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
 
@@ -216,7 +218,7 @@ interface RepositoryContract
     /**
      * Find entity matching the given attributes or create it.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return mixed
      */
@@ -225,8 +227,8 @@ interface RepositoryContract
     /**
      * Update an entity with the given attributes.
      *
-     * @param  mixed $id
-     * @param  array $attributes
+     * @param mixed $id
+     * @param array $attributes
      *
      * @return array
      */
@@ -235,7 +237,7 @@ interface RepositoryContract
     /**
      * Delete an entity with the given id.
      *
-     * @param  mixed $id
+     * @param mixed $id
      *
      * @return array
      */
@@ -244,10 +246,11 @@ interface RepositoryContract
     /**
      * Register a new global scope.
      *
-     * @param  \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
-     * @param  \Closure|null                                       $implementation
+     * @param \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
+     * @param \Closure|null                                       $implementation
      *
      * @throws \InvalidArgumentException
+     *
      * @return mixed
      */
     public function addGlobalScope($scope, Closure $implementation = null);

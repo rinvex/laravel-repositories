@@ -27,6 +27,7 @@ class EloquentRepository extends BaseRepository
      * @param array $data
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
+     *
      * @return mixed
      */
     public function retrieveModel($model = null, array $data = [])
@@ -90,8 +91,8 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities.
      *
-     * @param  array $columns
-     * @param  array $with
+     * @param array $columns
+     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
@@ -107,13 +108,14 @@ class EloquentRepository extends BaseRepository
     /**
      * Paginate all entities.
      *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param int      $perPage
+     * @param array    $columns
+     * @param string   $pageName
+     * @param int|null $page
      *
      * @throws \InvalidArgumentException
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -217,7 +219,7 @@ class EloquentRepository extends BaseRepository
     /**
      * Find entity matching the given attributes or create it.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return mixed
      */
@@ -233,8 +235,8 @@ class EloquentRepository extends BaseRepository
     /**
      * Update an entity with the given attributes.
      *
-     * @param  mixed $id
-     * @param  array $attributes
+     * @param mixed $id
+     * @param array $attributes
      *
      * @return array
      */
@@ -261,7 +263,7 @@ class EloquentRepository extends BaseRepository
     /**
      * Delete an entity with the given id.
      *
-     * @param  mixed $id
+     * @param mixed $id
      *
      * @return array
      */
