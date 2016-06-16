@@ -108,7 +108,7 @@ class EloquentRepository extends BaseRepository
     /**
      * Paginate all entities.
      *
-     * @param int      $perPage
+     * @param int|null $perPage
      * @param array    $columns
      * @param string   $pageName
      * @param int|null $page

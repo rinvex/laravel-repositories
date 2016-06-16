@@ -26,8 +26,8 @@
     - [EloquentRepository](#eloquentrepository)
         - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
         - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
-        - [`setCacheStatus()`, `getCacheStatus()`](#setcachestatus-getcachestatus)
-        - [`setCacheClearStatus()`, `getCacheClearStatus()`](#setcacheclearstatus-getcacheclearstatus)
+        - [`enableCache()`, `isCacheEnabled()`](#enablecache-iscacheenabled)
+        - [`enableCacheClear()`, `isCacheClearEnabled()`](#enablecacheclear-iscacheclearenabled)
         - [`addGlobalScope()`, `withoutGlobalScopes()`](#addglobalscope-withoutglobalscopes)
         - [`retrieveModel()`](#retrievemodel)
         - [`forgetCache()`](#forgetcache)
@@ -277,26 +277,26 @@ $repository->setRepositoryId('rinvex.repository.entity');
 $repositoryId = $repository->getRepositoryId();
 ```
 
-#### `setCacheStatus()`, `getCacheStatus()`
+#### `enableCache()`, `isCacheEnabled()`
 
-The `setCacheStatus` method sets the repository cache status, while `getCacheStatus` returns it:
+The `enableCache` method enables repository cache, while `isCacheEnabled` determines it's state:
 ```php
-// Set the repository cache status
-$repository->setCacheStatus(true);
+// Enable repository cache
+$repository->enableCache(true);
 
-// Get the repository cache status
-$repository->getCacheStatus();
+// Determine if repository cache is enabled
+$repository->isCacheEnabled();
 ```
 
-#### `setCacheClearStatus()`, `getCacheClearStatus()`
+#### `enableCacheClear()`, `isCacheClearEnabled()`
 
-The `setCacheClearStatus` method sets the repository cache clear status, while `getCacheClearStatus` returns it:
+The `enableCacheClear` method enables repository cache clear, while `isCacheClearEnabled` determines it's state:
 ```php
-// Set the repository cache clear status
-$repository->setCacheClearStatus(true);
+// Enable repository cache clear
+$repository->enableCacheClear(true);
 
-// Get the repository cache clear status
-$repository->getCacheClearStatus();
+// Determine if repository cache clear is enabled
+$repository->isCacheClearEnabled();
 ```
 
 #### `addGlobalScope()`, `withoutGlobalScopes()`

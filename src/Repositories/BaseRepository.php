@@ -43,25 +43,25 @@ abstract class BaseRepository implements RepositoryContract
     protected $repositoryId;
 
     /**
-     * The repository cache status.
+     * Indicate if the repository cache is enabled.
      *
      * @var bool
      */
     protected $cacheEnabled = true;
 
     /**
-     * The repository cache clear status.
+     * Indicate if the repository cache clear is enabled.
      *
      * @var bool
      */
-    protected $cacheClear = true;
+    protected $cacheClearEnabled = true;
 
     /**
      * Execute given callback and cache result set.
      *
      * @param string   $class
      * @param string   $method
-     * @param string   $cacheKey
+     * @param string   $hash
      * @param \Closure $closure
      *
      * @return mixed
@@ -136,51 +136,51 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * Set the repository cache status.
+     * Enable repository cache.
      *
      * @param bool $status
      *
      * @return $this
      */
-    public function setCacheStatus($status)
+    public function enableCache($status = true)
     {
-        $this->cacheEnabled = (bool) $status;
+        $this->cacheEnabled = $status;
 
         return $this;
     }
 
     /**
-     * Get the repository cache status.
+     * Determine if repository cache is enabled.
      *
      * @return bool
      */
-    public function getCacheStatus()
+    public function isCacheEnabled()
     {
         return $this->cacheEnabled;
     }
 
     /**
-     * Set the repository cache clear status.
+     * Enable repository cache clear.
      *
      * @param bool $status
      *
      * @return $this
      */
-    public function setCacheClearStatus($status)
+    public function enableCacheClear($status = true)
     {
-        $this->cacheClear = (bool) $status;
+        $this->cacheClearEnabled = $status;
 
         return $this;
     }
 
     /**
-     * Get the repository cache clear status.
+     * Determine if repository cache clear is enabled.
      *
      * @return bool
      */
-    public function getCacheClearStatus()
+    public function isCacheClearEnabled()
     {
-        return $this->cacheClear;
+        return $this->cacheClearEnabled;
     }
 
     /**

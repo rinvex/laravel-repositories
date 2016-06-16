@@ -44,7 +44,7 @@ class RepositoryEventListener
     {
         $clearOn = $repository->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
-        if ($repository->getCacheClearStatus() && in_array('create', $clearOn)) {
+        if ($repository->isCacheClearEnabled() && in_array('create', $clearOn)) {
             $repository->forgetCache();
         }
     }
@@ -61,7 +61,7 @@ class RepositoryEventListener
     {
         $clearOn = $repository->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
-        if ($repository->getCacheClearStatus() && in_array('update', $clearOn)) {
+        if ($repository->isCacheClearEnabled() && in_array('update', $clearOn)) {
             $repository->forgetCache();
         }
     }
@@ -78,7 +78,7 @@ class RepositoryEventListener
     {
         $clearOn = $repository->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
-        if ($repository->getCacheClearStatus() && in_array('delete', $clearOn)) {
+        if ($repository->isCacheClearEnabled() && in_array('delete', $clearOn)) {
             $repository->forgetCache();
         }
     }

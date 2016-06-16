@@ -55,36 +55,36 @@ interface RepositoryContract
     public function getRepositoryId();
 
     /**
-     * Set the repository cache status.
+     * Enable repository cache.
      *
      * @param bool $status
      *
      * @return $this
      */
-    public function setCacheStatus($status);
+    public function enableCache($status = true);
 
     /**
-     * Get the repository cache status.
+     * Determine if repository cache is enabled.
      *
      * @return bool
      */
-    public function getCacheStatus();
+    public function isCacheEnabled();
 
     /**
-     * Set the repository cache clear status.
+     * Enable repository cache clear.
      *
      * @param bool $status
      *
      * @return $this
      */
-    public function setCacheClearStatus($status);
+    public function enableCacheClear($status);
 
     /**
-     * Get the repository cache clear status.
+     * Determine if repository cache clear is enabled.
      *
      * @return bool
      */
-    public function getCacheClearStatus();
+    public function isCacheClearEnabled();
 
     /**
      * Retrieve the repository model.
@@ -160,7 +160,7 @@ interface RepositoryContract
     /**
      * Paginate all entities.
      *
-     * @param int      $perPage
+     * @param int|null $perPage
      * @param array    $columns
      * @param string   $pageName
      * @param int|null $page
