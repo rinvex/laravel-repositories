@@ -1,0 +1,262 @@
+<?php
+
+/*
+ * NOTICE OF LICENSE
+ *
+ * Part of the Rinvex Repository Package.
+ *
+ * This source file is subject to The MIT License (MIT)
+ * that is bundled with this package in the LICENSE file.
+ *
+ * Package: Rinvex Repository Package
+ * License: The MIT License (MIT)
+ * Link:    https://rinvex.com
+ */
+
+namespace Rinvex\Repository\Contracts;
+
+use Closure;
+
+interface RepositoryContract
+{
+    /**
+     * Forget the repository cache.
+     *
+     * @return $this
+     */
+    public function forgetCache();
+
+    /**
+     * Retrieve the repository model.
+     *
+     * @param mixed $model
+     * @param array $data
+     *
+     * @throws \Rinvex\Repository\Exceptions\RepositoryException
+     * @return mixed
+     */
+    public function retrieveModel($model = null, array $data = []);
+
+    /**
+     * Set the repository identifier.
+     *
+     * @param string $repositoryId
+     *
+     * @return $this
+     */
+    public function setRepositoryId($repositoryId);
+
+    /**
+     * Get the repository identifier.
+     *
+     * @return string
+     */
+    public function getRepositoryId();
+
+    /**
+     * Set the repository cache status.
+     *
+     * @param bool $status
+     *
+     * @return $this
+     */
+    public function setCacheStatus($status);
+
+    /**
+     * Get the repository cache status.
+     *
+     * @return bool
+     */
+    public function getCacheStatus();
+
+    /**
+     * Set the repository cache clear status.
+     *
+     * @param bool $status
+     *
+     * @return $this
+     */
+    public function setCacheClearStatus($status);
+
+    /**
+     * Get the repository cache clear status.
+     *
+     * @return bool
+     */
+    public function getCacheClearStatus();
+
+    /**
+     * Set the relationships that should be eager loaded.
+     *
+     * @param  mixed  $relations
+     *
+     * @return $this
+     */
+    public function with($relations);
+
+    /**
+     * Add an "order by" clause to the repository.
+     *
+     * @param  string  $column
+     * @param  string  $direction
+     *
+     * @return $this
+     */
+    public function orderBy($column, $direction = 'asc');
+
+    /**
+     * Paginate all entities.
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null  $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+
+    /**
+     * Find an entity by its primary key.
+     *
+     * @param int   $id
+     * @param array $columns
+     * @param array $with
+     *
+     * @return mixed
+     */
+    public function find($id, $columns = ['*'], $with = []);
+
+    /**
+     * Find an entity by one of it's attributes.
+     *
+     * @param string $attribute
+     * @param string $value
+     * @param array  $columns
+     * @param array  $with
+     *
+     * @return mixed
+     */
+    public function findBy($attribute, $value, $columns = ['*'], $with = []);
+
+    /**
+     * Find all entities.
+     *
+     * @param  array $columns
+     * @param  array $with
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function findAll($columns = ['*'], $with = []);
+
+    /**
+     * Find all entities matching where conditions.
+     *
+     * @param array $where
+     * @param array $columns
+     * @param array $with
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function findWhere(array $where, $columns = ['*'], $with = []);
+
+    /**
+     * Find all entities matching whereIn conditions.
+     *
+     * @param array $where
+     * @param array $columns
+     * @param array $with
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = []);
+
+    /**
+     * Find all entities matching whereNotIn conditions.
+     *
+     * @param array $where
+     * @param array $columns
+     * @param array $with
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = []);
+
+    /**
+     * Create a new entity with the given attributes.
+     *
+     * @param array $attributes
+     *
+     * @return array
+     */
+    public function create(array $attributes = []);
+
+    /**
+     * Find entity matching the given attributes or create it.
+     *
+     * @param  array $attributes
+     *
+     * @return mixed
+     */
+    public function findOrCreate(array $attributes);
+
+    /**
+     * Update an entity with the given attributes.
+     *
+     * @param  mixed $id
+     * @param  array $attributes
+     *
+     * @return array
+     */
+    public function update($id, array $attributes = []);
+
+    /**
+     * Delete an entity with the given id.
+     *
+     * @param  mixed $id
+     *
+     * @return array
+     */
+    public function delete($id);
+
+    /**
+     * Register a new global scope.
+     *
+     * @param  \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
+     * @param  \Closure|null                                       $implementation
+     *
+     * @throws \InvalidArgumentException
+     * @return mixed
+     */
+    public function addGlobalScope($scope, Closure $implementation = null);
+
+    /**
+     * Remove all or passed registered global scopes.
+     *
+     * @param array|null $scopes
+     *
+     * @return $this
+     */
+    public function withoutGlobalScopes(array $scopes = null);
+
+    /**
+     * Dynamically pass missing static methods to the model.
+     *
+     * @param $method
+     * @param $parameters
+     *
+     * @return mixed
+     */
+    public static function __callStatic($method, $parameters);
+
+    /**
+     * Dynamically pass missing methods to the model.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters);
+}

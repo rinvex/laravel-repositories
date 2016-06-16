@@ -1,0 +1,61 @@
+{
+    "name": "rinvex/repository",
+    "description": "Rinvex Repository is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making applications more flexible to maintain adhering to SOLID principles.",
+    "keywords": [
+        "solid",
+        "rinvex",
+        "laravel",
+        "contract",
+        "interface",
+        "repository",
+        "eloquent",
+        "pattern",
+        "cache",
+        "trait"
+    ],
+    "license": "MIT",
+    "homepage": "https://rinvex.com/repository.html",
+    "support": {
+        "email": "help@rinvex.com",
+        "issues": "https://github.com/rinvex/repository/issues",
+        "source": "https://github.com/rinvex/repository",
+        "docs": "https://github.com/rinvex/repository/README.md"
+    },
+    "authors": [
+        {
+            "name": "Rinvex LLC",
+            "homepage": "https://rinvex.com",
+            "email": "help@rinvex.com"
+        },
+        {
+            "name": "Abdelrahman Omran",
+            "homepage": "https://omranic.com",
+            "email": "me@omranic.com",
+            "role": "Project Lead"
+        },
+        {
+            "name": "The Generous PHP Community",
+            "homepage": "https://github.com/rinvex/repository/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/events": "5.1.*|5.2.*",
+        "illuminate/support": "5.1.*|5.2.*",
+        "illuminate/database": "5.1.*|5.2.*",
+        "illuminate/container": "5.1.*|5.2.*",
+        "illuminate/contracts": "5.1.*|5.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rinvex\\Repository\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
