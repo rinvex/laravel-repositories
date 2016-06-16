@@ -71,15 +71,19 @@ abstract class BaseRepository implements RepositoryContract
         $cacheKey = $class.'@'.$method.'.'.$hash;
         $config   = $this->getContainer('config')->get('rinvex.repository.cache');
 
-        if ($this->cacheEnabled && $config['lifetime'] && in_array($method, $config['methods']) && ! $this->getContainer('request')->has($config['skip_uri'])) {
+        if ($this->isCacheableMethod($config, $method)) {
             if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
-                return $config['lifetime'] === -1 ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure) : $this->getContainer('cache')->tags($this->getRepositoryId())->remember($cacheKey, $config['lifetime'], $closure);
+                return $config['lifetime'] === -1
+                    ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure)
+                    : $this->getContainer('cache')->tags($this->getRepositoryId())->remember($cacheKey, $config['lifetime'], $closure);
             }
 
             // Store cache keys by mimicking cache tags
             $this->storeCacheKeys($class, $method, $hash, $config['keys_file']);
 
-            return $config['lifetime'] === -1 ? $this->getContainer('cache')->rememberForever($cacheKey, $closure) : $this->getContainer('cache')->remember($cacheKey, $config['lifetime'], $closure);
+            return $config['lifetime'] === -1
+                ? $this->getContainer('cache')->rememberForever($cacheKey, $closure)
+                : $this->getContainer('cache')->remember($cacheKey, $config['lifetime'], $closure);
         }
 
         return call_user_func($closure);
@@ -348,5 +352,21 @@ abstract class BaseRepository implements RepositoryContract
     protected function getCacheKeys($file)
     {
         return json_decode(file_get_contents(file_exists($file) ? $file : file_put_contents($file, null)), true) ?: [];
+    }
+
+    /**
+     * Determine if repository method is cacheable.
+     *
+     * @param array  $config
+     * @param string $method
+     *
+     * @return array
+     */
+    protected function isCacheableMethod($config, $method)
+    {
+        return $this->cacheEnabled
+               && $config['lifetime']
+               && in_array($method, $config['methods'])
+               && ! $this->getContainer('request')->has($config['skip_uri']);
     }
 }

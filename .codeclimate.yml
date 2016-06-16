@@ -21,6 +21,8 @@ engines:
         enabled: false
       CleanCode/ElseExpression:
         enabled: false
+      CleanCode/BooleanArgumentFlag:
+        enabled: false
 ratings:
   paths:
   - "**.inc"
