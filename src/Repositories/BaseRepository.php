@@ -77,7 +77,7 @@ abstract class BaseRepository implements RepositoryContract
             }
 
             // Store cache keys by mimicking cache tags
-            $this->storeCacheKeys($class, $method, $hash, $config);
+            $this->storeCacheKeys($class, $method, $hash, $config['keys_file']);
 
             return $config['lifetime'] === -1 ? $this->getContainer('cache')->rememberForever($cacheKey, $closure) : $this->getContainer('cache')->remember($cacheKey, $config['lifetime'], $closure);
         }
@@ -102,7 +102,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Return the IoC container instance or any of it's services.
      *
-     * @param string $service
+     * @param string|null $service
      *
      * @return mixed
      */
@@ -297,20 +297,20 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Store cache keys by mimicking cache tags.
      *
-     * @param $class
-     * @param $method
-     * @param $hash
-     * @param $config
+     * @param string $class
+     * @param string $method
+     * @param string $hash
+     * @param string $file
      *
      * @return void
      */
-    protected function storeCacheKeys($class, $method, $hash, $config)
+    protected function storeCacheKeys($class, $method, $hash, $file)
     {
-        $cacheKeys = json_decode(file_get_contents(file_exists($config['keys_file']) ? $config['keys_file'] : file_put_contents($config['keys_file'], null)), true) ?: [];
+        $cacheKeys = $this->getCacheKeys($file);
 
         if (! isset($cacheKeys[$class]) || ! in_array($method.'.'.$hash, $cacheKeys[$class])) {
             $cacheKeys[$class][] = $method.'.'.$hash;
-            file_put_contents($config['keys_file'], json_encode($cacheKeys));
+            file_put_contents($file, json_encode($cacheKeys));
         }
     }
 
@@ -324,7 +324,7 @@ abstract class BaseRepository implements RepositoryContract
         $flushedKeys = [];
 
         $config    = $this->getContainer('config')->get('rinvex.repository.cache');
-        $cacheKeys = json_decode(file_get_contents(file_exists($config['keys_file']) ? $config['keys_file'] : file_put_contents($config['keys_file'], null)), true) ?: [];
+        $cacheKeys = $this->getCacheKeys($config['keys_file']);
 
         if (isset($cacheKeys[get_called_class()]) && is_array($cacheKeys[get_called_class()])) {
             foreach ($cacheKeys[get_called_class()] as $cacheKey) {
@@ -336,5 +336,17 @@ abstract class BaseRepository implements RepositoryContract
         }
 
         return $flushedKeys;
+    }
+
+    /**
+     * Get cache keys file.
+     *
+     * @param string $file
+     *
+     * @return array
+     */
+    protected function getCacheKeys($file)
+    {
+        return json_decode(file_get_contents(file_exists($file) ? $file : file_put_contents($file, null)), true) ?: [];
     }
 }

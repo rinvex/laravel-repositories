@@ -32,7 +32,7 @@ interface RepositoryContract
     /**
      * Return the IoC container instance or any of it's services.
      *
-     * @param string $service
+     * @param string|null $service
      *
      * @return mixed
      */
