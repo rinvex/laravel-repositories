@@ -94,7 +94,7 @@ interface RepositoryContract
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
      *
-     * @return mixed
+     * @return object
      */
     public function retrieveModel($model = null, array $data = []);
 
@@ -131,7 +131,7 @@ interface RepositoryContract
      * @param array $columns
      * @param array $with
      *
-     * @return mixed
+     * @return object
      */
     public function find($id, $columns = ['*'], $with = []);
 
@@ -143,7 +143,7 @@ interface RepositoryContract
      * @param array  $columns
      * @param array  $with
      *
-     * @return mixed
+     * @return object
      */
     public function findBy($attribute, $value, $columns = ['*'], $with = []);
 
@@ -220,7 +220,7 @@ interface RepositoryContract
      *
      * @param array $attributes
      *
-     * @return mixed
+     * @return object|array
      */
     public function findOrCreate(array $attributes);
 

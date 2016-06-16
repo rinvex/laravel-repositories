@@ -31,7 +31,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * The repository model.
      *
-     * @var string
+     * @var object
      */
     protected $model;
 
