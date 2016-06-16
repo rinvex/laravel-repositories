@@ -1,6 +1,6 @@
 {
     "name": "rinvex/repository",
-    "description": "Rinvex Repository is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making applications more flexible to maintain adhering to SOLID principles.",
+    "description": "Rinvex Repository is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making apps more flexible to maintain adhering to SOLID principles.",
     "keywords": [
         "solid",
         "rinvex",
@@ -19,7 +19,7 @@
         "email": "help@rinvex.com",
         "issues": "https://github.com/rinvex/repository/issues",
         "source": "https://github.com/rinvex/repository",
-        "docs": "https://github.com/rinvex/repository/README.md"
+        "docs": "https://github.com/rinvex/repository/blob/master/README.md"
     },
     "authors": [
         {

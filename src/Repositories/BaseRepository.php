@@ -16,13 +16,17 @@
 namespace Rinvex\Repository\Repositories;
 
 use Closure;
-use Rinvex\Repository\Traits\UsesContainer;
-use Rinvex\Repository\Contracts\ContainerContract;
+use Illuminate\Contracts\Container\Container;
 use Rinvex\Repository\Contracts\RepositoryContract;
 
-abstract class BaseRepository implements RepositoryContract, ContainerContract
+abstract class BaseRepository implements RepositoryContract
 {
-    use UsesContainer;
+    /**
+     * The IoC container instance.
+     *
+     * @var \Illuminate\Contracts\Container\Container
+     */
+    protected $container;
 
     /**
      * The repository model.
@@ -72,12 +76,8 @@ abstract class BaseRepository implements RepositoryContract, ContainerContract
                 return $config['lifetime'] === -1 ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure) : $this->getContainer('cache')->tags($this->getRepositoryId())->remember($cacheKey, $config['lifetime'], $closure);
             }
 
-            $cacheKeys = json_decode(file_get_contents(file_exists($config['keys_file']) ? $config['keys_file'] : file_put_contents($config['keys_file'], null)), true) ?: [];
-
-            if (! isset($cacheKeys[$class]) || ! in_array($method.'.'.$hash, $cacheKeys[$class])) {
-                $cacheKeys[$class][] = $method.'.'.$hash;
-                file_put_contents($config['keys_file'], json_encode($cacheKeys));
-            }
+            // Store cache keys by mimicking cache tags
+            $this->storeCacheKeys($class, $method, $hash, $config);
 
             return $config['lifetime'] === -1 ? $this->getContainer('cache')->rememberForever($cacheKey, $closure) : $this->getContainer('cache')->remember($cacheKey, $config['lifetime'], $closure);
         }
@@ -86,33 +86,29 @@ abstract class BaseRepository implements RepositoryContract, ContainerContract
     }
 
     /**
-     * Forget the repository cache.
+     * Set the IoC container instance.
+     *
+     * @param \Illuminate\Contracts\Container\Container $container
      *
      * @return $this
      */
-    public function forgetCache()
+    public function setContainer(Container $container)
     {
-        $lifetime = $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
-
-        if ($this->cacheEnabled && $lifetime) {
-            if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
-                $this->getContainer('cache')->tags($this->getRepositoryId())->flush();
-            } else {
-                $config    = $this->getContainer('config')->get('rinvex.repository.cache');
-                $cacheKeys = json_decode(file_get_contents(file_exists($config['keys_file']) ? $config['keys_file'] : file_put_contents($config['keys_file'], null)), true) ?: [];
-
-                if (isset($cacheKeys[get_called_class()]) && is_array($cacheKeys[get_called_class()])) {
-                    foreach ($cacheKeys[get_called_class()] as $cacheKey) {
-                        $this->getContainer('cache')->forget($cacheKey);
-                    }
-
-                    unset($cacheKeys[get_called_class()]);
-                    file_put_contents($config['keys_file'], json_encode($cacheKeys));
-                }
-            }
-        }
+        $this->container = $container;
 
         return $this;
+    }
+
+    /**
+     * Return the IoC container instance or any of it's services.
+     *
+     * @param String $service
+     *
+     * @return mixed
+     */
+    public function getContainer($service = null)
+    {
+        return is_null($service) ? ($this->container ?: app()) : ($this->container[$service] ?: app($service));
     }
 
     /**
@@ -185,6 +181,31 @@ abstract class BaseRepository implements RepositoryContract, ContainerContract
     public function getCacheClearStatus()
     {
         return $this->cacheClear;
+    }
+
+    /**
+     * Forget the repository cache.
+     *
+     * @return $this
+     */
+    public function forgetCache()
+    {
+        $lifetime = $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
+
+        if ($this->cacheEnabled && $lifetime) {
+            if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
+                $this->getContainer('cache')->tags($this->getRepositoryId())->flush();
+            } else {
+                // Flush cache keys by mimicking cache tags
+                foreach ($this->flushCacheKeys() as $cacheKey) {
+                    $this->getContainer('cache')->forget($cacheKey);
+                }
+            }
+
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.cache.flushed', [$this]);
+        }
+
+        return $this;
     }
 
     /**
@@ -270,5 +291,49 @@ abstract class BaseRepository implements RepositoryContract, ContainerContract
         $model = $this->model;
 
         return call_user_func_array([$model, $method], $parameters);
+    }
+
+    /**
+     * Store cache keys by mimicking cache tags.
+     *
+     * @param $class
+     * @param $method
+     * @param $hash
+     * @param $config
+     *
+     * @return void
+     */
+    protected function storeCacheKeys($class, $method, $hash, $config)
+    {
+        $cacheKeys = json_decode(file_get_contents(file_exists($config['keys_file']) ? $config['keys_file'] : file_put_contents($config['keys_file'], null)), true) ?: [];
+
+        if (! isset($cacheKeys[$class]) || ! in_array($method.'.'.$hash, $cacheKeys[$class])) {
+            $cacheKeys[$class][] = $method.'.'.$hash;
+            file_put_contents($config['keys_file'], json_encode($cacheKeys));
+        }
+    }
+
+    /**
+     * Flush cache keys by mimicking cache tags.
+     *
+     * @return array
+     */
+    protected function flushCacheKeys()
+    {
+        $flushedKeys = [];
+
+        $config    = $this->getContainer('config')->get('rinvex.repository.cache');
+        $cacheKeys = json_decode(file_get_contents(file_exists($config['keys_file']) ? $config['keys_file'] : file_put_contents($config['keys_file'], null)), true) ?: [];
+
+        if (isset($cacheKeys[get_called_class()]) && is_array($cacheKeys[get_called_class()])) {
+            foreach ($cacheKeys[get_called_class()] as $cacheKey) {
+                $flushedKeys[] = $cacheKey;
+            }
+
+            unset($cacheKeys[get_called_class()]);
+            file_put_contents($config['keys_file'], json_encode($cacheKeys));
+        }
+
+        return $flushedKeys;
     }
 }

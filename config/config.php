@@ -103,6 +103,7 @@ return [
             'find',
             'findBy',
             'findAll',
+            'paginate',
             'findWhere',
             'findWhereIn',
             'findWhereNotIn',

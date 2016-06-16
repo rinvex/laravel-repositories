@@ -1,14 +1,14 @@
 # Rinvex Repository
 
-**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making applications more flexible to maintain adhering to SOLID principles.
+**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making apps more flexible to maintain adhering to SOLID principles.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
-[![VersionEye Dependencies](https://img.shields.io/versioneye/d/php/rinvex:support.svg?label=Dependencies&style=flat-square)](https://www.versioneye.com/php/rinvex:support/)
+[![VersionEye Dependencies](https://img.shields.io/versioneye/d/php/rinvex:repository.svg?label=Dependencies&style=flat-square)](https://www.versioneye.com/php/rinvex:repository/)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/repository.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/repository/)
 [![Code Climate](https://img.shields.io/codeclimate/github/rinvex/repository.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/repository)
-[![StyleCI](https://styleci.io/repos/49874431/shield)](https://styleci.io/repos/49874431)
-[![SensioLabs Insight](https://img.shields.io/sensiolabs/i/da6c0f03-ea00-46ed-8f7b-a20ee721cad5.svg?label=SensioLabs&style=flat-square)](https://insight.sensiolabs.com/projects/da6c0f03-ea00-46ed-8f7b-a20ee721cad5)
+[![StyleCI](https://styleci.io/repos/49874431/shield)](https://styleci.io/repos/61269204)
+[![SensioLabs Insight](https://img.shields.io/sensiolabs/i/8394bf3e-26c8-415a-8952-078b41110181.svg?label=SensioLabs&style=flat-square)](https://insight.sensiolabs.com/projects/8394bf3e-26c8-415a-8952-078b41110181)
 
 
 ## Table Of Contents
@@ -23,17 +23,20 @@
     - [Laravel Integration](#laravel-integration)
 - [Config Options](#config-options)
 - [Usage](#usage)
-    - [UsesContainer Trait](#usescontainer-trait)
     - [EloquentRepository](#eloquentrepository)
-        - [`forgetCache()`](#forgetcache)
+        - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
         - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
         - [`setCacheStatus()`, `getCacheStatus()`](#setcachestatus-getcachestatus)
         - [`setCacheClearStatus()`, `getCacheClearStatus()`](#setcacheclearstatus-getcacheclearstatus)
         - [`addGlobalScope()`, `withoutGlobalScopes()`](#addglobalscope-withoutglobalscopes)
         - [`retrieveModel()`](#retrievemodel)
+        - [`forgetCache()`](#forgetcache)
         - [`find()`](#find)
+        - [`with()`](#with)
+        - [`orderBy()`](#orderby)
         - [`findBy()`](#findby)
         - [`findAll()`](#findall)
+        - [`paginate()`](#paginate)
         - [`findWhere()`](#findwhere)
         - [`findWhereIn()`](#findwherein)
         - [`findWhereNotIn()`](#findwherenotin)
@@ -227,33 +230,10 @@ return [
 
 ## Usage
 
-### UsesContainer Trait
-
-The `Rinvex\Repository\Traits\UsesContainer` provides an easy way to set/get application container instances on runtime. First, your class MUST implement the appropriate interface and use the corresponding trait:
-```php
-use Rinvex\Repository\Traits\UsesContainer;
-use Rinvex\Repository\Contracts\ContainerContract;
-
-class FooRepository implements ContainerContract
-{
-    use UsesContainer;
-}
-```
-
-Set the IoC container instance:
-```php
-$this->setContainer(new \Illuminate\Container\Container());
-```
-
-Get the IoC container instance:
-```php
-$container = $this->getContainer();
-```
-
 ### EloquentRepository
 
 The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum implementation that concrete implementations must extend. 
-The `Rinvex\Repository\Repositories\EloquentRepository` is the only available repository implementation currently available, it makes it easy to create new instances of a model and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation, it makes it easy to create new instances of a model and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
 ```php
 use Rinvex\Repository\Repositories\EloquentRepository;
 
@@ -275,11 +255,15 @@ $repository = new \FooRepository();
 As you can see, you have to inistantiate your repository object with required data, and the best place to do so is through the constructor method. Set the application container, retrieve model, set the repository ID, and you're good to go.
 Through the `setContainer` method, it's easy to swap application container instances used within the repository.
 
-#### `forgetCache()`
+#### `setContainer()`, `getContainer()`
 
-The `forgetCache()` method forgets the repository cache:
+The `setContainer` method sets the IoC container instance, while `getContainer` returns it:
 ```php
-$repository->forgetCache();
+// Set the IoC container instance
+$this->setContainer(new \Illuminate\Container\Container());
+
+// Get the IoC container instance:
+$container = $this->getContainer();
 ```
 
 #### `setRepositoryId()`, `getRepositoryId()`
@@ -315,20 +299,6 @@ $repository->setCacheClearStatus(true);
 $repository->getCacheClearStatus();
 ```
 
-#### `with()`
-
-The `with` method sets the relationships that should be eager loaded:
-```php
-$repository->with(['relationship']);
-```
-
-#### `orderBy()`
-
-The `orderBy` method adds an "order by" clause to the repository:
-```php
-$repository->orderBy('id', 'asc');
-```
-
 #### `addGlobalScope()`, `withoutGlobalScopes()`
 
 The `addGlobalScope` method registers a new global scope on the model while `withoutGlobalScopes` removes all or passed registered global scopes:
@@ -351,11 +321,25 @@ The `retrieveModel` method retrieves the repository model:
 $model = $repository->retrieveModel(\App\User::class);
 ```
 
-#### `paginate()`
+#### `forgetCache()`
 
-The `paginate` method paginates all entities:
+The `forgetCache()` method forgets the repository cache:
 ```php
-$paginatedEntities = $repository->paginate(15);
+$repository->forgetCache();
+```
+
+#### `with()`
+
+The `with` method sets the relationships that should be eager loaded:
+```php
+$repository->with(['relationship']);
+```
+
+#### `orderBy()`
+
+The `orderBy` method adds an "order by" clause to the repository:
+```php
+$repository->orderBy('id', 'asc');
 ```
 
 #### `find()`
@@ -377,6 +361,13 @@ $entity = $repository->findBy('id', 1);
 The `findAll` method finds all entities:
 ```php
 $allEntities = $repository->findAll();
+```
+
+#### `paginate()`
+
+The `paginate` method paginates all entities:
+```php
+$paginatedEntities = $repository->paginate(15);
 ```
 
 #### `findWhere()`
@@ -448,7 +439,8 @@ Repositories fire events at every successful action, like `create`, `update`, `d
 - rivnex.repository.entity.updated
 - rivnex.repository.entity.deleted
 
-For your convenience, all events suffixed with `.entity.created`, `.entity.updated`, or `.entity.deleted` have listeners that take actions accordingly. Usually we need to flush cache -if enabled/exists- upon every success action.
+For your convenience, the events suffixed with `.entity.created`, `.entity.updated`, or `.entity.deleted` have listeners that take actions accordingly. Usually we need to flush cache -if enabled/exists- upon every success action.
+There's one more event `rivnex.repository.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it for relashionship actions.
 
 ### Mandatory Repository Conventions
 

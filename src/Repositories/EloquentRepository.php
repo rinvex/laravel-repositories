@@ -51,26 +51,6 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Paginate all entities.
-     *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
-    {
-        $cacheKey = md5(json_encode([$perPage, $columns, $pageName, $page, $this->getGlobalScopes(), $this->toSql()]));
-
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($perPage, $columns, $pageName, $page) {
-            return $this->model->paginate($perPage, $columns, $pageName, $page);
-        });
-    }
-
-    /**
      * Find an entity by its primary key.
      *
      * @param int   $id
@@ -125,6 +105,26 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
+     * Paginate all entities.
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null  $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        $cacheKey = md5(json_encode([$perPage, $columns, $pageName, $page, $this->getGlobalScopes(), $this->toSql()]));
+
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($perPage, $columns, $pageName, $page) {
+            return $this->model->paginate($perPage, $columns, $pageName, $page);
+        });
+    }
+
+    /**
      * Find all entities matching where conditions.
      *
      * @param array $where
@@ -154,9 +154,10 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
@@ -172,9 +173,10 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */

@@ -16,26 +16,27 @@
 namespace Rinvex\Repository\Contracts;
 
 use Closure;
+use Illuminate\Contracts\Container\Container;
 
 interface RepositoryContract
 {
     /**
-     * Forget the repository cache.
+     * Set the IoC container instance.
+     *
+     * @param \Illuminate\Contracts\Container\Container $container
      *
      * @return $this
      */
-    public function forgetCache();
+    public function setContainer(Container $container);
 
     /**
-     * Retrieve the repository model.
+     * Return the IoC container instance or any of it's services.
      *
-     * @param mixed $model
-     * @param array $data
+     * @param String $service
      *
-     * @throws \Rinvex\Repository\Exceptions\RepositoryException
      * @return mixed
      */
-    public function retrieveModel($model = null, array $data = []);
+    public function getContainer($service = null);
 
     /**
      * Set the repository identifier.
@@ -86,6 +87,24 @@ interface RepositoryContract
     public function getCacheClearStatus();
 
     /**
+     * Retrieve the repository model.
+     *
+     * @param mixed $model
+     * @param array $data
+     *
+     * @throws \Rinvex\Repository\Exceptions\RepositoryException
+     * @return mixed
+     */
+    public function retrieveModel($model = null, array $data = []);
+
+    /**
+     * Forget the repository cache.
+     *
+     * @return $this
+     */
+    public function forgetCache();
+
+    /**
      * Set the relationships that should be eager loaded.
      *
      * @param  mixed  $relations
@@ -103,19 +122,6 @@ interface RepositoryContract
      * @return $this
      */
     public function orderBy($column, $direction = 'asc');
-
-    /**
-     * Paginate all entities.
-     *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
 
     /**
      * Find an entity by its primary key.
@@ -151,6 +157,19 @@ interface RepositoryContract
     public function findAll($columns = ['*'], $with = []);
 
     /**
+     * Paginate all entities.
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null  $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+
+    /**
      * Find all entities matching where conditions.
      *
      * @param array $where
@@ -164,9 +183,10 @@ interface RepositoryContract
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
@@ -175,9 +195,10 @@ interface RepositoryContract
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
