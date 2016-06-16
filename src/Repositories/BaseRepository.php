@@ -360,7 +360,7 @@ abstract class BaseRepository implements RepositoryContract
      * @param array  $config
      * @param string $method
      *
-     * @return array
+     * @return bool
      */
     protected function isCacheableMethod($config, $method)
     {

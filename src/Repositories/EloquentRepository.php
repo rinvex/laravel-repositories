@@ -62,7 +62,7 @@ class EloquentRepository extends BaseRepository
      */
     public function find($id, $columns = ['*'], $with = [])
     {
-        $cacheKey = md5(json_encode([$id, $columns, $with, $this->model->getGlobalScopes(), $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$id, $columns, $with, $this->model->toSql()]));
 
         return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($id, $columns, $with) {
             return $this->model->with($with)->find($id, $columns);
@@ -81,7 +81,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findBy($attribute, $value, $columns = ['*'], $with = [])
     {
-        $cacheKey = md5(json_encode([$attribute, $value, $columns, $with, $this->model->getGlobalScopes(), $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$attribute, $value, $columns, $with, $this->model->toSql()]));
 
         return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($attribute, $value, $columns, $with) {
             return $this->model->with($with)->where($attribute, '=', $value)->first($columns);
@@ -98,7 +98,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findAll($columns = ['*'], $with = [])
     {
-        $cacheKey = md5(json_encode([$columns, $with, $this->model->getGlobalScopes(), $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$columns, $with, $this->model->toSql()]));
 
         return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($columns, $with) {
             return $this->model->with($with)->get($columns);
@@ -119,7 +119,7 @@ class EloquentRepository extends BaseRepository
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        $cacheKey = md5(json_encode([$perPage, $columns, $pageName, $page, $this->model->getGlobalScopes(), $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$perPage, $columns, $pageName, $page, $this->model->toSql()]));
 
         return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($perPage, $columns, $pageName, $page) {
             return $this->model->paginate($perPage, $columns, $pageName, $page);
@@ -137,7 +137,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findWhere(array $where, $columns = ['*'], $with = [])
     {
-        $cacheKey = md5(json_encode([$where, $columns, $with, $this->model->getGlobalScopes(), $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$where, $columns, $with, $this->model->toSql()]));
 
         return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($where, $columns, $with) {
             foreach ($where as $attribute => $value) {
@@ -165,7 +165,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findWhereIn($attribute, array $values, $columns = ['*'], $with = [])
     {
-        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $this->model->getGlobalScopes(), $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $this->model->toSql()]));
 
         return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($attribute, $values, $columns, $with) {
             return $this->model->with($with)->whereIn($attribute, $values)->get($columns);
@@ -184,7 +184,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = [])
     {
-        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $this->model->getGlobalScopes(), $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $this->model->toSql()]));
 
         return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($attribute, $values, $columns, $with) {
             return $this->model->with($with)->whereNotIn($attribute, $values)->get($columns);
