@@ -102,7 +102,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Return the IoC container instance or any of it's services.
      *
-     * @param String $service
+     * @param string $service
      *
      * @return mixed
      */
@@ -211,7 +211,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param  mixed  $relations
+     * @param mixed $relations
      *
      * @return $this
      */
@@ -225,8 +225,8 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Add an "order by" clause to the repository.
      *
-     * @param  string  $column
-     * @param  string  $direction
+     * @param string $column
+     * @param string $direction
      *
      * @return $this
      */
@@ -240,10 +240,11 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Register a new global scope.
      *
-     * @param  \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
-     * @param  \Closure|null                                       $implementation
+     * @param \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
+     * @param \Closure|null                                       $implementation
      *
      * @throws \InvalidArgumentException
+     *
      * @return mixed
      */
     public function addGlobalScope($scope, Closure $implementation = null)
@@ -275,7 +276,7 @@ abstract class BaseRepository implements RepositoryContract
      */
     public static function __callStatic($method, $parameters)
     {
-        return call_user_func_array([new static, $method], $parameters);
+        return call_user_func_array([new static(), $method], $parameters);
     }
 
     /**
