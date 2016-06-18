@@ -47,6 +47,7 @@
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
     - [Mandatory Repository Conventions](#mandatory-repository-conventions)
     - [Automatic Guessing](#automatic-guessing)
+    - [Flexible Caching](#flexible-caching)
 - [Changelog](#changelog)
 - [Support](#support)
 - [Contributing & Protocols](#contributing--protocols)
