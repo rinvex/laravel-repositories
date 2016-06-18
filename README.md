@@ -4,6 +4,7 @@
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
+[![VersionEye Dependencies](https://img.shields.io/versioneye/d/php/rinvex:repository.svg?label=Dependencies&style=flat-square)](https://www.versioneye.com/php/rinvex:repository/)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/repository.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/repository/)
 [![Code Climate](https://img.shields.io/codeclimate/github/rinvex/repository.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/repository)
 [![StyleCI](https://styleci.io/repos/61269204/shield)](https://styleci.io/repos/61269204)
@@ -50,6 +51,7 @@
 - [Support](#support)
 - [Contributing & Protocols](#contributing--protocols)
 - [Security Vulnerabilities](#security-vulnerabilities)
+- [About Rinvex](#about-rinvex)
 - [License](#license)
 
 
@@ -91,7 +93,7 @@ On your terminal run `composer install` or `composer update` command according t
 
 ## Integration
 
-**Rinvex Support** package is framework-agnostic and as such can be integrated easily natively or with your favorite framework.
+**Rinvex Repository** package is framework-agnostic and as such can be integrated easily natively or with your favorite framework.
 
 ### Native Integration
 
@@ -208,7 +210,7 @@ return [
         | Specify which methods should be cached. Note that these methods
         | MUST support caching in it's implementation for this to work.
         |
-        | Default: ['find', 'findBy', 'findAll', 'findWhere', 'findWhereIn', 'findWhereNotIn']
+        | Default: ['find', 'findBy', 'findAll', 'paginate', 'findWhere', 'findWhereIn', 'findWhereNotIn']
         |
         */
 
@@ -216,6 +218,7 @@ return [
             'find',
             'findBy',
             'findAll',
+            'paginate',
             'findWhere',
             'findWhereIn',
             'findWhereNotIn',
@@ -498,6 +501,21 @@ While it's recomended to explicitely set application container, repository model
 - Repository Model: Conventionally repositories namespaced like `Rinvex\Demos\Repositories\ItemRepository`, so corresponding model supposed to be namespaced like `Rinvex\Demos\Models\Item`. That's how this packages guess the model if it's missing.
 - Repository Identifier: It's recommended to set repository identifier as a doted name like `rinvex.repository.entity`, but if it's missing fully qualified class name will be used (actually the result of `get_called_class()` function).
 
+### Flexible Caching
+
+**Rinvex Repository** has an powerful, yet simple caching system, that handles almost every edge case. While you can enable/disable your application's cache as a whole, you have the ability to enable/disable cache individually per repository through the following attribute:
+```php
+$repository->enableCache(true);
+```
+
+Additionally, you have the flexibility to control cache even more granualy and enable/disable cache per method. Checkout the `rinvex.repository.cache.methods` config option for a list of cached methods.
+
+Lastly, you can disable cache per single request by passing the following query string in your URL `skipCache`. Note that you can modify this parameter to whatever you need through the `rinvex.repository.cache.skip_uri`.
+
+> **Notes:** 
+> - You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option.
+> - This package utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys that you can modify through the `rinvex.repository.cache.keys_file` config option.
+
 
 ## Changelog
 
@@ -530,8 +548,13 @@ Bug reports, feature requests, and pull requests are very welcome.
 If you discover a security vulnerability within this project, please send an e-mail to help@rinvex.com. All security vulnerabilities will be promptly addressed.
 
 
+## About Rinvex
+
+Rinvex is a software solutions startup, specialized in integrated enterprise solutions for SMEs established in Alexandria, Egypt since June 2016. We believe that our drive The Value, The Reach, and The Impact is what differentiates us and unleash the endless possibilities of our philosophy through the power of software. We like to call it Innovation At The Speed Of Life. That’s how we do our share of advancing humanity.
+
+
 ## License
 
 This software is released under [The MIT License (MIT)](LICENSE).
 
-(c) 2015-2016 Rinvex LLC, Some rights reserved.
+(c) 2016 Rinvex LLC, Some rights reserved.
