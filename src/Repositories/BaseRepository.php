@@ -104,7 +104,7 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * Return the IoC container instance or any of it's services.
+     * Get the IoC container instance or any of it's services.
      *
      * @param string|null $service
      *
