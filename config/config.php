@@ -87,28 +87,6 @@ return [
 
         'skip_uri' => 'skipCache',
 
-        /*
-        |--------------------------------------------------------------------------
-        | Cache Methods
-        |--------------------------------------------------------------------------
-        |
-        | Specify which methods should be cached. Note that these methods
-        | MUST support caching in it's implementation for this to work.
-        |
-        | Default: ['find', 'findBy', 'findAll', 'paginate', 'findWhere', 'findWhereIn', 'findWhereNotIn']
-        |
-        */
-
-        'methods' => [
-            'find',
-            'findBy',
-            'findAll',
-            'paginate',
-            'findWhere',
-            'findWhereIn',
-            'findWhereNotIn',
-        ],
-
     ],
 
 ];

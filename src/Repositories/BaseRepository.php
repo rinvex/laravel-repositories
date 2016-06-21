@@ -72,14 +72,14 @@ abstract class BaseRepository implements RepositoryContract
     {
         $cacheKey = $class.'@'.$method.'.'.$hash;
         $config   = $this->getContainer('config')->get('rinvex.repository.cache');
-        $lifetime = $lifetime ?: $config['lifetime'];
+        $lifetime = ! is_null($lifetime) ? $lifetime : $config['lifetime'];
 
         if ($driver) {
             // Switch cache driver on runtime
             $this->getContainer('cache')->setDefaultDriver($driver);
         }
 
-        if ($this->isCacheableMethod($config, $method, $lifetime)) {
+        if ($this->isCacheableMethod($config, $lifetime)) {
             if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
                 return $lifetime === -1
                     ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure)
@@ -366,15 +366,13 @@ abstract class BaseRepository implements RepositoryContract
      * Determine if repository method is cacheable.
      *
      * @param array  $config
-     * @param string $method
      * @param int    $lifetime
      *
      * @return bool
      */
-    protected function isCacheableMethod($config, $method, $lifetime)
+    protected function isCacheableMethod($config, $lifetime)
     {
         return $this->cacheEnabled && $lifetime
-               && in_array($method, $config['methods'])
                && ! $this->getContainer('request')->has($config['skip_uri']);
     }
 }
