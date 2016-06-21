@@ -1,6 +1,6 @@
 # Rinvex Repository
 
-**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making apps more flexible to maintain.
+**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making applications more flexible to maintain.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
@@ -47,7 +47,7 @@
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
     - [Mandatory Repository Conventions](#mandatory-repository-conventions)
     - [Automatic Guessing](#automatic-guessing)
-    - [Flexible Caching](#flexible-caching)
+    - [Flexible Granular Caching](#flexible-granular-caching)
 - [Changelog](#changelog)
 - [Support](#support)
 - [Contributing & Protocols](#contributing--protocols)
@@ -444,7 +444,7 @@ $deletedEntity = $repository->delete(1);
 > **Notes:** 
 > - All setter methods returns an instance of the current object, and thus can be chained.
 > - All `find` method result sets are cached if cache is enabled and allowed for the method.
-> - All `find` methods take two more optional parameters for selected columns and eager loading relations. By default all columns are selected.
+> - All `find` methods take few more optional parameters for selected columns and eager loading relations. By default all columns are selected, and cache enabled forever.
 > - All model methods can be called on repositories since it transparently passes it all through to the model even if not explicitly defined in the repository’s implementation.
 > - Cache is enabled by default, but you can disable caching if you want per repository as shown above. Cache tags are maintained behind scenes even for cache drivers that doesn't support it.
 > - `create`, `update`, and `delete` methods always return an array with two values, the first is action status whether it's succeeded or failed as a boolean value, and the other is an instance of the model just operated upon.
@@ -512,15 +512,15 @@ Here some conventions important to know while using this package. This package a
 
 ### Automatic Guessing
 
-While it's recomended to explicitely set application container, repository model, and repository ID; This package is smart enough to guess any of these required data whenever missing.
+While it's **recomended** to explicitely set application container, repository model, and repository ID; This package is smart enough to guess any of these required data whenever missing.
 
 - Application Container: `app()` helper is used as a fallback if application container instance not provided explicitely.
 - Repository Model: Conventionally repositories namespaced like `Rinvex\Demos\Repositories\ItemRepository`, so corresponding model supposed to be namespaced like `Rinvex\Demos\Models\Item`. That's how this packages guess the model if it's missing.
 - Repository Identifier: It's recommended to set repository identifier as a doted name like `rinvex.repository.entity`, but if it's missing fully qualified class name will be used (actually the result of `get_called_class()` function).
 
-### Flexible Caching
+### Flexible Granular Caching
 
-**Rinvex Repository** has an powerful, yet simple caching system, that handles almost every edge case. While you can enable/disable your application's cache as a whole, you have the ability to enable/disable cache individually per repository through the following attribute:
+**Rinvex Repository** has an powerful, yet simple and granular caching system, that handles almost every edge case. While you can enable/disable your application's cache as a whole, you have the ability to enable/disable cache individually per repository through the following attribute:
 ```php
 $repository->enableCache(true);
 ```

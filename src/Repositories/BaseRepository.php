@@ -74,8 +74,8 @@ abstract class BaseRepository implements RepositoryContract
         $config   = $this->getContainer('config')->get('rinvex.repository.cache');
         $lifetime = $lifetime ?: $config['lifetime'];
 
-        // Switch cache driver on runtime
         if ($driver) {
+            // Switch cache driver on runtime
             $this->getContainer('cache')->setDefaultDriver($driver);
         }
 
