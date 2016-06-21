@@ -1,6 +1,6 @@
 # Rinvex Repository
 
-**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making apps more flexible to maintain adhering to SOLID principles.
+**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making apps more flexible to maintain.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
@@ -63,6 +63,8 @@ The best and easiest way to install this package is through [Composer](https://g
 ### Compatibility
 
 This package fully compatible with **Laravel** `5.2.*`.
+
+While this package tends to be framework-agnostic, it embraces Laravel culture and best practices to some extent. It's tested mainly with Laravel but you still can use it with other frameworks or even without any framework if you want.
 
 > **Note:** Global scope features not tested with Laravel 5.1, and probably won't work as it has been drastically changed in 5.2 releases. Checkout Laravel's [Global Scopes](https://laravel.com/docs/5.2/eloquent#global-scopes) documentation for further details.
 
@@ -236,7 +238,7 @@ return [
 ### EloquentRepository
 
 The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum implementation that concrete implementations must extend. 
-The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation, it makes it easy to create new instances of a model and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation, it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
 ```php
 use Rinvex\Repository\Repositories\EloquentRepository;
 
@@ -516,6 +518,7 @@ Lastly, you can disable cache per single request by passing the following query 
 > **Notes:** 
 > - You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option.
 > - This package utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys that you can modify through the `rinvex.repository.cache.keys_file` config option.
+> - This package follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
 
 
 ## Changelog

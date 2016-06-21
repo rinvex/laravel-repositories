@@ -54,17 +54,19 @@ class EloquentRepository extends BaseRepository
     /**
      * Find an entity by its primary key.
      *
-     * @param int   $id
-     * @param array $columns
-     * @param array $with
+     * @param int    $id
+     * @param array  $columns
+     * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return object
      */
-    public function find($id, $columns = ['*'], $with = [])
+    public function find($id, $columns = ['*'], $with = [], $lifetime = null, $driver = null)
     {
-        $cacheKey = md5(json_encode([$id, $columns, $with, $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$id, $columns, $with, $lifetime, $driver, $this->model->toSql()]));
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($id, $columns, $with) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, $lifetime, $driver, function () use ($id, $columns, $with) {
             return $this->model->with($with)->find($id, $columns);
         });
     }
@@ -76,14 +78,16 @@ class EloquentRepository extends BaseRepository
      * @param string $value
      * @param array  $columns
      * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return object
      */
-    public function findBy($attribute, $value, $columns = ['*'], $with = [])
+    public function findBy($attribute, $value, $columns = ['*'], $with = [], $lifetime = null, $driver = null)
     {
-        $cacheKey = md5(json_encode([$attribute, $value, $columns, $with, $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$attribute, $value, $columns, $with, $lifetime, $driver, $this->model->toSql()]));
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($attribute, $value, $columns, $with) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, $lifetime, $driver, function () use ($attribute, $value, $columns, $with) {
             return $this->model->with($with)->where($attribute, '=', $value)->first($columns);
         });
     }
@@ -91,16 +95,18 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities.
      *
-     * @param array $columns
-     * @param array $with
+     * @param array  $columns
+     * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*'], $with = [])
+    public function findAll($columns = ['*'], $with = [], $lifetime = null, $driver = null)
     {
-        $cacheKey = md5(json_encode([$columns, $with, $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$columns, $with, $lifetime, $driver, $this->model->toSql()]));
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($columns, $with) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, $lifetime, $driver, function () use ($columns, $with) {
             return $this->model->with($with)->get($columns);
         });
     }
@@ -112,16 +118,18 @@ class EloquentRepository extends BaseRepository
      * @param array    $columns
      * @param string   $pageName
      * @param int|null $page
+     * @param int      $lifetime
+     * @param string   $driver
      *
      * @throws \InvalidArgumentException
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $lifetime = null, $driver = null)
     {
-        $cacheKey = md5(json_encode([$perPage, $columns, $pageName, $page, $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$perPage, $columns, $pageName, $page, $lifetime, $driver, $this->model->toSql()]));
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($perPage, $columns, $pageName, $page) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, $lifetime, $driver, function () use ($perPage, $columns, $pageName, $page) {
             return $this->model->paginate($perPage, $columns, $pageName, $page);
         });
     }
@@ -129,17 +137,19 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching where conditions.
      *
-     * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param array  $where
+     * @param array  $columns
+     * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*'], $with = [])
+    public function findWhere(array $where, $columns = ['*'], $with = [], $lifetime = null, $driver = null)
     {
-        $cacheKey = md5(json_encode([$where, $columns, $with, $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$where, $columns, $with, $lifetime, $driver, $this->model->toSql()]));
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($where, $columns, $with) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, $lifetime, $driver, function () use ($where, $columns, $with) {
             foreach ($where as $attribute => $value) {
                 if (is_array($value)) {
                     list($attribute, $condition, $value) = $value;
@@ -160,14 +170,16 @@ class EloquentRepository extends BaseRepository
      * @param array  $values
      * @param array  $columns
      * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = [])
+    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = [], $lifetime = null, $driver = null)
     {
-        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $lifetime, $driver, $this->model->toSql()]));
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($attribute, $values, $columns, $with) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, $lifetime, $driver, function () use ($attribute, $values, $columns, $with) {
             return $this->model->with($with)->whereIn($attribute, $values)->get($columns);
         });
     }
@@ -179,14 +191,16 @@ class EloquentRepository extends BaseRepository
      * @param array  $values
      * @param array  $columns
      * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = [])
+    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = [], $lifetime = null, $driver = null)
     {
-        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $this->model->toSql()]));
+        $cacheKey = md5(json_encode([$attribute, $values, $columns, $with, $lifetime, $driver, $this->model->toSql()]));
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, function () use ($attribute, $values, $columns, $with) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, $cacheKey, $lifetime, $driver, function () use ($attribute, $values, $columns, $with) {
             return $this->model->with($with)->whereNotIn($attribute, $values)->get($columns);
         });
     }
