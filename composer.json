@@ -1,6 +1,6 @@
 {
     "name": "rinvex/repository",
-    "description": "Rinvex Repository is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making apps more flexible to maintain adhering to SOLID principles.",
+    "description": "Rinvex Repository is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making apps more flexible to maintain.",
     "keywords": [
         "solid",
         "rinvex",
@@ -9,6 +9,7 @@
         "interface",
         "repository",
         "eloquent",
+        "granular",
         "pattern",
         "cache",
         "trait"
