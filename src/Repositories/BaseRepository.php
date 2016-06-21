@@ -365,8 +365,8 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Determine if repository method is cacheable.
      *
-     * @param array  $config
-     * @param int    $lifetime
+     * @param array $config
+     * @param int   $lifetime
      *
      * @return bool
      */
