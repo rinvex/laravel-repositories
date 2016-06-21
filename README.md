@@ -1,6 +1,6 @@
 # Rinvex Repository
 
-**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, making apps more flexible to maintain adhering to SOLID principles.
+**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making apps more flexible to maintain.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
