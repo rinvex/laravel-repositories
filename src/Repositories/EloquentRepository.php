@@ -54,11 +54,11 @@ class EloquentRepository extends BaseRepository
     /**
      * Find an entity by its primary key.
      *
-     * @param int    $id
-     * @param array  $columns
-     * @param array  $with
-     * @param int    $lifetime
-     * @param string $driver
+     * @param int         $id
+     * @param array       $columns
+     * @param array       $with
+     * @param int|null    $lifetime
+     * @param string|null $driver
      *
      * @return object
      */
@@ -74,12 +74,12 @@ class EloquentRepository extends BaseRepository
     /**
      * Find an entity by one of it's attributes.
      *
-     * @param string $attribute
-     * @param string $value
-     * @param array  $columns
-     * @param array  $with
-     * @param int    $lifetime
-     * @param string $driver
+     * @param string      $attribute
+     * @param string      $value
+     * @param array       $columns
+     * @param array       $with
+     * @param int|null    $lifetime
+     * @param string|null $driver
      *
      * @return object
      */
@@ -95,10 +95,10 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities.
      *
-     * @param array  $columns
-     * @param array  $with
-     * @param int    $lifetime
-     * @param string $driver
+     * @param array       $columns
+     * @param array       $with
+     * @param int|null    $lifetime
+     * @param string|null $driver
      *
      * @return \Illuminate\Support\Collection
      */
@@ -114,12 +114,12 @@ class EloquentRepository extends BaseRepository
     /**
      * Paginate all entities.
      *
-     * @param int|null $perPage
-     * @param array    $columns
-     * @param string   $pageName
-     * @param int|null $page
-     * @param int      $lifetime
-     * @param string   $driver
+     * @param int|null    $perPage
+     * @param array       $columns
+     * @param string      $pageName
+     * @param int|null    $page
+     * @param int|null    $lifetime
+     * @param string|null $driver
      *
      * @throws \InvalidArgumentException
      *
@@ -137,11 +137,11 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching where conditions.
      *
-     * @param array  $where
-     * @param array  $columns
-     * @param array  $with
-     * @param int    $lifetime
-     * @param string $driver
+     * @param array       $where
+     * @param array       $columns
+     * @param array       $with
+     * @param int|null    $lifetime
+     * @param string|null $driver
      *
      * @return \Illuminate\Support\Collection
      */
@@ -153,9 +153,9 @@ class EloquentRepository extends BaseRepository
             foreach ($where as $attribute => $value) {
                 if (is_array($value)) {
                     list($attribute, $condition, $value) = $value;
-                    $this->model->where($attribute, $condition, $value);
+                    $this->model = $this->model->where($attribute, $condition, $value);
                 } else {
-                    $this->model->where($attribute, '=', $value);
+                    $this->model = $this->model->where($attribute, '=', $value);
                 }
             }
 
@@ -166,12 +166,12 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
-     * @param array  $columns
-     * @param array  $with
-     * @param int    $lifetime
-     * @param string $driver
+     * @param string      $attribute
+     * @param array       $values
+     * @param array       $columns
+     * @param array       $with
+     * @param int|null    $lifetime
+     * @param string|null $driver
      *
      * @return \Illuminate\Support\Collection
      */
@@ -187,12 +187,12 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
-     * @param array  $columns
-     * @param array  $with
-     * @param int    $lifetime
-     * @param string $driver
+     * @param string      $attribute
+     * @param array       $values
+     * @param array       $columns
+     * @param array       $with
+     * @param int|null    $lifetime
+     * @param string|null $driver
      *
      * @return \Illuminate\Support\Collection
      */

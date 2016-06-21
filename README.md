@@ -1,6 +1,6 @@
 # Rinvex Repository
 
-**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making apps more flexible to maintain.
+**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making applications more flexible to maintain.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
@@ -47,7 +47,7 @@
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
     - [Mandatory Repository Conventions](#mandatory-repository-conventions)
     - [Automatic Guessing](#automatic-guessing)
-    - [Flexible Caching](#flexible-caching)
+    - [Flexible Granular Caching](#flexible--granular-caching)
 - [Changelog](#changelog)
 - [Support](#support)
 - [Contributing & Protocols](#contributing--protocols)
@@ -205,28 +205,6 @@ return [
 
         'skip_uri' => 'skipCache',
 
-        /*
-        |--------------------------------------------------------------------------
-        | Cache Methods
-        |--------------------------------------------------------------------------
-        |
-        | Specify which methods should be cached. Note that these methods
-        | MUST support caching in it's implementation for this to work.
-        |
-        | Default: ['find', 'findBy', 'findAll', 'paginate', 'findWhere', 'findWhereIn', 'findWhereNotIn']
-        |
-        */
-
-        'methods' => [
-            'find',
-            'findBy',
-            'findAll',
-            'paginate',
-            'findWhere',
-            'findWhereIn',
-            'findWhereNotIn',
-        ],
-
     ],
 
 ];
@@ -237,8 +215,9 @@ return [
 
 ### EloquentRepository
 
-The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum implementation that concrete implementations must extend. 
-The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation, it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
+The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum implementation that concrete implementations must extend.
+
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future), it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
 ```php
 use Rinvex\Repository\Repositories\EloquentRepository;
 
@@ -248,8 +227,12 @@ class FooRepository extends EloquentRepository
     public function __construct(Application $app)
     {
         $this->setContainer($app)
-             ->retrieveModel(\App\User::class)
-             ->setRepositoryId('rinvex.repository');
+             
+             // Repository identifier could be anything unique per repository
+             ->setRepositoryId('rinvex.repository')
+             
+             // Model retrieval MUST be the last called method here, it's not chainable
+             ->retrieveModel(\App\User::class);
     }
 }
 
@@ -257,7 +240,8 @@ class FooRepository extends EloquentRepository
 $repository = new \FooRepository();
 ```
 
-As you can see, you have to inistantiate your repository object with required data, and the best place to do so is through the constructor method. Set the application container, retrieve model, set the repository ID, and you're good to go.
+As you can see, you have to inistantiate your repository object with required data, and the best place to do so is through the constructor method. Set the application container, set the repository ID, retrieve model, and you're good to go.
+
 Through the `setContainer` method, it's easy to swap application container instances used within the repository.
 
 #### `setContainer()`, `getContainer()`
@@ -273,10 +257,10 @@ $container = $this->getContainer();
 
 #### `setRepositoryId()`, `getRepositoryId()`
 
-The `setRepositoryId` method sets the repository identifier, while `getRepositoryId` returns it:
+The `setRepositoryId` method sets the repository identifier, while `getRepositoryId` returns it (it could be anything you want, but must be **unique per repository**):
 ```php
 // Set repository identifier
-$repository->setRepositoryId('rinvex.repository.entity');
+$repository->setRepositoryId('rinvex.repository');
 
 // Get repository identifier
 $repositoryId = $repository->getRepositoryId();
@@ -313,8 +297,39 @@ $repository->addGlobalScope('age', function(Builder $builder) {
     $builder->where('age', '>', 200);
 });
 
-// Remove all or passed registered global scopes
-$repository->withoutGlobalScopes(['age'])
+// Remove specific registered global scopes
+$repository->withoutGlobalScopes(['age']);
+
+// Remove all registered global scopes
+$repository->withoutGlobalScopes();
+```
+
+Alternatively, you can define a scope class then register it as follows:
+```php
+namespace App\Scopes;
+
+use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+
+class AgeScope implements Scope
+{
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     *
+     * @return void
+     */
+    public function apply(Builder $builder, Model $model)
+    {
+        return $builder->where('age', '>', 200);
+    }
+}
+
+// Register a new global scope on the model
+$repository->addGlobalScope('age', new \App\Scopes\AgeScope());
 ```
 
 > **Note:** Checkout Laravel's [Global Scopes](https://laravel.com/docs/5.2/eloquent#global-scopes) documentation for further details.
@@ -379,7 +394,17 @@ $paginatedEntities = $repository->paginate(15);
 
 The `findWhere` method finds all entities matching where conditions:
 ```php
-$singleEntity = $repository->findWhere(['id' => 1]);
+// Matching values with equal '=' operator
+$result = $repository->findWhere(['id' => 1]);
+
+// Same way you can add multiple where conditions
+$result = $repository->findWhere(['id' => 1, 'slug' => 'example']);
+
+// Matching exact value with custom operator (notice that parameter syntax differs this time, it's now array of arrays)
+$result = $repository->findWhere([['id', '=', 1]]);
+
+// Same way you can add multiple where conditions
+$result = $repository->findWhere([['id', '=', 1], ['slug', '!=', 'example']]);
 ```
 
 #### `findWhereIn()`
@@ -428,31 +453,34 @@ $deletedEntity = $repository->delete(1);
 ```
 
 > **Notes:** 
-> - All setter methods returns an instance of the current object, and thus can be chained.
-> - All `find` method result sets are cached if cache is enabled and allowed for the method.
-> - All `find` methods take two more optional parameters for selected columns and eager loading relations. By default all columns are selected.
-> - All model methods can be called on repositories since it transparently passes it all through to the model even if not explicitly defined in the repository’s implementation.
-> - Cache is enabled by default, but you can disable caching if you want per repository as shown above. Cache tags are maintained behind scenes even for cache drivers that doesn't support it.
-> - `create`, `update`, and `delete` methods always return an array with two values, the first is action status whether it's succeeded or failed as a boolean value, and the other is an instance of the model just operated upon.
-> - It's recommended to set IoC container instance, repository identifier, and model name explicitely through your repository constructor like the above example, but this package is smart enough to guess any required piece of data if it's missing.
+> - Cache tags are maintained behind scenes even for cache drivers that doesn't support it.
+> - All setter methods `set*` returns an instance of the current object, and thus can be chained.
+> - All `find` method results are cached if cache is enabled on both the repository and query levels.
+> - Cache is enabled by default, but you can disable caching if you want per repository, or per query as described above. 
+> - All model methods can be called on repositories since it transparently passed through to the model even if it's not explicitly defined in the repository’s implementation.
+> - All `find` methods take few more optional parameters for selected columns, eager loading relations, cache lifetime, and cache driver. By default all columns are selected, and results cached forever.
+> - `create`, `update`, and `delete` methods always return an array with two values, the first is action status whether it's success or fail as a boolean value, and the other is an instance of the model just operated upon.
+> - It's recommended to set IoC container instance, repository identifier, and model name explicitely through your repository constructor like the above example, but this package is smart enough to guess any missing requirements.
 
 ### EloquentRepository Fired Events
 
-Repositories fire events at every successful action, like `create`, `update`, `delete`. All fired events are prefixed with repository's identifier like the following example:
+Repositories fire events at every successful action, like `create`, `update`, `delete`. All fired events are prefixed with repository's identifier (you set before in your [repository's constructor](#eloquentrepository)) like the following example:
 
 - rivnex.repository.entity.created
 - rivnex.repository.entity.updated
 - rivnex.repository.entity.deleted
 
-For your convenience, the events suffixed with `.entity.created`, `.entity.updated`, or `.entity.deleted` have listeners that take actions accordingly. Usually we need to flush cache -if enabled/exists- upon every success action.
-There's one more event `rivnex.repository.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it for relashionship actions.
+For your convenience, the events suffixed with `.entity.created`, `.entity.updated`, or `.entity.deleted` have listeners that take actions accordingly. Usually we need to flush cache -if enabled & exists- upon every success action.
+
+There's one more event `rivnex.repository.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it if you've model relashions for further actions.
 
 ### Mandatory Repository Conventions
 
-Here some conventions important to know while using this package. This package adheres to best practices trying to make development easier for web artisan, and thus it has some conventions for standardization and interoperability.
+Here some conventions important to know while using this package. This package adheres to best practices trying to make development easier for web artisans, and thus it has some conventions for standardization and interoperability.
 
-- All Fired Events has a unique suffix, like `.entity.created` for example. Note the `.entity.` which is mandatory for automatic event listeners to subscribe to. 
-- Default Directory Structure of any package integrates with this package is as follows:
+- All Fired Events has a unique suffix, like `.entity.created` for example. Note the `.entity.` which is mandatory for automatic event listeners to subscribe to.
+
+- Default directory structure of any package uses **Rinvex Repository** is as follows:
 ```
 ├── config                  --> config files
 |
@@ -493,32 +521,56 @@ Here some conventions important to know while using this package. This package a
 ```
 
 > **Notes:**
-> - This package adheres to [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) and expects all integrated packages to adhere to the same standard as well.
-> - That full structure may not required by this package, or even other packages, but it's the standard for all Rinvex packages. It's also used for automatic resolving, such as when repository model is missing for example, it will be auto guessed and resolved according to this directory structure.
+> - **Rinvex Repository** adheres to [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) and expects other packages that uses it to adhere to the same standard as well.
+> - That full structure may not required, but it's the standard for all Rinvex packages. It's also used for automatic guessing, such as when repository model is missing for example, it will be guessed automatically and resolved according to this directory structure.
 
 ### Automatic Guessing
 
-While it's recomended to explicitely set application container, repository model, and repository ID; This package is smart enough to guess any of these required data whenever missing.
+While it's **recomended** to explicitely set application container, repository identifier, and repository model; This package is smart enough to guess any of these required data whenever missing.
 
 - Application Container: `app()` helper is used as a fallback if application container instance not provided explicitely.
-- Repository Model: Conventionally repositories namespaced like `Rinvex\Demos\Repositories\ItemRepository`, so corresponding model supposed to be namespaced like `Rinvex\Demos\Models\Item`. That's how this packages guess the model if it's missing.
-- Repository Identifier: It's recommended to set repository identifier as a doted name like `rinvex.repository.entity`, but if it's missing fully qualified class name will be used (actually the result of `get_called_class()` function).
+- Repository Identifier: It's recommended to set repository identifier as a doted name like `rinvex.repository`, but if it's missing fully qualified repository class name will be used (actually the result of `get_called_class()` function).
+- Repository Model: Conventionally repositories are namespaced like this `Rinvex\Demos\Repositories\ItemRepository`, so corresponding model supposed to be namespaced like this `Rinvex\Demos\Models\Item`. That's how this packages guess the model if it's missing according to the [Default Directory Structure](#mandatory-repository-conventions).
 
-### Flexible Caching
+### Flexible & Granular Caching
 
-**Rinvex Repository** has an powerful, yet simple caching system, that handles almost every edge case. While you can enable/disable your application's cache as a whole, you have the ability to enable/disable cache individually per repository through the following attribute:
+**Rinvex Repository** has an powerful, yet simple and granular caching system, that handles almost every edge case. While you can enable/disable your application's cache as a whole, you have the flexibility to enable/disable cache individually per repository, or even more granularly for every method call! That gives you the ability to except certain queries from being cached even if the method is normally cached by default.
+
+Let's see what caching levels we can control:
+
+- **Whole application cache**
+Checkout Laravel's [Cache](https://laravel.com/docs/5.2/cache) documentation for more details.
+
+- **Per repository cache**
+Enable/Disable cache per repository:
+
 ```php
+// Enable cache for the whole repository
 $repository->enableCache(true);
+
+// Disable cache for the whole repository
+$repository->enableCache(false);
 ```
 
-Additionally, you have the flexibility to control cache even more granualy and enable/disable cache per method. Checkout the `rinvex.repository.cache.methods` config option for a list of cached methods.
+- **Per query cache**
+Enable/Disable cache per query (set the `$lifetime` parameter to 0):
+```php
+$repository->findAll(['*'], [], 0);
+```
 
-Lastly, you can disable cache per single request by passing the following query string in your URL `skipCache`. Note that you can modify this parameter to whatever you need through the `rinvex.repository.cache.skip_uri`.
+The `$lifetime` parameter exists in all retrieval `find*` methods and it controls how that query results being cached, you've three possible states **(-1: cache forever, 0: disable cache, 123: cache for 123 minutes)**. [see the `Rinvex\Repository\Contracts\RepositoryContract` interface for full API details] 
+
+So as you may expect, caching query results is totally up to you, while all retrieval `find*` methods have cache enabled by default, you can enable/disable cache for individual queries as you wish.
+
+- **Per HTTP request cache**
+
+Lastly, you can disable cache per single request by passing the following query string in your URL `skipCache`. Note that you can modify this parameter to whatever name you may need through the `rinvex.repository.cache.skip_uri` config option.
 
 > **Notes:** 
-> - You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option.
-> - This package utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys that you can modify through the `rinvex.repository.cache.keys_file` config option.
-> - This package follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
+> - Repository level cache MUST be enabled for any lower level cache to work (query cache), otherwise it's considered disabled even if explicitly enabled per query.
+> - You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option, or per individual query through the `$lifetime` parameter.
+> - **Rinvex Repository** utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage it virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys. Checkout the `rinvex.repository.cache.keys_file` config option to change file path.
+> - **Rinvex Repository** follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
 
 
 ## Changelog
