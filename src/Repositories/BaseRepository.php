@@ -63,27 +63,35 @@ abstract class BaseRepository implements RepositoryContract
      * @param string   $method
      * @param string   $hash
      * @param \Closure $closure
+     * @param int      $lifetime
+     * @param string   $driver
      *
      * @return mixed
      */
-    protected function executeCallback($class, $method, $hash, Closure $closure)
+    protected function executeCallback($class, $method, $hash, $lifetime = null, $driver = null, Closure $closure)
     {
         $cacheKey = $class.'@'.$method.'.'.$hash;
         $config   = $this->getContainer('config')->get('rinvex.repository.cache');
+        $lifetime = $lifetime ?: $config['lifetime'];
 
-        if ($this->isCacheableMethod($config, $method)) {
+        // Switch cache driver on runtime
+        if ($driver) {
+            $this->getContainer('cache')->setDefaultDriver($driver);
+        }
+
+        if ($this->isCacheableMethod($config, $method, $lifetime)) {
             if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
-                return $config['lifetime'] === -1
+                return $lifetime === -1
                     ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure)
-                    : $this->getContainer('cache')->tags($this->getRepositoryId())->remember($cacheKey, $config['lifetime'], $closure);
+                    : $this->getContainer('cache')->tags($this->getRepositoryId())->remember($cacheKey, $lifetime, $closure);
             }
 
             // Store cache keys by mimicking cache tags
             $this->storeCacheKeys($class, $method, $hash, $config['keys_file']);
 
-            return $config['lifetime'] === -1
+            return $lifetime === -1
                 ? $this->getContainer('cache')->rememberForever($cacheKey, $closure)
-                : $this->getContainer('cache')->remember($cacheKey, $config['lifetime'], $closure);
+                : $this->getContainer('cache')->remember($cacheKey, $lifetime, $closure);
         }
 
         return call_user_func($closure);
@@ -359,13 +367,13 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @param array  $config
      * @param string $method
+     * @param int    $lifetime
      *
      * @return bool
      */
-    protected function isCacheableMethod($config, $method)
+    protected function isCacheableMethod($config, $method, $lifetime)
     {
-        return $this->cacheEnabled
-               && $config['lifetime']
+        return $this->cacheEnabled && $lifetime
                && in_array($method, $config['methods'])
                && ! $this->getContainer('request')->has($config['skip_uri']);
     }

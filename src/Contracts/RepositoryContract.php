@@ -127,13 +127,15 @@ interface RepositoryContract
     /**
      * Find an entity by its primary key.
      *
-     * @param int   $id
-     * @param array $columns
-     * @param array $with
+     * @param int    $id
+     * @param array  $columns
+     * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return object
      */
-    public function find($id, $columns = ['*'], $with = []);
+    public function find($id, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
 
     /**
      * Find an entity by one of it's attributes.
@@ -142,20 +144,24 @@ interface RepositoryContract
      * @param string $value
      * @param array  $columns
      * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return object
      */
-    public function findBy($attribute, $value, $columns = ['*'], $with = []);
+    public function findBy($attribute, $value, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
 
     /**
      * Find all entities.
      *
-     * @param array $columns
-     * @param array $with
+     * @param array  $columns
+     * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*'], $with = []);
+    public function findAll($columns = ['*'], $with = [], $lifetime = null, $driver = null);
 
     /**
      * Paginate all entities.
@@ -164,23 +170,27 @@ interface RepositoryContract
      * @param array    $columns
      * @param string   $pageName
      * @param int|null $page
+     * @param int      $lifetime
+     * @param string   $driver
      *
      * @throws \InvalidArgumentException
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $lifetime = null, $driver = null);
 
     /**
      * Find all entities matching where conditions.
      *
-     * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param array  $where
+     * @param array  $columns
+     * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*'], $with = []);
+    public function findWhere(array $where, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
 
     /**
      * Find all entities matching whereIn conditions.
@@ -189,10 +199,12 @@ interface RepositoryContract
      * @param array  $values
      * @param array  $columns
      * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = []);
+    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
 
     /**
      * Find all entities matching whereNotIn conditions.
@@ -201,10 +213,12 @@ interface RepositoryContract
      * @param array  $values
      * @param array  $columns
      * @param array  $with
+     * @param int    $lifetime
+     * @param string $driver
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = []);
+    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
 
     /**
      * Create a new entity with the given attributes.
