@@ -68,7 +68,7 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @return mixed
      */
-    protected function executeCallback($class, $method, $hash, $lifetime = null, $driver = null, Closure $closure)
+    protected function executeCallback($class, $method, $hash, $lifetime, $driver, Closure $closure)
     {
         $cacheKey = $class.'@'.$method.'.'.$hash;
         $config   = $this->getContainer('config')->get('rinvex.repository.cache');
