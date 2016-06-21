@@ -153,9 +153,9 @@ class EloquentRepository extends BaseRepository
             foreach ($where as $attribute => $value) {
                 if (is_array($value)) {
                     list($attribute, $condition, $value) = $value;
-                    $this->model->where($attribute, $condition, $value);
+                    $this->model = $this->model->where($attribute, $condition, $value);
                 } else {
-                    $this->model->where($attribute, '=', $value);
+                    $this->model = $this->model->where($attribute, '=', $value);
                 }
             }
 

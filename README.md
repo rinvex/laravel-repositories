@@ -248,8 +248,12 @@ class FooRepository extends EloquentRepository
     public function __construct(Application $app)
     {
         $this->setContainer($app)
-             ->retrieveModel(\App\User::class)
-             ->setRepositoryId('rinvex.repository');
+             
+             // Repository identifier could be anything unique per repository
+             ->setRepositoryId('rinvex.repository')
+             
+             // Model retrieval MUST be the last called method here
+             ->retrieveModel(\App\User::class);
     }
 }
 
@@ -273,7 +277,7 @@ $container = $this->getContainer();
 
 #### `setRepositoryId()`, `getRepositoryId()`
 
-The `setRepositoryId` method sets the repository identifier, while `getRepositoryId` returns it:
+The `setRepositoryId` method sets the repository identifier, while `getRepositoryId` returns it (it could be anything you want, but must be **unique per repository**):
 ```php
 // Set repository identifier
 $repository->setRepositoryId('rinvex.repository.entity');
@@ -379,7 +383,17 @@ $paginatedEntities = $repository->paginate(15);
 
 The `findWhere` method finds all entities matching where conditions:
 ```php
-$singleEntity = $repository->findWhere(['id' => 1]);
+// Matching values with equal '=' operator
+$result = $repository->findWhere(['id' => 1]);
+
+// Same way you can add multiple where conditions
+$result = $repository->findWhere(['id' => 1, 'slug' => 'example']);
+
+// Matching exact value with custom operator (notice that parameter syntax differs this time, it's now array of arrays)
+$result = $repository->findWhere([['id', '=', 1]]);
+
+// Same way you can add multiple where conditions
+$result = $repository->findWhere([['id', '=', 1], ['slug', '!=', 'example']]);
 ```
 
 #### `findWhereIn()`
