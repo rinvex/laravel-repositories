@@ -13,7 +13,7 @@
  * Link:    https://rinvex.com
  */
 
-namespace Rinvex\Repository;
+namespace Rinvex\Repository\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Rinvex\Repository\Listeners\RepositoryEventListener;
