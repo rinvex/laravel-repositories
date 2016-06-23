@@ -60,9 +60,6 @@
 - [License](#license)
 
 
-![Rinvex Repository Workflow](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.workflow.gif)
-
-
 ## Installation
 
 The best and easiest way to install this package is through [Composer](https://getcomposer.org/).
@@ -269,6 +266,8 @@ class BarController
     }
 }
 ```
+
+![Rinvex Repository Workflow](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.workflow.gif)
 
 ___
 
