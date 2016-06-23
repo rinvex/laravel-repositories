@@ -533,8 +533,9 @@ Now in a Laravel Service Provider bind both to the IoC (inside the `register` me
 ```php
 $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class)
 ```
-This way we don't have to instantiate the repository manually, and it's easy to switch betwee multiple implementations.
- ItUsing dependency injection (i.e. injecting the UsersRepository in a controller) the IoC Container would take care of other dependencies that our app may depend on and new them up under the hood.
+This way we don't have to instantiate the repository manually, and it's easy to switch between multiple implementations. The IoC Container will take care of the required dependencies.
+
+> **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
     
 
 ### EloquentRepository Fired Events
