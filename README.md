@@ -1,6 +1,8 @@
 # Rinvex Repository
 
-**Rinvex Repository** is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making applications more flexible to maintain.
+![Rinvex Repository Pattern](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.pattern.png)
+
+**Rinvex Repository** is a simple, intuitive, and smart implementation of Repository Pattern with extremely flexible & granular caching system, used to abstract the data layer, making applications more flexible to maintain.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
@@ -21,9 +23,10 @@
 - [Integration](#integration)
     - [Native Integration](#native-integration)
     - [Laravel Integration](#laravel-integration)
-- [Config Options](#config-options)
+- [Configuration](#configuration)
 - [Usage](#usage)
-    - [EloquentRepository](#eloquentrepository)
+    - [Quick Example](#quick-example)
+    - [Detailed Documentation](#detailed-documentation)
         - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
         - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
         - [`enableCache()`, `isCacheEnabled()`](#enablecache-iscacheenabled)
@@ -44,6 +47,7 @@
         - [`findOrCreate()`](#findorcreate)
         - [`update()`](#update)
         - [`delete()`](#delete)
+    - [Code To An Interface](#code-to-an-interface)
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
     - [Mandatory Repository Conventions](#mandatory-repository-conventions)
     - [Automatic Guessing](#automatic-guessing)
@@ -54,6 +58,9 @@
 - [Security Vulnerabilities](#security-vulnerabilities)
 - [About Rinvex](#about-rinvex)
 - [License](#license)
+
+
+![Rinvex Repository Workflow](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.workflow.gif)
 
 
 ## Installation
@@ -110,14 +117,14 @@ Integrating the package outside of a framework is incredibly easy, just require 
 
 After installing the package, open your Laravel config file located at `config/app.php` and add the following service provider to the `$providers` array:
 ```php
-Rinvex\Repository\RepositoryServiceProvider::class,
+Rinvex\Repository\Providers\RepositoryServiceProvider::class,
 ```
 
 > **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
 
 Run the following command on your terminal to publish config files:
 ```shell
-php artisan vendor:publish --provider="Rinvex\Repository\RepositoryServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Rinvex\Repository\Providers\RepositoryServiceProvider" --tag="config"
 ```
 
 > **Note:** Checkout Laravel's [Configuration](https://laravel.com/docs/5.2/#configuration) documentation for further details.
@@ -125,7 +132,7 @@ php artisan vendor:publish --provider="Rinvex\Repository\RepositoryServiceProvid
 You are good to go. Integration is done and you can now use all the available methods, proceed to the [Usage](#usage) section for an example.
 
 
-## Config Options
+## Configuration
 
 If you followed the previous integration steps, then your published config file reside at `config/rinvex.themes.php`.
 
@@ -213,36 +220,67 @@ return [
 
 ## Usage
 
-### EloquentRepository
+### Quick Example
 
-The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum implementation that concrete implementations must extend.
+The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum that concrete implementations must extend.
 
-The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future), it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and you can develop your own), it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
 ```php
+namespace App\Repositories;
+
+use Illuminate\Contracts\Container\Container;
 use Rinvex\Repository\Repositories\EloquentRepository;
 
 class FooRepository extends EloquentRepository
 {
-    // Inistantiate repository object with required data
-    public function __construct(Application $app)
+    // Instantiate repository object with required data
+    public function __construct(Container $container)
     {
-        $this->setContainer($app)
-             
+        $this->setContainer($container)
+
              // Repository identifier could be anything unique per repository
-             ->setRepositoryId('rinvex.repository')
-             
+             ->setRepositoryId('rinvex.repository.uniqueid')
+
              // Model retrieval MUST be the last called method here, it's not chainable
              ->retrieveModel(\App\User::class);
     }
 }
-
-// Inistantiate repository
-$repository = new \FooRepository();
 ```
 
-As you can see, you have to inistantiate your repository object with required data, and the best place to do so is through the constructor method. Set the application container, set the repository ID, retrieve model, and you're good to go.
+Now inside your controller, you can either instantiate the repository traditionaly through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
+```php
+namespace App\Http\Controllers;
 
-Through the `setContainer` method, it's easy to swap application container instances used within the repository.
+use App\Repositories\FooRepository;
+
+class BarController
+{
+    // Inject `FooRepository` from the IoC
+    public function baz(FooRepository $repository)
+    {
+        // Find entity by primary key
+        $repository->find(1);
+
+        // Find all entities
+        $repository->findAll();
+
+        // Create a new entity
+        $repository->create(['name' => 'Example']);
+    }
+}
+```
+
+___
+
+_**You're good to go! That's pretty enough knowledge to use this package.**_ 
+
+> A good programmer is someone who always looks both ways before crossing a one-way street. -Doug Linder
+
+_**So, you decided to proceed, ha?! Awesome!! :D**_
+
+___
+
+### Detailed Documentation
 
 #### `setContainer()`, `getContainer()`
 
@@ -260,7 +298,7 @@ $container = $this->getContainer();
 The `setRepositoryId` method sets the repository identifier, while `getRepositoryId` returns it (it could be anything you want, but must be **unique per repository**):
 ```php
 // Set repository identifier
-$repository->setRepositoryId('rinvex.repository');
+$repository->setRepositoryId('rinvex.repository.uniqueid');
 
 // Get repository identifier
 $repositoryId = $repository->getRepositoryId();
@@ -443,6 +481,9 @@ $fetchedEntity = $repository->findOrCreate(['name' => 'Example']);
 The `update` method updates an entity with the given attributes:
 ```php
 $updatedEntity = $repository->update(1, ['name' => 'Example2']);
+
+// Assign updated entity status and instance variables:
+list($status, $instance) = $updatedEntity;
 ```
 
 #### `delete()`
@@ -450,6 +491,9 @@ $updatedEntity = $repository->update(1, ['name' => 'Example2']);
 The `delete` method deletes an entity with the given id:
 ```php
 $deletedEntity = $repository->delete(1);
+
+// Assign deleted entity status and instance variables:
+list($status, $instance) = $deletedEntity;
 ```
 
 > **Notes:** 
@@ -461,6 +505,38 @@ $deletedEntity = $repository->delete(1);
 > - All `find` methods take few more optional parameters for selected columns, eager loading relations, cache lifetime, and cache driver. By default all columns are selected, and results cached forever.
 > - `create`, `update`, and `delete` methods always return an array with two values, the first is action status whether it's success or fail as a boolean value, and the other is an instance of the model just operated upon.
 > - It's recommended to set IoC container instance, repository identifier, and model name explicitely through your repository constructor like the above example, but this package is smart enough to guess any missing requirements.
+
+### Code To An Interface
+
+As a best practice, it's recommended to code for an interface specifically for scalable projects. The following example explains how to do so.
+
+First, create an interface (abstract) for every entity you've:
+```php
+use Rinvex\Repository\Contracts\RepositoryContract;
+
+interface UserRepositoryContract extends RepositoryContract
+{
+    //
+}
+```
+
+Second, create a repository (concrete implementation) for every entity you've:
+```php
+use Rinvex\Repository\Repositories\EloquentRepository;
+
+class UserEloquentRepository extends EloquentRepository implements UserRepositoryContract
+{
+    // 
+}
+```
+
+Now in a Laravel Service Provider bind both to the IoC (inside the `register` method):
+```php
+$this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class)
+```
+This way we don't have to instantiate the repository manually, and it's easy to switch betwee multiple implementations.
+ ItUsing dependency injection (i.e. injecting the UsersRepository in a controller) the IoC Container would take care of other dependencies that our app may depend on and new them up under the hood.
+    
 
 ### EloquentRepository Fired Events
 
@@ -529,7 +605,7 @@ Here some conventions important to know while using this package. This package a
 While it's **recomended** to explicitely set application container, repository identifier, and repository model; This package is smart enough to guess any of these required data whenever missing.
 
 - Application Container: `app()` helper is used as a fallback if application container instance not provided explicitely.
-- Repository Identifier: It's recommended to set repository identifier as a doted name like `rinvex.repository`, but if it's missing fully qualified repository class name will be used (actually the result of `get_called_class()` function).
+- Repository Identifier: It's recommended to set repository identifier as a doted name like `rinvex.repository.uniqueid`, but if it's missing fully qualified repository class name will be used (actually the result of `get_called_class()` function).
 - Repository Model: Conventionally repositories are namespaced like this `Rinvex\Demos\Repositories\ItemRepository`, so corresponding model supposed to be namespaced like this `Rinvex\Demos\Models\Item`. That's how this packages guess the model if it's missing according to the [Default Directory Structure](#mandatory-repository-conventions).
 
 ### Flexible & Granular Caching
