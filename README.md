@@ -582,7 +582,7 @@ Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
 The following support channels are available at your fingertips:
 
-- [Chat](https://gitter.im/rinvex/chat)
+- [Chat](http://chat.rinvex.com)
 - [Email](mailto:help@rinvex.com)
 - [Twitter](https://twitter.com/rinvex)
 
