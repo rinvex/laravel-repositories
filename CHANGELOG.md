@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v1.0.4] - 2016-06-24
+- Add Laravel 5.3.* support
+- Update chat link
+- Review and enhance documentation from scratch
+  - Add gif for quick example workflow
+  - Add visual graphics for better attraction & understanding
+  - Enhance the whole documentation framework and outlines
+  - Add quick example section & isolate the advanced details
+  - Add example for Coding To An Interface
+- Fix fired event names typo (close #25)
+
 ## [v1.0.3] - 2016-06-22
 - Fix wrong RepositoryServiceProvider PSR-4 namespace (close #19)
 
@@ -20,6 +31,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Commit first draft
 
+[v1.0.4]: https://github.com/rinvex/repository/compare/v1.0.3...v1.0.4
 [v1.0.3]: https://github.com/rinvex/repository/compare/v1.0.2...v1.0.3
 [v1.0.2]: https://github.com/rinvex/repository/compare/v1.0.1...v1.0.2
 [v1.0.1]: https://github.com/rinvex/repository/compare/v1.0.0...v1.0.1
