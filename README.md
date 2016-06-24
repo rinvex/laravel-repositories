@@ -66,20 +66,21 @@ The best and easiest way to install this package is through [Composer](https://g
 
 ### Compatibility
 
-This package fully compatible with **Laravel** `5.2.*`.
+This package fully compatible with **Laravel** `5.2.*`, and `5.3.*`.
 
 While this package tends to be framework-agnostic, it embraces Laravel culture and best practices to some extent. It's tested mainly with Laravel but you still can use it with other frameworks or even without any framework if you want.
 
-> **Note:** Global scope features not tested with Laravel 5.1, and probably won't work as it has been drastically changed in 5.2 releases. Checkout Laravel's [Global Scopes](https://laravel.com/docs/5.2/eloquent#global-scopes) documentation for further details.
+> **Note:** Global scope features not tested with Laravel 5.1, and probably won't work as it has been drastically changed in Laravel 5.2 releases. Checkout Laravel's [Global Scopes](https://laravel.com/docs/5.2/eloquent#global-scopes) documentation for further details.
 
 ### Prerequisites
 
 ```json
-"illuminate/events": "5.1.*|5.2.*",
-"illuminate/support": "5.1.*|5.2.*",
-"illuminate/database": "5.1.*|5.2.*",
-"illuminate/container": "5.1.*|5.2.*",
-"illuminate/contracts": "5.1.*|5.2.*"
+"php": ">=5.5.9",
+"illuminate/events": "5.1.*|5.2.*|5.3.*",
+"illuminate/support": "5.1.*|5.2.*|5.3.*",
+"illuminate/database": "5.1.*|5.2.*|5.3.*",
+"illuminate/container": "5.1.*|5.2.*|5.3.*",
+"illuminate/contracts": "5.1.*|5.2.*|5.3.*"
 ```
 
 ### Require Package
