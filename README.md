@@ -542,13 +542,13 @@ This way we don't have to instantiate the repository manually, and it's easy to 
 
 Repositories fire events at every successful action, like `create`, `update`, `delete`. All fired events are prefixed with repository's identifier (you set before in your [repository's constructor](#eloquentrepository)) like the following example:
 
-- rivnex.repository.entity.created
-- rivnex.repository.entity.updated
-- rivnex.repository.entity.deleted
+- rinvex.repository.entity.created
+- rinvex.repository.entity.updated
+- rinvex.repository.entity.deleted
 
 For your convenience, the events suffixed with `.entity.created`, `.entity.updated`, or `.entity.deleted` have listeners that take actions accordingly. Usually we need to flush cache -if enabled & exists- upon every success action.
 
-There's one more event `rivnex.repository.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it if you've model relashions for further actions.
+There's one more event `rinvex.repository.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it if you've model relashions for further actions.
 
 ### Mandatory Repository Conventions
 
