@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
   - Add quick example section & isolate the advanced details
   - Add example for Coding To An Interface
 - Fix fired event names typo (close #25)
+- Update contributing guidelines
 
 ## [v1.0.3] - 2016-06-22
 - Fix wrong RepositoryServiceProvider PSR-4 namespace (close #19)
