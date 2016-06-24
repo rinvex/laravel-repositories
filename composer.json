@@ -1,6 +1,6 @@
 {
     "name": "rinvex/repository",
-    "description": "Rinvex Repository is an intuitive, smart, and simple implementation of Repository Pattern used to abstract the data layer, with extremely flexible & granular caching system, making applications more flexible to maintain.",
+    "description": "Rinvex Repository is a simple, intuitive, and smart implementation of Repository Pattern with extremely flexible & granular caching system, used to abstract the data layer, making applications more flexible to maintain.",
     "keywords": [
         "solid",
         "rinvex",
@@ -41,11 +41,11 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "illuminate/events": "5.1.*|5.2.*",
-        "illuminate/support": "5.1.*|5.2.*",
-        "illuminate/database": "5.1.*|5.2.*",
-        "illuminate/container": "5.1.*|5.2.*",
-        "illuminate/contracts": "5.1.*|5.2.*"
+        "illuminate/events": "5.1.*|5.2.*|5.3.*",
+        "illuminate/support": "5.1.*|5.2.*|5.3.*",
+        "illuminate/database": "5.1.*|5.2.*|5.3.*",
+        "illuminate/container": "5.1.*|5.2.*|5.3.*",
+        "illuminate/contracts": "5.1.*|5.2.*|5.3.*"
     },
     "autoload": {
         "psr-4": {
