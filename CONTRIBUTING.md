@@ -54,6 +54,8 @@ The proposal should also describe the new feature, as well as implementation ide
 
 ### Which Branch?
 
-This project follows [Git-Flow](http://nvie.com/posts/a-successful-git-branching-model/), and as such has `master` (latest stable releases), `develop` (latest WIP development) and X.Y support branches.
+This project follows [Git-Flow](http://nvie.com/posts/a-successful-git-branching-model/), and as such has `master` (latest stable releases), `develop` (latest WIP development) and X.Y support branches (when there's multiple major versions).
+
+Accordingly all pull requests MUST be sent to the `develop` branch.
 
 > **Note:** Pull requests which do not follow these guidelines will be closed without any further notice.
