@@ -181,7 +181,9 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function getCacheLifetime()
     {
-        return ! is_null($this->cacheLifetime) ? $this->cacheLifetime : $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
+        return ! is_null($this->cacheLifetime)
+            ? $this->cacheLifetime
+            : $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
     }
 
     /**
@@ -428,7 +430,9 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function isCacheable()
     {
+        $skipUri = $this->getContainer('config')->get('rinvex.repository.cache.skip_uri');
+
         return $this->isCacheEnabled() && $this->getCacheLifetime()
-               && ! $this->getContainer('request')->has($this->getContainer('config')->get('rinvex.repository.cache.skip_uri'));
+               && ! $this->getContainer('request')->has($skipUri);
     }
 }
