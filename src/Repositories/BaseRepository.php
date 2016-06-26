@@ -333,17 +333,17 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function flushCacheKeys()
     {
-        $flushedKeys = [];
+        $flushedKeys  = [];
+        $calledClasss = get_called_class();
+        $config       = $this->getContainer('config')->get('rinvex.repository.cache');
+        $cacheKeys    = $this->getCacheKeys($config['keys_file']);
 
-        $config    = $this->getContainer('config')->get('rinvex.repository.cache');
-        $cacheKeys = $this->getCacheKeys($config['keys_file']);
-
-        if (isset($cacheKeys[get_called_class()]) && is_array($cacheKeys[get_called_class()])) {
-            foreach ($cacheKeys[get_called_class()] as $cacheKey) {
-                $flushedKeys[] = $cacheKey;
+        if (isset($cacheKeys[$calledClasss]) && is_array($cacheKeys[$calledClasss])) {
+            foreach ($cacheKeys[$calledClasss] as $cacheKey) {
+                $flushedKeys[] = $calledClasss.'@'.$cacheKey;
             }
 
-            unset($cacheKeys[get_called_class()]);
+            unset($cacheKeys[$calledClasss]);
             file_put_contents($config['keys_file'], json_encode($cacheKeys));
         }
 
