@@ -1,8 +1,8 @@
 # Rinvex Repository
 
-![Rinvex Repository Pattern](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.pattern.png)
+![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.diagram.png)
 
-**Rinvex Repository** is a simple, intuitive, and smart implementation of Repository Pattern with extremely flexible & granular caching system, used to abstract the data layer, making applications more flexible to maintain.
+**Rinvex Repository** is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system, used to abstract the data layer, making applications more flexible to maintain.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
@@ -47,11 +47,18 @@
         - [`findOrCreate()`](#findorcreate)
         - [`update()`](#update)
         - [`delete()`](#delete)
+    - [Add Custom Implementation](#add-custom-implementation)
     - [Code To An Interface](#code-to-an-interface)
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
     - [Mandatory Repository Conventions](#mandatory-repository-conventions)
     - [Automatic Guessing](#automatic-guessing)
-    - [Flexible Granular Caching](#flexible--granular-caching)
+    - [Flexible & Granular Caching](#flexible--granular-caching)
+        - [Whole Application Cache](#whole-application-cache)
+        - [Repository Cache](#repository-cache)
+        - [Individual Repository Query Cache](#individual-repository-query-cache)
+        - [Skip individual HTTP request cache](#skip-individual-http-request-cache)
+- [A Room For Enhancement](#a-room-for-enhancement)
+- [Further Reading](#further-reading)
 - [Changelog](#changelog)
 - [Support](#support)
 - [Contributing & Protocols](#contributing--protocols)
@@ -222,7 +229,7 @@ return [
 
 The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum that concrete implementations must extend.
 
-The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and you can develop your own), it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and [you can develop your own](#add-custom-implementation)), it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
 ```php
 namespace App\Repositories;
 
@@ -272,7 +279,7 @@ class BarController
 
 ___
 
-_**You're good to go! That's pretty enough knowledge to use this package.**_ 
+_**You're good to go! That's pretty enough knowledge to use this package.**_
 
 > A good programmer is someone who always looks both ways before crossing a one-way street. -Doug Linder
 
@@ -297,11 +304,33 @@ $container = $this->getContainer();
 
 The `setRepositoryId` method sets the repository identifier, while `getRepositoryId` returns it (it could be anything you want, but must be **unique per repository**):
 ```php
-// Set repository identifier
+// Set the repository identifier
 $repository->setRepositoryId('rinvex.repository.uniqueid');
 
-// Get repository identifier
+// Get the repository identifier
 $repositoryId = $repository->getRepositoryId();
+```
+
+#### `setCacheLifetime()`, `getCacheLifetime()`
+
+The `setCacheLifetime` method sets the repository cache lifetime, while `getCacheLifetime` returns it:
+```php
+// Set the repository cache lifetime
+$repository->setCacheLifetime(123);
+
+// Get the repository cache lifetime
+$cacheLifetime = $repository->getCacheLifetime();
+```
+
+#### `setCacheDriver()`, `getCacheDriver()`
+
+The `setCacheDriver` method sets the repository identifier, while `getCacheDriver` returns it:
+```php
+// Set the repository cache driver
+$repository->setCacheDriver('redis');
+
+// Get the repository cache driver
+$cacheDriver = $repository->getCacheDriver();
 ```
 
 #### `enableCache()`, `isCacheEnabled()`
@@ -496,15 +525,26 @@ $deletedEntity = $repository->delete(1);
 list($status, $instance) = $deletedEntity;
 ```
 
-> **Notes:** 
+> **Notes:**
 > - Cache tags are maintained behind scenes even for cache drivers that doesn't support it.
 > - All setter methods `set*` returns an instance of the current object, and thus can be chained.
 > - All `find` method results are cached if cache is enabled on both the repository and query levels.
-> - Cache is enabled by default, but you can disable caching if you want per repository, or per query as described above. 
+> - All `find` methods take few more optional parameters for selected columns, eager loading relations. By default all columns are selected.
 > - All model methods can be called on repositories since it transparently passed through to the model even if it's not explicitly defined in the repository’s implementation.
-> - All `find` methods take few more optional parameters for selected columns, eager loading relations, cache lifetime, and cache driver. By default all columns are selected, and results cached forever.
 > - `create`, `update`, and `delete` methods always return an array with two values, the first is action status whether it's success or fail as a boolean value, and the other is an instance of the model just operated upon.
 > - It's recommended to set IoC container instance, repository identifier, and model name explicitely through your repository constructor like the above example, but this package is smart enough to guess any missing requirements.
+
+### Add Custom Implementation
+
+Since we're focusing on abstracting the data layer, and we're separating the abstract interface from the concrete implementation, it's easy to add your own implementation.
+
+Say your domain model uses a web service, or a filesystem data store as it's data source, all you need to do is just extend the `BaseRepository` class, that's it. See:
+```php
+class FilesystemRepository extends BaseRepository
+{
+    // Implement here all `RepositoryContract` methods that query/persist data to & from filesystem
+}
+```
 
 ### Code To An Interface
 
@@ -526,7 +566,7 @@ use Rinvex\Repository\Repositories\EloquentRepository;
 
 class UserEloquentRepository extends EloquentRepository implements UserRepositoryContract
 {
-    // 
+    //
 }
 ```
 
@@ -537,7 +577,7 @@ $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class)
 This way we don't have to instantiate the repository manually, and it's easy to switch between multiple implementations. The IoC Container will take care of the required dependencies.
 
 > **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
-    
+
 
 ### EloquentRepository Fired Events
 
@@ -611,16 +651,17 @@ While it's **recomended** to explicitely set application container, repository i
 
 ### Flexible & Granular Caching
 
-**Rinvex Repository** has an powerful, yet simple and granular caching system, that handles almost every edge case. While you can enable/disable your application's cache as a whole, you have the flexibility to enable/disable cache individually per repository, or even more granularly for every method call! That gives you the ability to except certain queries from being cached even if the method is normally cached by default.
+**Rinvex Repository** has a powerful, yet simple and granular caching system, that handles almost every edge case. While you can enable/disable your application's cache as a whole, you have the flexibility to enable/disable cache individually per repository, or even more granularly for every method call! That gives you the ability to except certain queries from being cached even if the method is normally cached by default.
 
 Let's see what caching levels we can control:
 
-- **Whole application cache**
+#### Whole Application Cache
+
 Checkout Laravel's [Cache](https://laravel.com/docs/5.2/cache) documentation for more details.
 
-- **Per repository cache**
-Enable/Disable cache per repository:
+#### Repository Cache
 
+Enable/Disable cache per repository:
 ```php
 // Enable cache for the whole repository
 $repository->enableCache(true);
@@ -629,21 +670,57 @@ $repository->enableCache(true);
 $repository->enableCache(false);
 ```
 
-- **Per query cache**
-Enable/Disable cache per query (set the `$lifetime` parameter to 0):
+#### Individual Repository Query Cache
+
+Change cache per query or disable it:
 ```php
-$repository->findAll(['*'], [], 0);
+// Set cache lifetime for this specific repository query to 123 minutes
+$repository->setCacheLifetime(123);
+
+// Set cache lifetime for this specific repository query to forever
+$repository->setCacheLifetime(-1);
+
+// Disable cache for this specific repository query
+$repository->setCacheLifetime(0);
 ```
 
-The `$lifetime` parameter exists in all retrieval `find*` methods and it controls how that query results being cached, you've three possible states **(-1: cache forever, 0: disable cache, 123: cache for 123 minutes)**. [see the `Rinvex\Repository\Contracts\RepositoryContract` interface for full API details] 
+Change cache driver per query:
+```php
+// Set cache driver for this specific repository query to redis
+$repository->setCacheDriver('redis');
+```
 
-So as you may expect, caching query results is totally up to you, while all retrieval `find*` methods have cache enabled by default, you can enable/disable cache for individual queries as you wish.
+Both `setCacheLifetime` & `setCacheDriver` methods are chainable:
+```php
+// Change cache lifetime & driver on runtime
+$repository->setCacheLifetime(123)->setCacheDriver('redis')->findAll();
 
-- **Per HTTP request cache**
+// Use default cache lifetime & driver
+$repository->findAll();
+```
 
-Lastly, you can disable cache per single request by passing the following query string in your URL `skipCache`. Note that you can modify this parameter to whatever name you may need through the `rinvex.repository.cache.skip_uri` config option.
+Unless disabled explicitly, cache is enabled for all repositories by default, and kept for as long as your `rinvex.repository.cache.lifetime` config value, using default application's cache driver `cache.default` (which could be changed per repository query as well).
 
-> **Notes:** 
+Caching repository query results is totally up to you, while all retrieval `find*` methods have cache enabled by default, you can enable/disable cache for individual queries or control how it's being cache, for how long, and using which driver as you wish.
+
+#### Skip individual HTTP request cache
+
+Lastly, you can disable cache per single request by passing the following query string in your URL `skipCache=true`. Note that you can modify this parameter to whatever name you may need through the `rinvex.repository.cache.skip_uri` config option.
+
+
+## A Room For Enhancement
+
+Since this is an evolving implementation that may change accordingly depending on real-world use cases, it’s worth mentioning that the caching layer could be decoupled more, may be I’ll rethink the whole caching layer in a Decorator Pattern way.
+
+I also admit that this implementation is tightly coupled to Laravel Eloquent in some way, and has some leaking implementation details, specifically in the context of filtration and using scopes, this likely to be changed and rethought in a Criteria Pattern way in the future.
+
+
+## Further Reading
+
+For more insights about the Active Repository implementation, I've published an article on the topic titled [Active Repository is good & Awesomely Usable](https://blog.omranic.com/active-repository-is-good-awesomely-usable-6991cfd58774).
+
+
+> **Notes:**
 > - Repository level cache MUST be enabled for any lower level cache to work (query cache), otherwise it's considered disabled even if explicitly enabled per query.
 > - You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option, or per individual query through the `$lifetime` parameter.
 > - **Rinvex Repository** utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage it virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys. Checkout the `rinvex.repository.cache.keys_file` config option to change file path.
