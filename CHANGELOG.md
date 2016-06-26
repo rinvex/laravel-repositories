@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v1.0.5] - 2016-06-27
+- Fix clear cache on update issue (close #27)
+- Move cache lifetime & driver args to setter methods (close #26)
+- Review & rewrite documentation to reflect recent updates
+
 ## [v1.0.4] - 2016-06-24
 - Add Laravel 5.3.* support
 - Update chat link
@@ -32,6 +37,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Commit first draft
 
+[v1.0.5]: https://github.com/rinvex/repository/compare/v1.0.4...v1.0.5
 [v1.0.4]: https://github.com/rinvex/repository/compare/v1.0.3...v1.0.4
 [v1.0.3]: https://github.com/rinvex/repository/compare/v1.0.2...v1.0.3
 [v1.0.2]: https://github.com/rinvex/repository/compare/v1.0.1...v1.0.2

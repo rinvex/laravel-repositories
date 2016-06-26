@@ -57,29 +57,42 @@ abstract class BaseRepository implements RepositoryContract
     protected $cacheClearEnabled = true;
 
     /**
+     * The repository cache lifetime.
+     *
+     * @var int
+     */
+    protected $cacheLifetime;
+
+    /**
+     * The repository cache driver.
+     *
+     * @var string
+     */
+    protected $cacheDriver;
+
+    /**
      * Execute given callback and cache result set.
      *
      * @param string   $class
      * @param string   $method
-     * @param string   $hash
+     * @param array    $args
      * @param \Closure $closure
-     * @param int      $lifetime
-     * @param string   $driver
      *
      * @return mixed
      */
-    protected function executeCallback($class, $method, $hash, $lifetime, $driver, Closure $closure)
+    protected function executeCallback($class, $method, $args, Closure $closure)
     {
+        $driver   = $this->getCacheDriver();
+        $lifetime = $this->getCacheLifetime();
+        $hash     = md5(json_encode($args + [$driver, $lifetime, $this->model->toSql()]));
         $cacheKey = $class.'@'.$method.'.'.$hash;
-        $config   = $this->getContainer('config')->get('rinvex.repository.cache');
-        $lifetime = ! is_null($lifetime) ? $lifetime : $config['lifetime'];
 
         if ($driver) {
             // Switch cache driver on runtime
             $this->getContainer('cache')->setDefaultDriver($driver);
         }
 
-        if ($this->isCacheableMethod($config, $lifetime)) {
+        if ($this->isCacheable()) {
             if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
                 return $lifetime === -1
                     ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure)
@@ -87,7 +100,7 @@ abstract class BaseRepository implements RepositoryContract
             }
 
             // Store cache keys by mimicking cache tags
-            $this->storeCacheKeys($class, $method, $hash, $config['keys_file']);
+            $this->storeCacheKeys($class, $method, $hash);
 
             return $lifetime === -1
                 ? $this->getContainer('cache')->rememberForever($cacheKey, $closure)
@@ -148,6 +161,56 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
+     * Set the repository cache lifetime.
+     *
+     * @param int $cacheLifetime
+     *
+     * @return $this
+     */
+    public function setCacheLifetime($cacheLifetime)
+    {
+        $this->cacheLifetime = $cacheLifetime;
+
+        return $this;
+    }
+
+    /**
+     * Get the repository cache lifetime.
+     *
+     * @return int
+     */
+    public function getCacheLifetime()
+    {
+        return ! is_null($this->cacheLifetime)
+            ? $this->cacheLifetime
+            : $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
+    }
+
+    /**
+     * Set the repository cache driver.
+     *
+     * @param string $cacheDriver
+     *
+     * @return $this
+     */
+    public function setCacheDriver($cacheDriver)
+    {
+        $this->cacheDriver = $cacheDriver;
+
+        return $this;
+    }
+
+    /**
+     * Get the repository cache driver.
+     *
+     * @return string
+     */
+    public function getCacheDriver()
+    {
+        return $this->cacheDriver;
+    }
+
+    /**
      * Enable repository cache.
      *
      * @param bool $status
@@ -202,9 +265,7 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function forgetCache()
     {
-        $lifetime = $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
-
-        if ($this->cacheEnabled && $lifetime) {
+        if ($this->isCacheEnabled() && $this->getCacheLifetime()) {
             if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
                 $this->getContainer('cache')->tags($this->getRepositoryId())->flush();
             } else {
@@ -312,17 +373,17 @@ abstract class BaseRepository implements RepositoryContract
      * @param string $class
      * @param string $method
      * @param string $hash
-     * @param string $file
      *
      * @return void
      */
-    protected function storeCacheKeys($class, $method, $hash, $file)
+    protected function storeCacheKeys($class, $method, $hash)
     {
-        $cacheKeys = $this->getCacheKeys($file);
+        $keysFile  = $this->getContainer('config')->get('rinvex.repository.cache.keys_file');
+        $cacheKeys = $this->getCacheKeys($keysFile);
 
         if (! isset($cacheKeys[$class]) || ! in_array($method.'.'.$hash, $cacheKeys[$class])) {
             $cacheKeys[$class][] = $method.'.'.$hash;
-            file_put_contents($file, json_encode($cacheKeys));
+            file_put_contents($keysFile, json_encode($cacheKeys));
         }
     }
 
@@ -333,17 +394,17 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function flushCacheKeys()
     {
-        $flushedKeys = [];
+        $flushedKeys  = [];
+        $calledClasss = get_called_class();
+        $config       = $this->getContainer('config')->get('rinvex.repository.cache');
+        $cacheKeys    = $this->getCacheKeys($config['keys_file']);
 
-        $config    = $this->getContainer('config')->get('rinvex.repository.cache');
-        $cacheKeys = $this->getCacheKeys($config['keys_file']);
-
-        if (isset($cacheKeys[get_called_class()]) && is_array($cacheKeys[get_called_class()])) {
-            foreach ($cacheKeys[get_called_class()] as $cacheKey) {
-                $flushedKeys[] = $cacheKey;
+        if (isset($cacheKeys[$calledClasss]) && is_array($cacheKeys[$calledClasss])) {
+            foreach ($cacheKeys[$calledClasss] as $cacheKey) {
+                $flushedKeys[] = $calledClasss.'@'.$cacheKey;
             }
 
-            unset($cacheKeys[get_called_class()]);
+            unset($cacheKeys[$calledClasss]);
             file_put_contents($config['keys_file'], json_encode($cacheKeys));
         }
 
@@ -351,7 +412,7 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * Get cache keys file.
+     * Get cache keys.
      *
      * @param string $file
      *
@@ -363,16 +424,15 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * Determine if repository method is cacheable.
-     *
-     * @param array $config
-     * @param int   $lifetime
+     * Determine if repository is cacheable.
      *
      * @return bool
      */
-    protected function isCacheableMethod($config, $lifetime)
+    protected function isCacheable()
     {
-        return $this->cacheEnabled && $lifetime
-               && ! $this->getContainer('request')->has($config['skip_uri']);
+        $skipUri = $this->getContainer('config')->get('rinvex.repository.cache.skip_uri');
+
+        return $this->isCacheEnabled() && $this->getCacheLifetime()
+               && ! $this->getContainer('request')->has($skipUri);
     }
 }

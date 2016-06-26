@@ -55,6 +55,38 @@ interface RepositoryContract
     public function getRepositoryId();
 
     /**
+     * Set the repository cache lifetime.
+     *
+     * @param string $cacheLifetime
+     *
+     * @return $this
+     */
+    public function setCacheLifetime($cacheLifetime);
+
+    /**
+     * Get the repository cache lifetime.
+     *
+     * @return string
+     */
+    public function getCacheLifetime();
+
+    /**
+     * Set the repository cache driver.
+     *
+     * @param string $cacheDriver
+     *
+     * @return $this
+     */
+    public function setCacheDriver($cacheDriver);
+
+    /**
+     * Get the repository cache driver.
+     *
+     * @return string
+     */
+    public function getCacheDriver();
+
+    /**
      * Enable repository cache.
      *
      * @param bool $status
@@ -127,98 +159,84 @@ interface RepositoryContract
     /**
      * Find an entity by its primary key.
      *
-     * @param int         $id
-     * @param array       $columns
-     * @param array       $with
-     * @param int|null    $lifetime
-     * @param string|null $driver
+     * @param int   $id
+     * @param array $columns
+     * @param array $with
      *
      * @return object
      */
-    public function find($id, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
+    public function find($id, $columns = ['*'], $with = []);
 
     /**
      * Find an entity by one of it's attributes.
      *
-     * @param string      $attribute
-     * @param string      $value
-     * @param array       $columns
-     * @param array       $with
-     * @param int|null    $lifetime
-     * @param string|null $driver
+     * @param string $attribute
+     * @param string $value
+     * @param array  $columns
+     * @param array  $with
      *
      * @return object
      */
-    public function findBy($attribute, $value, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
+    public function findBy($attribute, $value, $columns = ['*'], $with = []);
 
     /**
      * Find all entities.
      *
-     * @param array       $columns
-     * @param array       $with
-     * @param int|null    $lifetime
-     * @param string|null $driver
+     * @param array $columns
+     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*'], $with = [], $lifetime = null, $driver = null);
+    public function findAll($columns = ['*'], $with = []);
 
     /**
      * Paginate all entities.
      *
-     * @param int|null    $perPage
-     * @param array       $columns
-     * @param string      $pageName
-     * @param int|null    $page
-     * @param int|null    $lifetime
-     * @param string|null $driver
+     * @param int|null $perPage
+     * @param array    $columns
+     * @param string   $pageName
+     * @param int|null $page
      *
      * @throws \InvalidArgumentException
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $lifetime = null, $driver = null);
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
 
     /**
      * Find all entities matching where conditions.
      *
-     * @param array       $where
-     * @param array       $columns
-     * @param array       $with
-     * @param int|null    $lifetime
-     * @param string|null $driver
+     * @param array $where
+     * @param array $columns
+     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
+    public function findWhere(array $where, $columns = ['*'], $with = []);
 
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param string      $attribute
-     * @param array       $values
-     * @param array       $columns
-     * @param array       $with
-     * @param int|null    $lifetime
-     * @param string|null $driver
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
+    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = []);
 
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param string      $attribute
-     * @param array       $values
-     * @param array       $columns
-     * @param array       $with
-     * @param int|null    $lifetime
-     * @param string|null $driver
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = [], $lifetime = null, $driver = null);
+    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = []);
 
     /**
      * Create a new entity with the given attributes.
