@@ -75,7 +75,7 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @param string   $class
      * @param string   $method
-     * @param string   $hash
+     * @param array    $args
      * @param \Closure $closure
      *
      * @return mixed
@@ -163,7 +163,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Set the repository cache lifetime.
      *
-     * @param string $cacheLifetime
+     * @param int $cacheLifetime
      *
      * @return $this
      */
@@ -177,7 +177,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return string
+     * @return int
      */
     public function getCacheLifetime()
     {
