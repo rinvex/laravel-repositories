@@ -159,9 +159,9 @@ interface RepositoryContract
     /**
      * Find an entity by its primary key.
      *
-     * @param int         $id
-     * @param array       $columns
-     * @param array       $with
+     * @param int   $id
+     * @param array $columns
+     * @param array $with
      *
      * @return object
      */
@@ -170,10 +170,10 @@ interface RepositoryContract
     /**
      * Find an entity by one of it's attributes.
      *
-     * @param string      $attribute
-     * @param string      $value
-     * @param array       $columns
-     * @param array       $with
+     * @param string $attribute
+     * @param string $value
+     * @param array  $columns
+     * @param array  $with
      *
      * @return object
      */
@@ -182,8 +182,8 @@ interface RepositoryContract
     /**
      * Find all entities.
      *
-     * @param array       $columns
-     * @param array       $with
+     * @param array $columns
+     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
@@ -192,10 +192,10 @@ interface RepositoryContract
     /**
      * Paginate all entities.
      *
-     * @param int|null    $perPage
-     * @param array       $columns
-     * @param string      $pageName
-     * @param int|null    $page
+     * @param int|null $perPage
+     * @param array    $columns
+     * @param string   $pageName
+     * @param int|null $page
      *
      * @throws \InvalidArgumentException
      *
@@ -206,9 +206,9 @@ interface RepositoryContract
     /**
      * Find all entities matching where conditions.
      *
-     * @param array       $where
-     * @param array       $columns
-     * @param array       $with
+     * @param array $where
+     * @param array $columns
+     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
@@ -217,10 +217,10 @@ interface RepositoryContract
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param string      $attribute
-     * @param array       $values
-     * @param array       $columns
-     * @param array       $with
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
@@ -229,10 +229,10 @@ interface RepositoryContract
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param string      $attribute
-     * @param array       $values
-     * @param array       $columns
-     * @param array       $with
+     * @param string $attribute
+     * @param array  $values
+     * @param array  $columns
+     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
