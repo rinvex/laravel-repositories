@@ -59,7 +59,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * The repository cache lifetime.
      *
-     * @var int
+     * @var int|float
      */
     protected $cacheLifetime;
 
@@ -184,6 +184,18 @@ abstract class BaseRepository implements RepositoryContract
         return ! is_null($this->cacheLifetime)
             ? $this->cacheLifetime
             : $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
+    }
+
+    /**
+     * Convenience method. Alias to setCacheLifetime(0).
+     *
+     * @return $this
+     */
+    public function skipCache()
+    {
+        $this->setCacheLifetime(0);
+
+        return $this;
     }
 
     /**
