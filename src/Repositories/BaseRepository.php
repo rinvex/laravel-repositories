@@ -59,7 +59,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * The repository cache lifetime.
      *
-     * @var int|float
+     * @var float|int
      */
     protected $cacheLifetime;
 
