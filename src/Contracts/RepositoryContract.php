@@ -264,27 +264,6 @@ interface RepositoryContract
     public function delete($id);
 
     /**
-     * Register a new global scope.
-     *
-     * @param \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
-     * @param \Closure|null                                       $implementation
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
-     */
-    public function addGlobalScope($scope, Closure $implementation = null);
-
-    /**
-     * Remove all or passed registered global scopes.
-     *
-     * @param array|null $scopes
-     *
-     * @return $this
-     */
-    public function withoutGlobalScopes(array $scopes = null);
-
-    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method

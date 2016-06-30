@@ -311,35 +311,6 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * Register a new global scope.
-     *
-     * @param \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
-     * @param \Closure|null                                       $implementation
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
-     */
-    public function addGlobalScope($scope, Closure $implementation = null)
-    {
-        return $this->model->addGlobalScope($scope, $implementation);
-    }
-
-    /**
-     * Remove all or passed registered global scopes.
-     *
-     * @param array|null $scopes
-     *
-     * @return $this
-     */
-    public function withoutGlobalScopes(array $scopes = null)
-    {
-        $this->model = $this->model->withoutGlobalScopes($scopes);
-
-        return $this;
-    }
-
-    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method

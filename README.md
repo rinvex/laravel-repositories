@@ -30,7 +30,6 @@
         - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
         - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
         - [`enableCacheClear()`, `isCacheClearEnabled()`](#enablecacheclear-iscacheclearenabled)
-        - [`addGlobalScope()`, `withoutGlobalScopes()`](#addglobalscope-withoutglobalscopes)
         - [`setModel()`, `getModel()`](#setmodel-getmodel)
         - [`createModel()`](#createmodel)
         - [`forgetCache()`](#forgetcache)
@@ -73,11 +72,9 @@ The best and easiest way to install this package is through [Composer](https://g
 
 ### Compatibility
 
-This package fully compatible with **Laravel** `5.2.*`, and `5.3.*`.
+This package fully compatible with **Laravel** `5.1.*`, `5.2.*`, and `5.3.*`.
 
 While this package tends to be framework-agnostic, it embraces Laravel culture and best practices to some extent. It's tested mainly with Laravel but you still can use it with other frameworks or even without any framework if you want.
-
-> **Note:** Global scope features not tested with Laravel 5.1, and probably won't work as it has been drastically changed in Laravel 5.2 releases. Checkout Laravel's [Global Scopes](https://laravel.com/docs/5.2/eloquent#global-scopes) documentation for further details.
 
 ### Prerequisites
 
@@ -351,52 +348,6 @@ $repository->enableCacheClear(true);
 // Determine if repository cache clear is enabled
 $repository->isCacheClearEnabled();
 ```
-
-#### `addGlobalScope()`, `withoutGlobalScopes()`
-
-The `addGlobalScope` method registers a new global scope on the model while `withoutGlobalScopes` removes all or passed registered global scopes:
-```php
-// Register a new global scope on the model
-$repository->addGlobalScope('age', function(Builder $builder) {
-    $builder->where('age', '>', 200);
-});
-
-// Remove specific registered global scopes
-$repository->withoutGlobalScopes(['age']);
-
-// Remove all registered global scopes
-$repository->withoutGlobalScopes();
-```
-
-Alternatively, you can define a scope class then register it as follows:
-```php
-namespace App\Scopes;
-
-use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-
-class AgeScope implements Scope
-{
-    /**
-     * Apply the scope to a given Eloquent query builder.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     *
-     * @return void
-     */
-    public function apply(Builder $builder, Model $model)
-    {
-        return $builder->where('age', '>', 200);
-    }
-}
-
-// Register a new global scope on the model
-$repository->addGlobalScope('age', new \App\Scopes\AgeScope());
-```
-
-> **Note:** Checkout Laravel's [Global Scopes](https://laravel.com/docs/5.2/eloquent#global-scopes) documentation for further details.
 
 #### `retrieveModel()`
 
