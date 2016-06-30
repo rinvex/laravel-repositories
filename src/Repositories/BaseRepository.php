@@ -75,21 +75,21 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @var array
      */
-    protected $where;
+    protected $where = [];
 
     /**
      * The query whereIn clauses.
      *
      * @var array
      */
-    protected $whereIn;
+    protected $whereIn = [];
 
     /**
      * The query whereNotIn clauses.
      *
      * @var array
      */
-    protected $whereNotIn;
+    protected $whereNotIn = [];
 
     /**
      * The "offset" value of the query.
@@ -110,7 +110,7 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @var array
      */
-    protected $orderBy;
+    protected $orderBy = [];
 
     /**
      * Execute given callback and cache the result.
@@ -201,12 +201,12 @@ abstract class BaseRepository implements RepositoryContract
         $this->cacheLifetime = null;
         $this->cacheDriver   = null;
         $this->relations     = [];
-        $this->where         = null;
-        $this->whereIn       = null;
-        $this->whereNotIn    = null;
+        $this->where         = [];
+        $this->whereIn       = [];
+        $this->whereNotIn    = [];
         $this->offset        = null;
         $this->limit         = null;
-        $this->orderBy       = null;
+        $this->orderBy       = [];
 
         return $this;
     }
@@ -226,36 +226,33 @@ abstract class BaseRepository implements RepositoryContract
         }
 
         // Add a basic where clause to the query
-        if (is_array($this->where) && ! empty($this->where)) {
-            foreach ($this->where as $where) {
-                list($attribute, $operator, $value, $boolean) = $where;
-                $model = $model->where($attribute, $operator, $value, $boolean);
-            }
+        foreach ($this->where as $where) {
+            list($attribute, $operator, $value, $boolean) = $where;
+
+            $model = $model->where($attribute, $operator, $value, $boolean);
         }
 
         // Add a "where in" clause to the query
-        if (is_array($this->whereIn) && ! empty($this->whereIn)) {
-            foreach ($this->whereIn as $whereIn) {
-                list($attribute, $values, $boolean, $not) = $whereIn;
-                $model = $model->whereIn($attribute, $values, $boolean, $not);
-            }
+        foreach ($this->whereIn as $whereIn) {
+            list($attribute, $values, $boolean, $not) = $whereIn;
+
+            $model = $model->whereIn($attribute, $values, $boolean, $not);
         }
 
         // Add a "where not in" clause to the query
-        if (is_array($this->whereNotIn) && ! empty($this->whereNotIn)) {
-            foreach ($this->whereNotIn as $whereNotIn) {
-                list($attribute, $values, $boolean) = $whereNotIn;
-                $model = $model->whereNotIn($attribute, $values, $boolean);
-            }
+        foreach ($this->whereNotIn as $whereNotIn) {
+            list($attribute, $values, $boolean) = $whereNotIn;
+
+            $model = $model->whereNotIn($attribute, $values, $boolean);
         }
 
         // Set the "offset" value of the query
-        if ($this->offset) {
+        if ($this->offset > 0) {
             $model = $model->offset($this->offset);
         }
 
         // Set the "limit" value of the query
-        if ($this->limit) {
+        if ($this->limit > 0) {
             $model = $model->limit($this->limit);
         }
 
@@ -402,7 +399,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Set the repository cache lifetime.
      *
-     * @param int $cacheLifetime
+     * @param float|int $cacheLifetime
      *
      * @return $this
      */
@@ -416,7 +413,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return int
+     * @return float|int
      */
     public function getCacheLifetime()
     {

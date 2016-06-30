@@ -111,9 +111,9 @@ class EloquentRepository extends BaseRepository
     /**
      * Paginate all entities into a simple paginator.
      *
-     * @param  int    $perPage
-     * @param  array  $attributes
-     * @param  string $pageName
+     * @param  int|null $perPage
+     * @param  array    $attributes
+     * @param  string   $pageName
      *
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
@@ -136,6 +136,7 @@ class EloquentRepository extends BaseRepository
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
             list($attribute, $operator, $value, $boolean) = $where;
+
             $this->where($attribute, $operator, $value, $boolean);
 
             return $this->prepareQuery($this->createModel())->get($attributes);
@@ -154,6 +155,7 @@ class EloquentRepository extends BaseRepository
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
             list($attribute, $values, $boolean, $not) = $where;
+
             $this->whereIn($attribute, $values, $boolean, $not);
 
             return $this->prepareQuery($this->createModel())->get($attributes);
@@ -172,6 +174,7 @@ class EloquentRepository extends BaseRepository
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
             list($attribute, $values, $boolean) = $where;
+
             $this->whereNotIn($attribute, $values, $boolean);
 
             return $this->prepareQuery($this->createModel())->get($attributes);

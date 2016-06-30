@@ -72,7 +72,7 @@ interface RepositoryContract
     /**
      * Set the repository cache lifetime.
      *
-     * @param int $cacheLifetime
+     * @param float|int $cacheLifetime
      *
      * @return $this
      */
@@ -81,7 +81,7 @@ interface RepositoryContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return int
+     * @return float|int
      */
     public function getCacheLifetime();
 
@@ -252,9 +252,9 @@ interface RepositoryContract
     /**
      * Paginate all entities into a simple paginator.
      *
-     * @param  int    $perPage
-     * @param  array  $attributes
-     * @param  string $pageName
+     * @param  int|null $perPage
+     * @param  array    $attributes
+     * @param  string   $pageName
      *
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
