@@ -45,17 +45,17 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find an entity by its primary key.
+     * Find an entity by it's primary key.
      *
      * @param int   $id
      * @param array $attributes
      *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function find($id, $attributes = ['*'])
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($id, $attributes) {
-            return $this->model->find($id, $attributes);
+            return $this->prepareQuery($this->createModel())->find($id, $attributes);
         });
     }
 
@@ -66,12 +66,12 @@ class EloquentRepository extends BaseRepository
      * @param string $value
      * @param array  $attributes
      *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function findBy($attribute, $value, $attributes = ['*'])
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $value, $attributes) {
-            return $this->model->where($attribute, '=', $value)->first($attributes);
+            return $this->prepareQuery($this->createModel())->where($attribute, '=', $value)->first($attributes);
         });
     }
 
@@ -85,7 +85,7 @@ class EloquentRepository extends BaseRepository
     public function findAll($attributes = ['*'])
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attributes) {
-            return $this->model->get($attributes);
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 
@@ -104,7 +104,7 @@ class EloquentRepository extends BaseRepository
     public function paginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null)
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($perPage, $attributes, $pageName, $page) {
-            return $this->model->paginate($perPage, $attributes, $pageName, $page);
+            return $this->prepareQuery($this->createModel())->paginate($perPage, $attributes, $pageName, $page);
         });
     }
 
@@ -135,48 +135,46 @@ class EloquentRepository extends BaseRepository
     public function findWhere(array $where, $attributes = ['*'])
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
-            foreach ($where as $attribute => $value) {
-                if (is_array($value)) {
-                    list($attribute, $condition, $value) = $value;
-                    $this->model = $this->model->where($attribute, $condition, $value);
-                } else {
-                    $this->model = $this->model->where($attribute, '=', $value);
-                }
-            }
+            list($attribute, $operator, $value, $boolean) = $where;
+            $this->where($attribute, $operator, $value, $boolean);
 
-            return $this->model->get($attributes);
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
+     * @param array  $where
      * @param array  $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $attributes = ['*'])
+    public function findWhereIn(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $attributes) {
-            return $this->model->whereIn($attribute, $values)->get($attributes);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+            list($attribute, $values, $boolean, $not) = $where;
+            $this->whereIn($attribute, $values, $boolean, $not);
+
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
+     * @param array  $where
      * @param array  $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $attributes = ['*'])
+    public function findWhereNotIn(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $attributes) {
-            return $this->model->whereNotIn($attribute, $values)->get($attributes);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+            list($attribute, $values, $boolean) = $where;
+            $this->whereNotIn($attribute, $values, $boolean);
+
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 

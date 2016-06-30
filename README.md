@@ -443,31 +443,29 @@ $paginatedEntities = $repository->paginate(15);
 The `findWhere` method finds all entities matching where conditions:
 ```php
 // Matching values with equal '=' operator
-$result = $repository->findWhere(['id' => 1]);
+$repository->findWhere(['slug', '=', 'example']);
 
-// Same way you can add multiple where conditions
-$result = $repository->findWhere(['id' => 1, 'slug' => 'example']);
-
-// Matching exact value with custom operator (notice that parameter syntax differs this time, it's now array of arrays)
-$result = $repository->findWhere([['id', '=', 1]]);
-
-// Same way you can add multiple where conditions
-$result = $repository->findWhere([['id', '=', 1], ['slug', '!=', 'example']]);
+// If you want to add multiple conditions to the same query, chain it!
+$repository->findWhere(['slug', '=', 'example'])->findWhere(['name', '!=', 'Test']);
 ```
 
 #### `findWhereIn()`
 
 The `findWhereIn` method finds all entities matching whereIn conditions:
 ```php
-$includedEntities = $repository->findWhereIn('id', [1, 2, 3]);
+$includedEntities = $repository->findwhereIn('id', [1, 2, 5, 8);
 ```
 
 #### `findWhereNotIn()`
 
 The `findWhereNotIn` method finds all entities matching whereNotIn conditions:
 ```php
-$excludedEntities = $repository->findWhereNotIn('id', [1, 2, 3]);
+$excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8);
 ```
+
+> **Notes:**
+> - Signature of all of the `findWhere`, 'findWhereIn', and `findWhereNotIn` methods has been changed since **v2.0.0**.
+> - All of the `findWhere`, 'findWhereIn', and `findWhereNotIn` methods utilize the `where`, `whereIn`, and `whereNotIn` methods respectively, and thus takes first argument as an array of same parameters required by the later ones.
 
 #### `create()`
 

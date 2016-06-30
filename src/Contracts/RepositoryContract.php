@@ -274,24 +274,22 @@ interface RepositoryContract
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
+     * @param array  $where
      * @param array  $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $attributes = ['*']);
+    public function findWhereIn(array $where, $attributes = ['*']);
 
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
+     * @param array  $where
      * @param array  $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $attributes = ['*']);
+    public function findWhereNotIn(array $where, $attributes = ['*']);
 
     /**
      * Create a new entity with the given attributes.
