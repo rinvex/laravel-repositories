@@ -203,22 +203,6 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find entity matching the given attributes or create it.
-     *
-     * @param array $attributes
-     *
-     * @return object|array
-     */
-    public function findOrCreate(array $attributes)
-    {
-        if (! is_null($instance = $this->findWhere($attributes)->first())) {
-            return $instance;
-        }
-
-        return $this->create($attributes);
-    }
-
-    /**
      * Update an entity with the given attributes.
      *
      * @param mixed $id

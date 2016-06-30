@@ -498,13 +498,6 @@ $createdEntity = $repository->create(['name' => 'Example']);
 list($status, $instance) = $createdEntity;
 ```
 
-#### `findOrCreate()`
-
-The `findOrCreate` method finds entity matching the given attributes or create it:
-```php
-$fetchedEntity = $repository->findOrCreate(['name' => 'Example']);
-```
-
 #### `update()`
 
 The `update` method updates an entity with the given attributes:

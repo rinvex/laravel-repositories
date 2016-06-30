@@ -248,15 +248,6 @@ interface RepositoryContract
     public function create(array $attributes = []);
 
     /**
-     * Find entity matching the given attributes or create it.
-     *
-     * @param array $attributes
-     *
-     * @return object|array
-     */
-    public function findOrCreate(array $attributes);
-
-    /**
      * Update an entity with the given attributes.
      *
      * @param mixed $id
