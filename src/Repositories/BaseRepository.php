@@ -113,7 +113,7 @@ abstract class BaseRepository implements RepositoryContract
     protected $cacheDriver;
 
     /**
-     * Execute given callback and cache result set.
+     * Execute given callback and cache the result.
      *
      * @param string   $class
      * @param string   $method
@@ -124,32 +124,91 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function executeCallback($class, $method, $args, Closure $closure)
     {
-        $driver   = $this->getCacheDriver();
-        $lifetime = $this->getCacheLifetime();
-        $hash     = md5(json_encode($args + [$driver, $lifetime, $this->model->toSql()]));
-        $cacheKey = $class.'@'.$method.'.'.$hash;
+        $skipUri = $this->getContainer('config')->get('rinvex.repository.cache.skip_uri');
 
-        if ($driver) {
+        // Check if cache is enabled
+        if ($this->getCacheLifetime() && ! $this->getContainer('request')->has($skipUri)) {
+            $repositoryId = $this->getRepositoryId();
+            $lifetime     = $this->getCacheLifetime();
+            $hash         = $this->generateHash($args);
+            $cacheKey     = $class.'@'.$method.'.'.$hash;
+
             // Switch cache driver on runtime
-            $this->getContainer('cache')->setDefaultDriver($driver);
-        }
-
-        if ($this->isCacheable()) {
-            if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
-                return $lifetime === -1
-                    ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure)
-                    : $this->getContainer('cache')->tags($this->getRepositoryId())->remember($cacheKey, $lifetime, $closure);
+            if ($driver = $this->getCacheDriver()) {
+                $this->getContainer('cache')->setDefaultDriver($driver);
             }
 
-            // Store cache keys by mimicking cache tags
+            // We need cache tags, check if default driver supports it
+            if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
+                $result = $lifetime === -1
+                    ? $this->getContainer('cache')->tags($repositoryId)->rememberForever($cacheKey, $closure)
+                    : $this->getContainer('cache')->tags($repositoryId)->remember($cacheKey, $lifetime, $closure);
+
+                // We're done, let's clean up!
+                $this->resetRepository();
+
+                return $result;
+            }
+
+            // Default cache driver doesn't support tags, let's do it manually
             $this->storeCacheKeys($class, $method, $hash);
 
-            return $lifetime === -1
+            $result = $lifetime === -1
                 ? $this->getContainer('cache')->rememberForever($cacheKey, $closure)
                 : $this->getContainer('cache')->remember($cacheKey, $lifetime, $closure);
+
+            // We're done, let's clean up!
+            $this->resetRepository();
+
+            return $result;
         }
 
+        // Cache disabled, just execute qurey & return result
         return call_user_func($closure);
+    }
+
+    /**
+     * Generate unique query hash.
+     *
+     * @param $args
+     *
+     * @return string
+     */
+    protected function generateHash($args)
+    {
+        return md5(json_encode($args + [
+                $this->getRepositoryId(),
+                $this->getModel(),
+                $this->getCacheDriver(),
+                $this->getCacheLifetime(),
+                $this->relations,
+                $this->where,
+                $this->whereIn,
+                $this->whereNotIn,
+                $this->offset,
+                $this->limit,
+                $this->orderBy,
+            ]));
+    }
+
+    /**
+     * Reset repository to it's defaults.
+     *
+     * @return $this
+     */
+    protected function resetRepository()
+    {
+        $this->cacheLifetime = null;
+        $this->cacheDriver   = null;
+        $this->relations     = [];
+        $this->where         = null;
+        $this->whereIn       = null;
+        $this->whereNotIn    = null;
+        $this->offset        = null;
+        $this->limit         = null;
+        $this->orderBy       = null;
+
+        return $this;
     }
 
     /**
