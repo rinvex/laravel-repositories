@@ -85,6 +85,20 @@ abstract class BaseRepository implements RepositoryContract
     protected $whereNotIn;
 
     /**
+     * The "offset" value of the query.
+     *
+     * @var int
+     */
+    protected $offset;
+
+    /**
+     * The "limit" value of the query.
+     *
+     * @var int
+     */
+    protected $limit;
+
+    /**
      * The repository cache lifetime.
      *
      * @var int
@@ -369,6 +383,34 @@ abstract class BaseRepository implements RepositoryContract
     public function whereNotIn($attribute, $values, $boolean = 'and')
     {
         $this->whereNotIn[] = [$attribute, $values, $boolean];
+
+        return $this;
+    }
+
+    /**
+     * Set the "offset" value of the query.
+     *
+     * @param int $offset
+     *
+     * @return $this
+     */
+    public function offset($offset)
+    {
+        $this->offset = $offset;
+
+        return $this;
+    }
+
+    /**
+     * Set the "limit" value of the query.
+     *
+     * @param int $limit
+     *
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->limit = $limit;
 
         return $this;
     }

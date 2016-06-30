@@ -179,6 +179,24 @@ interface RepositoryContract
     public function whereNotIn($attribute, $values, $boolean = 'and');
 
     /**
+     * Set the "offset" value of the query.
+     *
+     * @param int $offset
+     *
+     * @return $this
+     */
+    public function offset($offset);
+
+    /**
+     * Set the "limit" value of the query.
+     *
+     * @param int $limit
+     *
+     * @return $this
+     */
+    public function limit($limit);
+
+    /**
      * Add an "order by" clause to the repository.
      *
      * @param string $attribute
