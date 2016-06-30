@@ -145,10 +145,10 @@ interface RepositoryContract
     /**
      * Add a basic where clause to the query.
      *
-     * @param  string  $attribute
-     * @param  string  $operator
-     * @param  mixed   $value
-     * @param  string  $boolean
+     * @param string $attribute
+     * @param string $operator
+     * @param mixed  $value
+     * @param string $boolean
      *
      * @return $this
      */
@@ -157,10 +157,10 @@ interface RepositoryContract
     /**
      * Add a "where in" clause to the query.
      *
-     * @param  string  $attribute
-     * @param  mixed   $values
-     * @param  string  $boolean
-     * @param  bool    $not
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     * @param bool   $not
      *
      * @return $this
      */
@@ -169,9 +169,9 @@ interface RepositoryContract
     /**
      * Add a "where not in" clause to the query.
      *
-     * @param  string  $attribute
-     * @param  mixed   $values
-     * @param  string  $boolean
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
      *
      * @return $this
      */
@@ -252,9 +252,9 @@ interface RepositoryContract
     /**
      * Paginate all entities into a simple paginator.
      *
-     * @param  int    $perPage
-     * @param  array  $attributes
-     * @param  string $pageName
+     * @param int    $perPage
+     * @param array  $attributes
+     * @param string $pageName
      *
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
@@ -273,8 +273,8 @@ interface RepositoryContract
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param array  $where
-     * @param array  $attributes
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
@@ -283,8 +283,8 @@ interface RepositoryContract
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param array  $where
-     * @param array  $attributes
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */

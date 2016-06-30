@@ -229,7 +229,7 @@ abstract class BaseRepository implements RepositoryContract
         if (is_array($this->where) && ! empty($this->where)) {
             foreach ($this->where as $where) {
                 list($attribute, $operator, $value, $boolean) = $where;
-                $model = $model->where($attribute, $operator, $value, $boolean);
+                $model                                        = $model->where($attribute, $operator, $value, $boolean);
             }
         }
 
@@ -237,7 +237,7 @@ abstract class BaseRepository implements RepositoryContract
         if (is_array($this->whereIn) && ! empty($this->whereIn)) {
             foreach ($this->whereIn as $whereIn) {
                 list($attribute, $values, $boolean, $not) = $whereIn;
-                $model = $model->whereIn($attribute, $values, $boolean, $not);
+                $model                                    = $model->whereIn($attribute, $values, $boolean, $not);
             }
         }
 
@@ -245,7 +245,7 @@ abstract class BaseRepository implements RepositoryContract
         if (is_array($this->whereNotIn) && ! empty($this->whereNotIn)) {
             foreach ($this->whereNotIn as $whereNotIn) {
                 list($attribute, $values, $boolean) = $whereNotIn;
-                $model = $model->whereNotIn($attribute, $values, $boolean);
+                $model                              = $model->whereNotIn($attribute, $values, $boolean);
             }
         }
 
@@ -515,10 +515,10 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Add a basic where clause to the query.
      *
-     * @param  string  $attribute
-     * @param  string  $operator
-     * @param  mixed   $value
-     * @param  string  $boolean
+     * @param string $attribute
+     * @param string $operator
+     * @param mixed  $value
+     * @param string $boolean
      *
      * @return $this
      */
@@ -532,10 +532,10 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Add a "where in" clause to the query.
      *
-     * @param  string  $attribute
-     * @param  mixed   $values
-     * @param  string  $boolean
-     * @param  bool    $not
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     * @param bool   $not
      *
      * @return $this
      */
@@ -549,9 +549,9 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Add a "where not in" clause to the query.
      *
-     * @param  string  $attribute
-     * @param  mixed   $values
-     * @param  string  $boolean
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
      *
      * @return $this
      */
