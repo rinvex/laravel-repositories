@@ -15,7 +15,6 @@
 
 namespace Rinvex\Repository\Contracts;
 
-use Closure;
 use Illuminate\Contracts\Container\Container;
 
 interface RepositoryContract
@@ -34,7 +33,7 @@ interface RepositoryContract
      *
      * @param string|null $service
      *
-     * @return mixed
+     * @return object
      */
     public function getContainer($service = null);
 
@@ -73,7 +72,7 @@ interface RepositoryContract
     /**
      * Set the repository cache lifetime.
      *
-     * @param string $cacheLifetime
+     * @param int $cacheLifetime
      *
      * @return $this
      */
@@ -82,7 +81,7 @@ interface RepositoryContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return string
+     * @return int
      */
     public function getCacheLifetime();
 
@@ -197,7 +196,7 @@ interface RepositoryContract
     public function limit($limit);
 
     /**
-     * Add an "order by" clause to the repository.
+     * Add an "order by" clause to the query.
      *
      * @param string $attribute
      * @param string $direction
@@ -207,7 +206,7 @@ interface RepositoryContract
     public function orderBy($attribute, $direction = 'asc');
 
     /**
-     * Find an entity by its primary key.
+     * Find an entity by it's primary key.
      *
      * @param int   $id
      * @param array $attributes

@@ -2,7 +2,7 @@
 
 ![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.diagram.png)
 
-**Rinvex Repository** is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system, used to abstract the data layer, making applications more flexible to maintain.
+**Rinvex Repository** is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system for Laravel, used to abstract the data layer, making applications more flexible to maintain.
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
@@ -15,6 +15,7 @@
 
 ## Table Of Contents
 
+- [Features](#features)
 - [Installation](#installation)
     - [Compatibility](#compatibility)
     - [Prerequisites](#prerequisites)
@@ -28,25 +29,29 @@
     - [Quick Example](#quick-example)
     - [Detailed Documentation](#detailed-documentation)
         - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
-        - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
-        - [`enableCacheClear()`, `isCacheClearEnabled()`](#enablecacheclear-iscacheclearenabled)
         - [`setModel()`, `getModel()`](#setmodel-getmodel)
+        - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
+        - [`setCacheLifetime()`, `getCacheLifetime()`](#setcachelifetime-getcachelifetime)
+        - [`setCacheDriver()`, `getCacheDriver()`](#setcachedriver-getcachedriver)
+        - [`enableCacheClear()`, `isCacheClearEnabled()`](#enablecacheclear-iscacheclearenabled)
         - [`createModel()`](#createmodel)
         - [`forgetCache()`](#forgetcache)
-        - [`find()`](#find)
         - [`with()`](#with)
         - [`where()`](#where)
         - [`whereIn()`](#wherein)
         - [`whereNotIn()`](#wherenotin)
+        - [`offset()`](#offset)
+        - [`limit()`](#limit)
         - [`orderBy()`](#orderby)
+        - [`find()`](#find)
         - [`findBy()`](#findby)
         - [`findAll()`](#findall)
         - [`paginate()`](#paginate)
+        - [`simplePaginate()`](#simplepaginate)
         - [`findWhere()`](#findwhere)
         - [`findWhereIn()`](#findwherein)
         - [`findWhereNotIn()`](#findwherenotin)
         - [`create()`](#create)
-        - [`findOrCreate()`](#findorcreate)
         - [`update()`](#update)
         - [`delete()`](#delete)
     - [Add Custom Implementation](#add-custom-implementation)
@@ -56,17 +61,27 @@
     - [Automatic Guessing](#automatic-guessing)
     - [Flexible & Granular Caching](#flexible--granular-caching)
         - [Whole Application Cache](#whole-application-cache)
-        - [Repository Cache](#repository-cache)
         - [Individual Repository Query Cache](#individual-repository-query-cache)
         - [Skip individual HTTP request cache](#skip-individual-http-request-cache)
-- [A Room For Enhancement](#a-room-for-enhancement)
-- [Further Reading](#further-reading)
 - [Changelog](#changelog)
 - [Support](#support)
 - [Contributing & Protocols](#contributing--protocols)
 - [Security Vulnerabilities](#security-vulnerabilities)
 - [About Rinvex](#about-rinvex)
 - [License](#license)
+
+
+## Features
+
+- Cache, Cache, Cache!
+- Prevent code duplication.
+- Reduce potential programming errors.
+- Granularly cache queries with flexible control.
+- Apply centrally managed, consistent access rules and logic.
+- Implement and centralize a caching strategy for the domain model.
+- Improve the code’s maintainability and readability by separating client objects from domain models.
+- Maximize the amount of code that can be tested with automation and to isolate both the client object and the domain model to support unit testing.
+- Associate a behavior with the related data. For example, calculate fields or enforce complex relationships or business rules between the data elements within an entity.
 
 
 ## Installation
@@ -229,7 +244,7 @@ return [
 
 The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum that concrete implementations must extend.
 
-The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and [you can develop your own](#add-custom-implementation)), it makes it easy to create new eloquent model instances and to retrieve or override the model during runtime, in addition to performing multiple useful operations on models. To use `EloquentRepository` your repository MUST extend it first:
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and [you can develop your own](#add-custom-implementation)), it makes it easy to create new eloquent model instances and to manipulate them easily. To use `EloquentRepository` your repository MUST extend it first:
 ```php
 namespace App\Repositories;
 
@@ -352,13 +367,6 @@ $repository->enableCacheClear(true);
 $repository->isCacheClearEnabled();
 ```
 
-#### `retrieveModel()`
-
-The `retrieveModel` method retrieves the repository model:
-```php
-$model = $repository->retrieveModel(\App\User::class);
-```
-
 #### `createModel()`
 
 The `createModel()` method creates a new repository model instance:
@@ -403,16 +411,30 @@ $repository->whereNotIn('id', [1, 2, 5, 8);
 
 > **Note:** All of the `where`, `whereIn`, and `whereNotIn` methods are chainable & could be called multiple times in a single request. It will hold all where clauses in an array internally and apply them all before executing the query.
 
+#### `offset()`
+
+The `offset` method sets the "offset" value of the query:
+```php
+$repository->offset(5);
+```
+
+#### `limit()`
+
+The `limit` method sets the "limit" value of the query:
+```php
+$repository->limit(9);
+```
+
 #### `orderBy()`
 
-The `orderBy` method adds an "order by" clause to the repository:
+The `orderBy` method adds an "order by" clause to the query:
 ```php
 $repository->orderBy('id', 'asc');
 ```
 
 #### `find()`
 
-The `find` method finds an entity by its primary key:
+The `find` method finds an entity by it's primary key:
 ```php
 $entity = $repository->find(1);
 ```
@@ -435,7 +457,14 @@ $allEntities = $repository->findAll();
 
 The `paginate` method paginates all entities:
 ```php
-$paginatedEntities = $repository->paginate(15);
+$entitiesPagination = $repository->paginate(15);
+```
+
+#### `simplePaginate()`
+
+The `simplePaginate` method paginates all entities into a simple paginator:
+```php
+$entitiesSimplePagination = $repository->simplePaginate(15);
 ```
 
 #### `findWhere()`
@@ -631,17 +660,6 @@ Let's see what caching levels we can control:
 
 Checkout Laravel's [Cache](https://laravel.com/docs/5.2/cache) documentation for more details.
 
-#### Repository Cache
-
-Enable/Disable cache per repository:
-```php
-// Enable cache for the whole repository
-$repository->enableCache(true);
-
-// Disable cache for the whole repository
-$repository->enableCache(false);
-```
-
 #### Individual Repository Query Cache
 
 Change cache per query or disable it:
@@ -680,23 +698,14 @@ Caching repository query results is totally up to you, while all retrieval `find
 Lastly, you can disable cache per single request by passing the following query string in your URL `skipCache=true`. Note that you can modify this parameter to whatever name you may need through the `rinvex.repository.cache.skip_uri` config option.
 
 
-## A Room For Enhancement
-
-Since this is an evolving implementation that may change accordingly depending on real-world use cases, it’s worth mentioning that the caching layer could be decoupled more, may be I’ll rethink the whole caching layer in a Decorator Pattern way.
-
-I also admit that this implementation is tightly coupled to Laravel Eloquent in some way, and has some leaking implementation details, specifically in the context of filtration and using scopes, this likely to be changed and rethought in a Criteria Pattern way in the future.
-
-
-## Further Reading
-
-For more insights about the Active Repository implementation, I've published an article on the topic titled [Active Repository is good & Awesomely Usable](https://blog.omranic.com/active-repository-is-good-awesomely-usable-6991cfd58774).
-
-
 > **Notes:**
 > - Repository level cache MUST be enabled for any lower level cache to work (query cache), otherwise it's considered disabled even if explicitly enabled per query.
 > - You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option, or per individual query through the `$lifetime` parameter.
+> - For more insights about the Active Repository implementation, I've published an article on the topic titled [Active Repository is good & Awesomely Usable](https://blog.omranic.com/active-repository-is-good-awesomely-usable-6991cfd58774), read it if you're interested.
 > - **Rinvex Repository** utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage it virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys. Checkout the `rinvex.repository.cache.keys_file` config option to change file path.
 > - **Rinvex Repository** follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
+> - I don't see the benefit of adding a more complex layer by implementing the **Criteria Pattern** for filtration, rather I'd prefer to keep it as simple as it is now using traditional where clauses since we can achieve same results. (do you've different thoughts? explain please)
+> - Since this is an evolving implementation that may change accordingly depending on real-world use cases, it’s worth mentioning that the caching layer could be decoupled more, may be I’ll rethink the whole caching layer in a Decorator Pattern way.
 
 
 ## Changelog
