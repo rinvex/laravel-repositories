@@ -32,7 +32,8 @@
         - [`enableCache()`, `isCacheEnabled()`](#enablecache-iscacheenabled)
         - [`enableCacheClear()`, `isCacheClearEnabled()`](#enablecacheclear-iscacheclearenabled)
         - [`addGlobalScope()`, `withoutGlobalScopes()`](#addglobalscope-withoutglobalscopes)
-        - [`retrieveModel()`](#retrievemodel)
+        - [`setModel()`, `getModel()`](#setmodel-getmodel)
+        - [`createModel()`](#createmodel)
         - [`forgetCache()`](#forgetcache)
         - [`find()`](#find)
         - [`with()`](#with)
@@ -242,12 +243,9 @@ class FooRepository extends EloquentRepository
     public function __construct(Container $container)
     {
         $this->setContainer($container)
+             ->setModel(\App\User::class)
+             ->setRepositoryId('rinvex.repository.uniqueid');
 
-             // Repository identifier could be anything unique per repository
-             ->setRepositoryId('rinvex.repository.uniqueid')
-
-             // Model retrieval MUST be the last called method here, it's not chainable
-             ->retrieveModel(\App\User::class);
     }
 }
 ```
@@ -298,6 +296,17 @@ $this->setContainer(new \Illuminate\Container\Container());
 
 // Get the IoC container instance:
 $container = $this->getContainer();
+```
+
+#### `setModel()`, `getModel()`
+
+The `setModel` method sets the repository model, while `getModel` returns it:
+```php
+// Set the repository model
+$repository->setModel(\App\User::class);
+
+// Get the repository model
+$repositoryModel = $repository->getModel();
 ```
 
 #### `setRepositoryId()`, `getRepositoryId()`
@@ -406,6 +415,13 @@ $repository->addGlobalScope('age', new \App\Scopes\AgeScope());
 The `retrieveModel` method retrieves the repository model:
 ```php
 $model = $repository->retrieveModel(\App\User::class);
+```
+
+#### `createModel()`
+
+The `createModel()` method creates a new repository model instance:
+```php
+$repositoryModelInstance = $repository->createModel();
 ```
 
 #### `forgetCache()`

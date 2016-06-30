@@ -161,6 +161,30 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
+     * Set the repository model.
+     *
+     * @param string $model
+     *
+     * @return $this
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Get the repository model.
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model ?: str_replace(['Repositories', 'Repository'], ['Models', ''], get_called_class());
+    }
+
+    /**
      * Set the repository cache lifetime.
      *
      * @param int $cacheLifetime

@@ -55,6 +55,22 @@ interface RepositoryContract
     public function getRepositoryId();
 
     /**
+     * Set the repository model.
+     *
+     * @param string $model
+     *
+     * @return $this
+     */
+    public function setModel($model);
+
+    /**
+     * Get the repository model.
+     *
+     * @return string
+     */
+    public function getModel();
+
+    /**
      * Set the repository cache lifetime.
      *
      * @param string $cacheLifetime
@@ -119,16 +135,13 @@ interface RepositoryContract
     public function isCacheClearEnabled();
 
     /**
-     * Retrieve the repository model.
-     *
-     * @param mixed $model
-     * @param array $data
+     * Create a new repository model instance.
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
      *
      * @return object
      */
-    public function retrieveModel($model = null, array $data = []);
+    public function createModel();
 
     /**
      * Forget the repository cache.

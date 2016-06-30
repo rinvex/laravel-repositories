@@ -21,34 +21,27 @@ use Rinvex\Repository\Exceptions\RepositoryException;
 class EloquentRepository extends BaseRepository
 {
     /**
-     * Retrieve the repository model.
-     *
-     * @param mixed $model
-     * @param array $data
+     * Create a new repository model instance.
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
      *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function retrieveModel($model = null, array $data = [])
+    public function createModel()
     {
-        if (is_null($model)) {
-            $model = $this->model ?: str_replace(['Repositories', 'Repository'], ['Models', ''], get_called_class());
-        }
-
-        if (is_string($model)) {
+        if (is_string($model = $this->getModel())) {
             if (! class_exists($class = '\\'.ltrim($model, '\\'))) {
                 throw new RepositoryException("Class {$model} does NOT exist!");
             }
 
-            $model = $this->getContainer()->make($class, [$data]);
+            $model = $this->getContainer()->make($class);
         }
 
         if (! $model instanceof Model) {
             throw new RepositoryException("Class {$model} must be an instance of \\Illuminate\\Database\\Eloquent\\Model");
         }
 
-        return $this->model = $model;
+        return $model;
     }
 
     /**
