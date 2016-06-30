@@ -251,6 +251,17 @@ interface RepositoryContract
     public function paginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null);
 
     /**
+     * Paginate all entities into a simple paginator.
+     *
+     * @param  int    $perPage
+     * @param  array  $attributes
+     * @param  string $pageName
+     *
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
+    public function simplePaginate($perPage = null, $attributes = ['*'], $pageName = 'page');
+
+    /**
      * Find all entities matching where conditions.
      *
      * @param array $where

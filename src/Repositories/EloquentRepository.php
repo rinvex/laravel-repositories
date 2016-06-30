@@ -109,6 +109,22 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
+     * Paginate all entities into a simple paginator.
+     *
+     * @param  int    $perPage
+     * @param  array  $attributes
+     * @param  string $pageName
+     *
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
+    public function simplePaginate($perPage = null, $attributes = ['*'], $pageName = 'page')
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($perPage, $attributes, $pageName) {
+            return $this->prepareQuery($this->createModel())->simplePaginate($perPage, $attributes, $pageName);
+        });
+    }
+
+    /**
      * Find all entities matching where conditions.
      *
      * @param array $where
