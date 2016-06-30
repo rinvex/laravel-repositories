@@ -305,14 +305,14 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Add an "order by" clause to the repository.
      *
-     * @param string $column
+     * @param string $attribute
      * @param string $direction
      *
      * @return $this
      */
-    public function orderBy($column, $direction = 'asc')
+    public function orderBy($attribute, $direction = 'asc')
     {
-        $this->model = $this->model->orderBy($column, $direction);
+        $this->model = $this->model->orderBy($attribute, $direction);
 
         return $this;
     }

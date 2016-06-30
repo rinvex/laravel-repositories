@@ -146,48 +146,48 @@ interface RepositoryContract
     /**
      * Add an "order by" clause to the repository.
      *
-     * @param string $column
+     * @param string $attribute
      * @param string $direction
      *
      * @return $this
      */
-    public function orderBy($column, $direction = 'asc');
+    public function orderBy($attribute, $direction = 'asc');
 
     /**
      * Find an entity by its primary key.
      *
      * @param int   $id
-     * @param array $columns
+     * @param array $attributes
      *
      * @return object
      */
-    public function find($id, $columns = ['*']);
+    public function find($id, $attributes = ['*']);
 
     /**
      * Find an entity by one of it's attributes.
      *
      * @param string $attribute
      * @param string $value
-     * @param array  $columns
+     * @param array  $attributes
      *
      * @return object
      */
-    public function findBy($attribute, $value, $columns = ['*']);
+    public function findBy($attribute, $value, $attributes = ['*']);
 
     /**
      * Find all entities.
      *
-     * @param array $columns
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*']);
+    public function findAll($attributes = ['*']);
 
     /**
      * Paginate all entities.
      *
      * @param int|null $perPage
-     * @param array    $columns
+     * @param array    $attributes
      * @param string   $pageName
      * @param int|null $page
      *
@@ -195,39 +195,39 @@ interface RepositoryContract
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+    public function paginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null);
 
     /**
      * Find all entities matching where conditions.
      *
      * @param array $where
-     * @param array $columns
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*']);
+    public function findWhere(array $where, $attributes = ['*']);
 
     /**
      * Find all entities matching whereIn conditions.
      *
      * @param string $attribute
      * @param array  $values
-     * @param array  $columns
+     * @param array  $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*']);
+    public function findWhereIn($attribute, array $values, $attributes = ['*']);
 
     /**
      * Find all entities matching whereNotIn conditions.
      *
      * @param string $attribute
      * @param array  $values
-     * @param array  $columns
+     * @param array  $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*']);
+    public function findWhereNotIn($attribute, array $values, $attributes = ['*']);
 
     /**
      * Create a new entity with the given attributes.
