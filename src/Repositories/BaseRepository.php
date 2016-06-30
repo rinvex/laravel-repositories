@@ -153,6 +153,64 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
+     * Prepare query.
+     *
+     * @param object $model
+     *
+     * @return object
+     */
+    protected function prepareQuery($model)
+    {
+        // Set the relationships that should be eager loaded
+        if ($this->relations) {
+            $model = $model->with($this->relations);
+        }
+
+        // Add a basic where clause to the query
+        if (is_array($this->where) && ! empty($this->where)) {
+            foreach ($this->where as $where) {
+                list($attribute, $operator, $value, $boolean) = $where;
+                $model = $model->where($attribute, $operator, $value, $boolean);
+            }
+        }
+
+        // Add a "where in" clause to the query
+        if (is_array($this->whereIn) && ! empty($this->whereIn)) {
+            foreach ($this->whereIn as $whereIn) {
+                list($attribute, $values, $boolean, $not) = $whereIn;
+                $model = $model->whereIn($attribute, $values, $boolean, $not);
+            }
+        }
+
+        // Add a "where not in" clause to the query
+        if (is_array($this->whereNotIn) && ! empty($this->whereNotIn)) {
+            foreach ($this->whereNotIn as $whereNotIn) {
+                list($attribute, $values, $boolean) = $whereNotIn;
+                $model = $model->whereNotIn($attribute, $values, $boolean);
+            }
+        }
+
+        // Set the "offset" value of the query
+        if ($this->offset) {
+            $model = $model->offset($this->offset);
+        }
+
+        // Set the "limit" value of the query
+        if ($this->limit) {
+            $model = $model->limit($this->limit);
+        }
+
+        // Add an "order by" clause to the query.
+        if ($this->orderBy) {
+            list($attribute, $direction) = $this->orderBy;
+
+            $model = $model->orderBy($attribute, $direction);
+        }
+
+        return $model;
+    }
+
+    /**
      * Set the IoC container instance.
      *
      * @param \Illuminate\Contracts\Container\Container $container
