@@ -235,30 +235,6 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * Enable repository cache.
-     *
-     * @param bool $status
-     *
-     * @return $this
-     */
-    public function enableCache($status = true)
-    {
-        $this->cacheEnabled = $status;
-
-        return $this;
-    }
-
-    /**
-     * Determine if repository cache is enabled.
-     *
-     * @return bool
-     */
-    public function isCacheEnabled()
-    {
-        return $this->cacheEnabled;
-    }
-
-    /**
      * Enable repository cache clear.
      *
      * @param bool $status

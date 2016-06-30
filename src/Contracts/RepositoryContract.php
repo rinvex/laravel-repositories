@@ -103,22 +103,6 @@ interface RepositoryContract
     public function getCacheDriver();
 
     /**
-     * Enable repository cache.
-     *
-     * @param bool $status
-     *
-     * @return $this
-     */
-    public function enableCache($status = true);
-
-    /**
-     * Determine if repository cache is enabled.
-     *
-     * @return bool
-     */
-    public function isCacheEnabled();
-
-    /**
      * Enable repository cache clear.
      *
      * @param bool $status

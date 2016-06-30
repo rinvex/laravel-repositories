@@ -29,7 +29,6 @@
     - [Detailed Documentation](#detailed-documentation)
         - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
         - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
-        - [`enableCache()`, `isCacheEnabled()`](#enablecache-iscacheenabled)
         - [`enableCacheClear()`, `isCacheClearEnabled()`](#enablecacheclear-iscacheclearenabled)
         - [`addGlobalScope()`, `withoutGlobalScopes()`](#addglobalscope-withoutglobalscopes)
         - [`setModel()`, `getModel()`](#setmodel-getmodel)
@@ -340,17 +339,6 @@ $repository->setCacheDriver('redis');
 
 // Get the repository cache driver
 $cacheDriver = $repository->getCacheDriver();
-```
-
-#### `enableCache()`, `isCacheEnabled()`
-
-The `enableCache` method enables repository cache, while `isCacheEnabled` determines it's state:
-```php
-// Enable repository cache
-$repository->enableCache(true);
-
-// Determine if repository cache is enabled
-$repository->isCacheEnabled();
 ```
 
 #### `enableCacheClear()`, `isCacheClearEnabled()`
