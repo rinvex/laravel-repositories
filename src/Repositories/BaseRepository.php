@@ -64,6 +64,27 @@ abstract class BaseRepository implements RepositoryContract
     protected $relations = [];
 
     /**
+     * The query where clauses.
+     *
+     * @var array
+     */
+    protected $where;
+
+    /**
+     * The query whereIn clauses.
+     *
+     * @var array
+     */
+    protected $whereIn;
+
+    /**
+     * The query whereNotIn clauses.
+     *
+     * @var array
+     */
+    protected $whereNotIn;
+
+    /**
      * The repository cache lifetime.
      *
      * @var int
@@ -298,6 +319,56 @@ abstract class BaseRepository implements RepositoryContract
     public function with(array $relations)
     {
         $this->relations = $relations;
+
+        return $this;
+    }
+
+    /**
+     * Add a basic where clause to the query.
+     *
+     * @param  string  $attribute
+     * @param  string  $operator
+     * @param  mixed   $value
+     * @param  string  $boolean
+     *
+     * @return $this
+     */
+    public function where($attribute, $operator = null, $value = null, $boolean = 'and')
+    {
+        $this->where[] = [$attribute, $operator, $value, $boolean];
+
+        return $this;
+    }
+
+    /**
+     * Add a "where in" clause to the query.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $values
+     * @param  string  $boolean
+     * @param  bool    $not
+     *
+     * @return $this
+     */
+    public function whereIn($attribute, $values, $boolean = 'and', $not = false)
+    {
+        $this->whereIn[] = [$attribute, $values, $boolean, $not];
+
+        return $this;
+    }
+
+    /**
+     * Add a "where not in" clause to the query.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $values
+     * @param  string  $boolean
+     *
+     * @return $this
+     */
+    public function whereNotIn($attribute, $values, $boolean = 'and')
+    {
+        $this->whereNotIn[] = [$attribute, $values, $boolean];
 
         return $this;
     }

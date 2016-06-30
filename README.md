@@ -35,6 +35,9 @@
         - [`forgetCache()`](#forgetcache)
         - [`find()`](#find)
         - [`with()`](#with)
+        - [`where()`](#where)
+        - [`whereIn()`](#wherein)
+        - [`whereNotIn()`](#wherenotin)
         - [`orderBy()`](#orderby)
         - [`findBy()`](#findby)
         - [`findAll()`](#findall)
@@ -376,6 +379,29 @@ The `with` method sets the relationships that should be eager loaded:
 ```php
 $repository->with(['relationship']);
 ```
+
+#### `where()`
+
+The `with` method adds a basic where clause to the query:
+```php
+$repository->where('slug', '=', 'example');
+```
+
+#### `whereIn()`
+
+The `whereIn` method adds a "where not in" clause to the query:
+```php
+$repository->whereIn('id', [1, 2, 5, 8);
+```
+
+#### `whereNotIn()`
+
+The `whereNotIn` method sets the relationships that should be eager loaded:
+```php
+$repository->whereNotIn('id', [1, 2, 5, 8);
+```
+
+> **Note:** All of the `where`, `whereIn`, and `whereNotIn` methods are chainable & could be called multiple times in a single request. It will hold all where clauses in an array internally and apply them all before executing the query.
 
 #### `orderBy()`
 

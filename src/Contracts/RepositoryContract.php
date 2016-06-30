@@ -144,6 +144,41 @@ interface RepositoryContract
     public function with(array $relations);
 
     /**
+     * Add a basic where clause to the query.
+     *
+     * @param  string  $attribute
+     * @param  string  $operator
+     * @param  mixed   $value
+     * @param  string  $boolean
+     *
+     * @return $this
+     */
+    public function where($attribute, $operator = null, $value = null, $boolean = 'and');
+
+    /**
+     * Add a "where in" clause to the query.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $values
+     * @param  string  $boolean
+     * @param  bool    $not
+     *
+     * @return $this
+     */
+    public function whereIn($attribute, $values, $boolean = 'and', $not = false);
+
+    /**
+     * Add a "where not in" clause to the query.
+     *
+     * @param  string  $attribute
+     * @param  mixed   $values
+     * @param  string  $boolean
+     *
+     * @return $this
+     */
+    public function whereNotIn($attribute, $values, $boolean = 'and');
+
+    /**
      * Add an "order by" clause to the repository.
      *
      * @param string $attribute
