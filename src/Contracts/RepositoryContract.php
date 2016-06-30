@@ -137,11 +137,11 @@ interface RepositoryContract
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param mixed $relations
+     * @param array $relations
      *
      * @return $this
      */
-    public function with($relations);
+    public function with(array $relations);
 
     /**
      * Add an "order by" clause to the repository.
@@ -158,11 +158,10 @@ interface RepositoryContract
      *
      * @param int   $id
      * @param array $columns
-     * @param array $with
      *
      * @return object
      */
-    public function find($id, $columns = ['*'], $with = []);
+    public function find($id, $columns = ['*']);
 
     /**
      * Find an entity by one of it's attributes.
@@ -170,21 +169,19 @@ interface RepositoryContract
      * @param string $attribute
      * @param string $value
      * @param array  $columns
-     * @param array  $with
      *
      * @return object
      */
-    public function findBy($attribute, $value, $columns = ['*'], $with = []);
+    public function findBy($attribute, $value, $columns = ['*']);
 
     /**
      * Find all entities.
      *
      * @param array $columns
-     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*'], $with = []);
+    public function findAll($columns = ['*']);
 
     /**
      * Paginate all entities.
@@ -205,11 +202,10 @@ interface RepositoryContract
      *
      * @param array $where
      * @param array $columns
-     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*'], $with = []);
+    public function findWhere(array $where, $columns = ['*']);
 
     /**
      * Find all entities matching whereIn conditions.
@@ -217,11 +213,10 @@ interface RepositoryContract
      * @param string $attribute
      * @param array  $values
      * @param array  $columns
-     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = []);
+    public function findWhereIn($attribute, array $values, $columns = ['*']);
 
     /**
      * Find all entities matching whereNotIn conditions.
@@ -229,11 +224,10 @@ interface RepositoryContract
      * @param string $attribute
      * @param array  $values
      * @param array  $columns
-     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = []);
+    public function findWhereNotIn($attribute, array $values, $columns = ['*']);
 
     /**
      * Create a new entity with the given attributes.

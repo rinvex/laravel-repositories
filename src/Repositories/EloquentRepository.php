@@ -49,14 +49,13 @@ class EloquentRepository extends BaseRepository
      *
      * @param int   $id
      * @param array $columns
-     * @param array $with
      *
      * @return object
      */
-    public function find($id, $columns = ['*'], $with = [])
+    public function find($id, $columns = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($id, $columns, $with) {
-            return $this->model->with($with)->find($id, $columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($id, $columns) {
+            return $this->model->find($id, $columns);
         });
     }
 
@@ -66,14 +65,13 @@ class EloquentRepository extends BaseRepository
      * @param string $attribute
      * @param string $value
      * @param array  $columns
-     * @param array  $with
      *
      * @return object
      */
-    public function findBy($attribute, $value, $columns = ['*'], $with = [])
+    public function findBy($attribute, $value, $columns = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $value, $columns, $with) {
-            return $this->model->with($with)->where($attribute, '=', $value)->first($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $value, $columns) {
+            return $this->model->where($attribute, '=', $value)->first($columns);
         });
     }
 
@@ -81,14 +79,13 @@ class EloquentRepository extends BaseRepository
      * Find all entities.
      *
      * @param array $columns
-     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*'], $with = [])
+    public function findAll($columns = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($columns, $with) {
-            return $this->model->with($with)->get($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($columns) {
+            return $this->model->get($columns);
         });
     }
 
@@ -116,13 +113,12 @@ class EloquentRepository extends BaseRepository
      *
      * @param array $where
      * @param array $columns
-     * @param array $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*'], $with = [])
+    public function findWhere(array $where, $columns = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $columns, $with) {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $columns) {
             foreach ($where as $attribute => $value) {
                 if (is_array($value)) {
                     list($attribute, $condition, $value) = $value;
@@ -132,7 +128,7 @@ class EloquentRepository extends BaseRepository
                 }
             }
 
-            return $this->model->with($with)->get($columns);
+            return $this->model->get($columns);
         });
     }
 
@@ -142,14 +138,13 @@ class EloquentRepository extends BaseRepository
      * @param string $attribute
      * @param array  $values
      * @param array  $columns
-     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = [])
+    public function findWhereIn($attribute, array $values, $columns = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $columns, $with) {
-            return $this->model->with($with)->whereIn($attribute, $values)->get($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $columns) {
+            return $this->model->whereIn($attribute, $values)->get($columns);
         });
     }
 
@@ -159,14 +154,13 @@ class EloquentRepository extends BaseRepository
      * @param string $attribute
      * @param array  $values
      * @param array  $columns
-     * @param array  $with
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = [])
+    public function findWhereNotIn($attribute, array $values, $columns = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $columns, $with) {
-            return $this->model->with($with)->whereNotIn($attribute, $values)->get($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $columns) {
+            return $this->model->whereNotIn($attribute, $values)->get($columns);
         });
     }
 

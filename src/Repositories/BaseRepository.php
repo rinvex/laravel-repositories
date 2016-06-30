@@ -57,6 +57,13 @@ abstract class BaseRepository implements RepositoryContract
     protected $cacheClearEnabled = true;
 
     /**
+     * The relations to eager load on query execution.
+     *
+     * @var array
+     */
+    protected $relations = [];
+
+    /**
      * The repository cache lifetime.
      *
      * @var int
@@ -284,13 +291,13 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param mixed $relations
+     * @param array $relations
      *
      * @return $this
      */
-    public function with($relations)
+    public function with(array $relations)
     {
-        $this->model = $this->model->with($relations);
+        $this->relations = $relations;
 
         return $this;
     }
