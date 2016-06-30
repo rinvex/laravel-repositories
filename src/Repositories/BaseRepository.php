@@ -164,7 +164,12 @@ abstract class BaseRepository implements RepositoryContract
         }
 
         // Cache disabled, just execute qurey & return result
-        return call_user_func($closure);
+        $result = call_user_func($closure);
+
+        // We're done, let's clean up!
+        $this->resetRepository();
+
+        return $result;
     }
 
     /**
