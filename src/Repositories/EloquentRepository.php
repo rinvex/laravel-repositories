@@ -111,9 +111,9 @@ class EloquentRepository extends BaseRepository
     /**
      * Paginate all entities into a simple paginator.
      *
-     * @param  int|null $perPage
-     * @param  array    $attributes
-     * @param  string   $pageName
+     * @param int|null $perPage
+     * @param array    $attributes
+     * @param string   $pageName
      *
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
@@ -146,8 +146,8 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param array  $where
-     * @param array  $attributes
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
@@ -165,8 +165,8 @@ class EloquentRepository extends BaseRepository
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param array  $where
-     * @param array  $attributes
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
