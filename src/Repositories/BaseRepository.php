@@ -94,7 +94,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * The "offset" value of the query.
      *
-     * @var int
+     * @var float|int
      */
     protected $offset;
 
@@ -424,6 +424,18 @@ abstract class BaseRepository implements RepositoryContract
         return ! is_null($this->cacheLifetime)
             ? $this->cacheLifetime
             : $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
+    }
+
+    /**
+     * Convenience method. Alias to setCacheLifetime(0).
+     *
+     * @return $this
+     */
+    public function skipCache()
+    {
+        $this->setCacheLifetime(0);
+
+        return $this;
     }
 
     /**

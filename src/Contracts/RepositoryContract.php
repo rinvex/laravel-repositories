@@ -86,6 +86,13 @@ interface RepositoryContract
     public function getCacheLifetime();
 
     /**
+     * Convenience method. Alias to setCacheLifetime(0).
+     *
+     * @return $this
+     */
+    public function skipCache();
+
+    /**
      * Set the repository cache driver.
      *
      * @param string $cacheDriver
