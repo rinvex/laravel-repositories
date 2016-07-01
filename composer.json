@@ -2,17 +2,16 @@
     "name": "rinvex/repository",
     "description": "Rinvex Repository is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system for Laravel, used to abstract the data layer, making applications more flexible to maintain.",
     "keywords": [
-        "solid",
         "rinvex",
         "laravel",
         "contract",
         "interface",
         "repository",
+        "intuitive",
         "eloquent",
         "granular",
         "pattern",
-        "cache",
-        "trait"
+        "cache"
     ],
     "license": "MIT",
     "homepage": "https://rinvex.com/marketplace/rinvex-repository/",
@@ -54,7 +53,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "2.0-dev"
         }
     },
     "minimum-stability": "dev",

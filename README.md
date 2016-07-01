@@ -54,8 +54,8 @@
         - [`create()`](#create)
         - [`update()`](#update)
         - [`delete()`](#delete)
-    - [Add Custom Implementation](#add-custom-implementation)
     - [Code To An Interface](#code-to-an-interface)
+    - [Add Custom Implementation](#add-custom-implementation)
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
     - [Mandatory Repository Conventions](#mandatory-repository-conventions)
     - [Automatic Guessing](#automatic-guessing)
@@ -63,6 +63,7 @@
         - [Whole Application Cache](#whole-application-cache)
         - [Individual Repository Query Cache](#individual-repository-query-cache)
         - [Skip individual HTTP request cache](#skip-individual-http-request-cache)
+- [Final Thoughts](#final-thoughts)
 - [Changelog](#changelog)
 - [Support](#support)
 - [Contributing & Protocols](#contributing--protocols)
@@ -109,7 +110,7 @@ While this package tends to be framework-agnostic, it embraces Laravel culture a
 
 Open your application's `composer.json` file and add the following line to the `require` array:
 ```json
-"rinvex/repository": "1.0.*"
+"rinvex/repository": "2.0.*"
 ```
 
 > **Note:** Make sure that after the required changes your `composer.json` file is valid by running `composer validate`.
@@ -154,7 +155,7 @@ You are good to go. Integration is done and you can now use all the available me
 
 ## Configuration
 
-If you followed the previous integration steps, then your published config file reside at `config/rinvex.themes.php`.
+If you followed the previous integration steps, then your published config file reside at `config/rinvex.repository.php`.
 
 Config options are very expressive and self explanatory, as follows:
 ```php
@@ -287,12 +288,13 @@ class BarController
 }
 ```
 
-**First: Create Your Repository**
+**Rinvex Repository Workflow - Create Repository**
 ![Rinvex Repository Workflow - Create Repository](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-1.gif)
 
-**Second: Use Your Repository In Controllers**
+**Rinvex Repository Workflow - Use In Controller**
 ![Rinvex Repository Workflow - Use In Controller](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-2.gif)
 
+[UML Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.uml-diagram.png)
 ___
 
 _**You're good to go! That's pretty enough knowledge to use this package.**_
@@ -539,18 +541,6 @@ list($status, $instance) = $deletedEntity;
 > - `create`, `update`, and `delete` methods always return an array with two values, the first is action status whether it's success or fail as a boolean value, and the other is an instance of the model just operated upon.
 > - It's recommended to set IoC container instance, repository identifier, and model name explicitely through your repository constructor like the above example, but this package is smart enough to guess any missing requirements.
 
-### Add Custom Implementation
-
-Since we're focusing on abstracting the data layer, and we're separating the abstract interface from the concrete implementation, it's easy to add your own implementation.
-
-Say your domain model uses a web service, or a filesystem data store as it's data source, all you need to do is just extend the `BaseRepository` class, that's it. See:
-```php
-class FilesystemRepository extends BaseRepository
-{
-    // Implement here all `RepositoryContract` methods that query/persist data to & from filesystem
-}
-```
-
 ### Code To An Interface
 
 As a best practice, it's recommended to code for an interface specifically for scalable projects. The following example explains how to do so.
@@ -583,6 +573,17 @@ This way we don't have to instantiate the repository manually, and it's easy to 
 
 > **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
 
+### Add Custom Implementation
+
+Since we're focusing on abstracting the data layer, and we're separating the abstract interface from the concrete implementation, it's easy to add your own implementation.
+
+Say your domain model uses a web service, or a filesystem data store as it's data source, all you need to do is just extend the `BaseRepository` class, that's it. See:
+```php
+class FilesystemRepository extends BaseRepository
+{
+    // Implement here all `RepositoryContract` methods that query/persist data to & from filesystem
+}
+```
 
 ### EloquentRepository Fired Events
 
@@ -702,15 +703,16 @@ Caching repository query results is totally up to you, while all retrieval `find
 Lastly, you can disable cache per single request by passing the following query string in your URL `skipCache=true`. Note that you can modify this parameter to whatever name you may need through the `rinvex.repository.cache.skip_uri` config option.
 
 
-> **Notes:**
-> - Repository level cache MUST be enabled for any lower level cache to work (query cache), otherwise it's considered disabled even if explicitly enabled per query.
-> - You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option, or per individual query through the `$lifetime` parameter.
-> - Repositories intelligently pass missing methods to the underlying model, so you actually can implement any kind of logic, or even complex queries by utilizing the repository model or the query builder.
-> - For more insights about the Active Repository implementation, I've published an article on the topic titled [Active Repository is good & Awesomely Usable](https://blog.omranic.com/active-repository-is-good-awesomely-usable-6991cfd58774), read it if you're interested.
-> - **Rinvex Repository** utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage it virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys. Checkout the `rinvex.repository.cache.keys_file` config option to change file path.
-> - **Rinvex Repository** follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
-> - I don't see the benefit of adding a more complex layer by implementing the **Criteria Pattern** for filtration, rather I'd prefer to keep it as simple as it is now using traditional where clauses since we can achieve same results. (do you've different thoughts? explain please)
-> - Since this is an evolving implementation that may change accordingly depending on real-world use cases, it’s worth mentioning that the caching layer could be decoupled more, may be I’ll rethink the whole caching layer in a Decorator Pattern way.
+## Final Thoughts
+
+- Repository level cache MUST be enabled for any lower level cache to work (query cache), otherwise it's considered disabled even if explicitly enabled per query.
+- You can control how long repository cache lasts through the `rinvex.repository.cache.lifetime` config option, or per individual query through the `$lifetime` parameter.
+- Repositories intelligently pass missing methods to the underlying model, so you actually can implement any kind of logic, or even complex queries by utilizing the repository model or the query builder.
+- For more insights about the Active Repository implementation, I've published an article on the topic titled [Active Repository is good & Awesomely Usable](https://blog.omranic.com/active-repository-is-good-awesomely-usable-6991cfd58774), read it if you're interested.
+- **Rinvex Repository** utilizes cache tags in a very smart way, even if your chosen cache driver doesn't support cache tags it will manage it virtually on it's own for precise cache management. Behind scenes it uses a json file to store cache keys. Checkout the `rinvex.repository.cache.keys_file` config option to change file path.
+- **Rinvex Repository** follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
+- I don't see the benefit of adding a more complex layer by implementing the **Criteria Pattern** for filtration, rather I'd prefer to keep it as simple as it is now using traditional where clauses since we can achieve same results. (do you've different thoughts? explain please)
+- Since this is an evolving implementation that may change accordingly depending on real-world use cases, it’s worth mentioning that the caching layer could be decoupled more, may be I’ll rethink the whole caching layer in a Decorator Pattern way.
 
 
 ## Changelog
