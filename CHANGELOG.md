@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v2.0.0] - 2016-07-01
+- Drop `findOrCreate` method (close #33)
+- Change `retrieveModel` behavior (close #34)
+  - Separate functionality into `setModel`, `getModel`, and `createModel`
+  - `createModel` always return a new clean model instance
+- Drop `enableCache` & `isCacheEnabled` (close #35)
+  - These methods have duplicate functionality of `setCacheLifetime` & `getCacheLifetime`
+- Add filtration through `where`, 'whereIn', `whereNotIn` methods
+- Add `offset`, and `limit` functionality to the query
+- Drop `addGlobalScope`, `withoutGlobalScopes` methods (close #8)
+- Move `$with` argument to setters & getters (close #36)
+- Rename `$column` to `$attribute` for more naming abstraction (close #37)
+- Add `where`, `whereIn`, `whereNotIn` methods for flexible filtration (close #6)
+- Update `findWhere`, `findWhereIn`, `findWhereNotIn` methods to utilize the new filtration (close #38)
+- Centralize & enforce filtration and data access rules (close #39)
+- Add `offset` & `limit` functionality to queries (close #40)
+- Add `simplePaginate` method for light weight pagination (close #41)
+- Refactor callback execution, clean code, and reset query conditions after execution (close #30, close #42)
+
 ## [v1.0.5] - 2016-06-27
 - Fix clear cache on update issue (close #27)
 - Move cache lifetime & driver args to setter methods (close #26)
@@ -37,6 +56,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Commit first draft
 
+[v2.0.0]: https://github.com/rinvex/repository/compare/v1.0.5...v2.0.0
 [v1.0.5]: https://github.com/rinvex/repository/compare/v1.0.4...v1.0.5
 [v1.0.4]: https://github.com/rinvex/repository/compare/v1.0.3...v1.0.4
 [v1.0.3]: https://github.com/rinvex/repository/compare/v1.0.2...v1.0.3

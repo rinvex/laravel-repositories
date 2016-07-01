@@ -21,49 +21,41 @@ use Rinvex\Repository\Exceptions\RepositoryException;
 class EloquentRepository extends BaseRepository
 {
     /**
-     * Retrieve the repository model.
-     *
-     * @param mixed $model
-     * @param array $data
+     * Create a new repository model instance.
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
      *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function retrieveModel($model = null, array $data = [])
+    public function createModel()
     {
-        if (is_null($model)) {
-            $model = $this->model ?: str_replace(['Repositories', 'Repository'], ['Models', ''], get_called_class());
-        }
-
-        if (is_string($model)) {
+        if (is_string($model = $this->getModel())) {
             if (! class_exists($class = '\\'.ltrim($model, '\\'))) {
                 throw new RepositoryException("Class {$model} does NOT exist!");
             }
 
-            $model = $this->getContainer()->make($class, [$data]);
+            $model = $this->getContainer()->make($class);
         }
 
         if (! $model instanceof Model) {
             throw new RepositoryException("Class {$model} must be an instance of \\Illuminate\\Database\\Eloquent\\Model");
         }
 
-        return $this->model = $model;
+        return $model;
     }
 
     /**
-     * Find an entity by its primary key.
+     * Find an entity by it's primary key.
      *
      * @param int   $id
-     * @param array $columns
-     * @param array $with
+     * @param array $attributes
      *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function find($id, $columns = ['*'], $with = [])
+    public function find($id, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($id, $columns, $with) {
-            return $this->model->with($with)->find($id, $columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($id, $attributes) {
+            return $this->prepareQuery($this->createModel())->find($id, $attributes);
         });
     }
 
@@ -72,30 +64,28 @@ class EloquentRepository extends BaseRepository
      *
      * @param string $attribute
      * @param string $value
-     * @param array  $columns
-     * @param array  $with
+     * @param array  $attributes
      *
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function findBy($attribute, $value, $columns = ['*'], $with = [])
+    public function findBy($attribute, $value, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $value, $columns, $with) {
-            return $this->model->with($with)->where($attribute, '=', $value)->first($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $value, $attributes) {
+            return $this->prepareQuery($this->createModel())->where($attribute, '=', $value)->first($attributes);
         });
     }
 
     /**
      * Find all entities.
      *
-     * @param array $columns
-     * @param array $with
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*'], $with = [])
+    public function findAll($attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($columns, $with) {
-            return $this->model->with($with)->get($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attributes) {
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 
@@ -103,7 +93,7 @@ class EloquentRepository extends BaseRepository
      * Paginate all entities.
      *
      * @param int|null $perPage
-     * @param array    $columns
+     * @param array    $attributes
      * @param string   $pageName
      * @param int|null $page
      *
@@ -111,10 +101,26 @@ class EloquentRepository extends BaseRepository
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null)
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($perPage, $columns, $pageName, $page) {
-            return $this->model->paginate($perPage, $columns, $pageName, $page);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($perPage, $attributes, $pageName, $page) {
+            return $this->prepareQuery($this->createModel())->paginate($perPage, $attributes, $pageName, $page);
+        });
+    }
+
+    /**
+     * Paginate all entities into a simple paginator.
+     *
+     * @param int|null $perPage
+     * @param array    $attributes
+     * @param string   $pageName
+     *
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
+    public function simplePaginate($perPage = null, $attributes = ['*'], $pageName = 'page')
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($perPage, $attributes, $pageName) {
+            return $this->prepareQuery($this->createModel())->simplePaginate($perPage, $attributes, $pageName);
         });
     }
 
@@ -122,58 +128,56 @@ class EloquentRepository extends BaseRepository
      * Find all entities matching where conditions.
      *
      * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*'], $with = [])
+    public function findWhere(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $columns, $with) {
-            foreach ($where as $attribute => $value) {
-                if (is_array($value)) {
-                    list($attribute, $condition, $value) = $value;
-                    $this->model = $this->model->where($attribute, $condition, $value);
-                } else {
-                    $this->model = $this->model->where($attribute, '=', $value);
-                }
-            }
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+            list($attribute, $operator, $value, $boolean) = array_pad($where, 4, null);
 
-            return $this->model->with($with)->get($columns);
+            $this->where($attribute, $operator, $value, $boolean);
+
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
-     * @param array  $columns
-     * @param array  $with
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = [])
+    public function findWhereIn(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $columns, $with) {
-            return $this->model->with($with)->whereIn($attribute, $values)->get($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+            list($attribute, $values, $boolean, $not) = array_pad($where, 4, null);
+
+            $this->whereIn($attribute, $values, $boolean, $not);
+
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
-     * @param array  $columns
-     * @param array  $with
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = [])
+    public function findWhereNotIn(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $values, $columns, $with) {
-            return $this->model->with($with)->whereNotIn($attribute, $values)->get($columns);
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+            list($attribute, $values, $boolean) = array_pad($where, 3, null);
+
+            $this->whereNotIn($attribute, $values, $boolean);
+
+            return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
 
@@ -187,7 +191,10 @@ class EloquentRepository extends BaseRepository
     public function create(array $attributes = [])
     {
         // Create a new instance
-        $instance = $this->model->newInstance($attributes);
+        $instance = $this->createModel();
+
+        // Fill instance with data
+        $instance->fill($attributes);
 
         // Save the instance
         $created = $instance->save();
@@ -200,22 +207,6 @@ class EloquentRepository extends BaseRepository
             $created,
             $instance,
         ];
-    }
-
-    /**
-     * Find entity matching the given attributes or create it.
-     *
-     * @param array $attributes
-     *
-     * @return object|array
-     */
-    public function findOrCreate(array $attributes)
-    {
-        if (! is_null($instance = $this->findWhere($attributes)->first())) {
-            return $instance;
-        }
-
-        return $this->create($attributes);
     }
 
     /**
@@ -233,8 +224,11 @@ class EloquentRepository extends BaseRepository
         $instance = $id instanceof Model ? $id : $this->find($id);
 
         if ($instance) {
-            // Update the instance
-            $updated = $instance->update($attributes);
+            // Fill instance with data
+            $instance->fill($attributes);
+
+            // Save the instance
+            $updated = $instance->save();
 
             // Fire the updated event
             $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $instance]);

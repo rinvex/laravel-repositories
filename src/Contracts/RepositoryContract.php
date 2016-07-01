@@ -15,7 +15,6 @@
 
 namespace Rinvex\Repository\Contracts;
 
-use Closure;
 use Illuminate\Contracts\Container\Container;
 
 interface RepositoryContract
@@ -34,7 +33,7 @@ interface RepositoryContract
      *
      * @param string|null $service
      *
-     * @return mixed
+     * @return object
      */
     public function getContainer($service = null);
 
@@ -55,9 +54,25 @@ interface RepositoryContract
     public function getRepositoryId();
 
     /**
+     * Set the repository model.
+     *
+     * @param string $model
+     *
+     * @return $this
+     */
+    public function setModel($model);
+
+    /**
+     * Get the repository model.
+     *
+     * @return string
+     */
+    public function getModel();
+
+    /**
      * Set the repository cache lifetime.
      *
-     * @param string $cacheLifetime
+     * @param float|int $cacheLifetime
      *
      * @return $this
      */
@@ -66,7 +81,7 @@ interface RepositoryContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return string
+     * @return float|int
      */
     public function getCacheLifetime();
 
@@ -87,22 +102,6 @@ interface RepositoryContract
     public function getCacheDriver();
 
     /**
-     * Enable repository cache.
-     *
-     * @param bool $status
-     *
-     * @return $this
-     */
-    public function enableCache($status = true);
-
-    /**
-     * Determine if repository cache is enabled.
-     *
-     * @return bool
-     */
-    public function isCacheEnabled();
-
-    /**
      * Enable repository cache clear.
      *
      * @param bool $status
@@ -119,16 +118,13 @@ interface RepositoryContract
     public function isCacheClearEnabled();
 
     /**
-     * Retrieve the repository model.
-     *
-     * @param mixed $model
-     * @param array $data
+     * Create a new repository model instance.
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
      *
      * @return object
      */
-    public function retrieveModel($model = null, array $data = []);
+    public function createModel();
 
     /**
      * Forget the repository cache.
@@ -140,60 +136,110 @@ interface RepositoryContract
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param mixed $relations
+     * @param array $relations
      *
      * @return $this
      */
-    public function with($relations);
+    public function with(array $relations);
 
     /**
-     * Add an "order by" clause to the repository.
+     * Add a basic where clause to the query.
      *
-     * @param string $column
+     * @param string $attribute
+     * @param string $operator
+     * @param mixed  $value
+     * @param string $boolean
+     *
+     * @return $this
+     */
+    public function where($attribute, $operator = null, $value = null, $boolean = 'and');
+
+    /**
+     * Add a "where in" clause to the query.
+     *
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     * @param bool   $not
+     *
+     * @return $this
+     */
+    public function whereIn($attribute, $values, $boolean = 'and', $not = false);
+
+    /**
+     * Add a "where not in" clause to the query.
+     *
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     *
+     * @return $this
+     */
+    public function whereNotIn($attribute, $values, $boolean = 'and');
+
+    /**
+     * Set the "offset" value of the query.
+     *
+     * @param int $offset
+     *
+     * @return $this
+     */
+    public function offset($offset);
+
+    /**
+     * Set the "limit" value of the query.
+     *
+     * @param int $limit
+     *
+     * @return $this
+     */
+    public function limit($limit);
+
+    /**
+     * Add an "order by" clause to the query.
+     *
+     * @param string $attribute
      * @param string $direction
      *
      * @return $this
      */
-    public function orderBy($column, $direction = 'asc');
+    public function orderBy($attribute, $direction = 'asc');
 
     /**
-     * Find an entity by its primary key.
+     * Find an entity by it's primary key.
      *
      * @param int   $id
-     * @param array $columns
-     * @param array $with
+     * @param array $attributes
      *
      * @return object
      */
-    public function find($id, $columns = ['*'], $with = []);
+    public function find($id, $attributes = ['*']);
 
     /**
      * Find an entity by one of it's attributes.
      *
      * @param string $attribute
      * @param string $value
-     * @param array  $columns
-     * @param array  $with
+     * @param array  $attributes
      *
      * @return object
      */
-    public function findBy($attribute, $value, $columns = ['*'], $with = []);
+    public function findBy($attribute, $value, $attributes = ['*']);
 
     /**
      * Find all entities.
      *
-     * @param array $columns
-     * @param array $with
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findAll($columns = ['*'], $with = []);
+    public function findAll($attributes = ['*']);
 
     /**
      * Paginate all entities.
      *
      * @param int|null $perPage
-     * @param array    $columns
+     * @param array    $attributes
      * @param string   $pageName
      * @param int|null $page
      *
@@ -201,42 +247,48 @@ interface RepositoryContract
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+    public function paginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null);
+
+    /**
+     * Paginate all entities into a simple paginator.
+     *
+     * @param int|null $perPage
+     * @param array    $attributes
+     * @param string   $pageName
+     *
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
+    public function simplePaginate($perPage = null, $attributes = ['*'], $pageName = 'page');
 
     /**
      * Find all entities matching where conditions.
      *
      * @param array $where
-     * @param array $columns
-     * @param array $with
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhere(array $where, $columns = ['*'], $with = []);
+    public function findWhere(array $where, $attributes = ['*']);
 
     /**
      * Find all entities matching whereIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
-     * @param array  $columns
-     * @param array  $with
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereIn($attribute, array $values, $columns = ['*'], $with = []);
+    public function findWhereIn(array $where, $attributes = ['*']);
 
     /**
      * Find all entities matching whereNotIn conditions.
      *
-     * @param string $attribute
-     * @param array  $values
-     * @param array  $columns
-     * @param array  $with
+     * @param array $where
+     * @param array $attributes
      *
      * @return \Illuminate\Support\Collection
      */
-    public function findWhereNotIn($attribute, array $values, $columns = ['*'], $with = []);
+    public function findWhereNotIn(array $where, $attributes = ['*']);
 
     /**
      * Create a new entity with the given attributes.
@@ -246,15 +298,6 @@ interface RepositoryContract
      * @return array
      */
     public function create(array $attributes = []);
-
-    /**
-     * Find entity matching the given attributes or create it.
-     *
-     * @param array $attributes
-     *
-     * @return object|array
-     */
-    public function findOrCreate(array $attributes);
 
     /**
      * Update an entity with the given attributes.
@@ -274,27 +317,6 @@ interface RepositoryContract
      * @return array
      */
     public function delete($id);
-
-    /**
-     * Register a new global scope.
-     *
-     * @param \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
-     * @param \Closure|null                                       $implementation
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
-     */
-    public function addGlobalScope($scope, Closure $implementation = null);
-
-    /**
-     * Remove all or passed registered global scopes.
-     *
-     * @param array|null $scopes
-     *
-     * @return $this
-     */
-    public function withoutGlobalScopes(array $scopes = null);
 
     /**
      * Dynamically pass missing static methods to the model.

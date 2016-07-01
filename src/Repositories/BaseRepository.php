@@ -29,13 +29,6 @@ abstract class BaseRepository implements RepositoryContract
     protected $container;
 
     /**
-     * The repository model.
-     *
-     * @var object
-     */
-    protected $model;
-
-    /**
      * The repository identifier.
      *
      * @var string
@@ -43,23 +36,16 @@ abstract class BaseRepository implements RepositoryContract
     protected $repositoryId;
 
     /**
-     * Indicate if the repository cache is enabled.
+     * The repository model.
      *
-     * @var bool
+     * @var string
      */
-    protected $cacheEnabled = true;
-
-    /**
-     * Indicate if the repository cache clear is enabled.
-     *
-     * @var bool
-     */
-    protected $cacheClearEnabled = true;
+    protected $model;
 
     /**
      * The repository cache lifetime.
      *
-     * @var int
+     * @var float|int
      */
     protected $cacheLifetime;
 
@@ -71,7 +57,63 @@ abstract class BaseRepository implements RepositoryContract
     protected $cacheDriver;
 
     /**
-     * Execute given callback and cache result set.
+     * Indicate if the repository cache clear is enabled.
+     *
+     * @var bool
+     */
+    protected $cacheClearEnabled = true;
+
+    /**
+     * The relations to eager load on query execution.
+     *
+     * @var array
+     */
+    protected $relations = [];
+
+    /**
+     * The query where clauses.
+     *
+     * @var array
+     */
+    protected $where = [];
+
+    /**
+     * The query whereIn clauses.
+     *
+     * @var array
+     */
+    protected $whereIn = [];
+
+    /**
+     * The query whereNotIn clauses.
+     *
+     * @var array
+     */
+    protected $whereNotIn = [];
+
+    /**
+     * The "offset" value of the query.
+     *
+     * @var int
+     */
+    protected $offset;
+
+    /**
+     * The "limit" value of the query.
+     *
+     * @var int
+     */
+    protected $limit;
+
+    /**
+     * The column to order results by.
+     *
+     * @var array
+     */
+    protected $orderBy = [];
+
+    /**
+     * Execute given callback and cache the result.
      *
      * @param string   $class
      * @param string   $method
@@ -82,32 +124,211 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function executeCallback($class, $method, $args, Closure $closure)
     {
-        $driver   = $this->getCacheDriver();
-        $lifetime = $this->getCacheLifetime();
-        $hash     = md5(json_encode($args + [$driver, $lifetime, $this->model->toSql()]));
-        $cacheKey = $class.'@'.$method.'.'.$hash;
+        $skipUri = $this->getContainer('config')->get('rinvex.repository.cache.skip_uri');
 
-        if ($driver) {
+        // Check if cache is enabled
+        if ($this->getCacheLifetime() && ! $this->getContainer('request')->has($skipUri)) {
+            $repositoryId = $this->getRepositoryId();
+            $lifetime     = $this->getCacheLifetime();
+            $hash         = $this->generateHash($args);
+            $cacheKey     = $class.'@'.$method.'.'.$hash;
+
             // Switch cache driver on runtime
-            $this->getContainer('cache')->setDefaultDriver($driver);
-        }
-
-        if ($this->isCacheable()) {
-            if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
-                return $lifetime === -1
-                    ? $this->getContainer('cache')->tags($this->getRepositoryId())->rememberForever($cacheKey, $closure)
-                    : $this->getContainer('cache')->tags($this->getRepositoryId())->remember($cacheKey, $lifetime, $closure);
+            if ($driver = $this->getCacheDriver()) {
+                $this->getContainer('cache')->setDefaultDriver($driver);
             }
 
-            // Store cache keys by mimicking cache tags
+            // We need cache tags, check if default driver supports it
+            if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
+                $result = $lifetime === -1
+                    ? $this->getContainer('cache')->tags($repositoryId)->rememberForever($cacheKey, $closure)
+                    : $this->getContainer('cache')->tags($repositoryId)->remember($cacheKey, $lifetime, $closure);
+
+                // We're done, let's clean up!
+                $this->resetRepository();
+
+                return $result;
+            }
+
+            // Default cache driver doesn't support tags, let's do it manually
             $this->storeCacheKeys($class, $method, $hash);
 
-            return $lifetime === -1
+            $result = $lifetime === -1
                 ? $this->getContainer('cache')->rememberForever($cacheKey, $closure)
                 : $this->getContainer('cache')->remember($cacheKey, $lifetime, $closure);
+
+            // We're done, let's clean up!
+            $this->resetRepository();
+
+            return $result;
         }
 
-        return call_user_func($closure);
+        // Cache disabled, just execute qurey & return result
+        $result = call_user_func($closure);
+
+        // We're done, let's clean up!
+        $this->resetRepository();
+
+        return $result;
+    }
+
+    /**
+     * Generate unique query hash.
+     *
+     * @param $args
+     *
+     * @return string
+     */
+    protected function generateHash($args)
+    {
+        return md5(json_encode($args + [
+                $this->getRepositoryId(),
+                $this->getModel(),
+                $this->getCacheDriver(),
+                $this->getCacheLifetime(),
+                $this->relations,
+                $this->where,
+                $this->whereIn,
+                $this->whereNotIn,
+                $this->offset,
+                $this->limit,
+                $this->orderBy,
+            ]));
+    }
+
+    /**
+     * Reset repository to it's defaults.
+     *
+     * @return $this
+     */
+    protected function resetRepository()
+    {
+        $this->cacheLifetime = null;
+        $this->cacheDriver   = null;
+        $this->relations     = [];
+        $this->where         = [];
+        $this->whereIn       = [];
+        $this->whereNotIn    = [];
+        $this->offset        = null;
+        $this->limit         = null;
+        $this->orderBy       = [];
+
+        return $this;
+    }
+
+    /**
+     * Prepare query.
+     *
+     * @param object $model
+     *
+     * @return object
+     */
+    protected function prepareQuery($model)
+    {
+        // Set the relationships that should be eager loaded
+        if (! empty($this->relations)) {
+            $model = $model->with($this->relations);
+        }
+
+        // Add a basic where clause to the query
+        foreach ($this->where as $where) {
+            list($attribute, $operator, $value, $boolean) = array_pad($where, 4, null);
+
+            $model = $model->where($attribute, $operator, $value, $boolean);
+        }
+
+        // Add a "where in" clause to the query
+        foreach ($this->whereIn as $whereIn) {
+            list($attribute, $values, $boolean, $not) = array_pad($whereIn, 4, null);
+
+            $model = $model->whereIn($attribute, $values, $boolean, $not);
+        }
+
+        // Add a "where not in" clause to the query
+        foreach ($this->whereNotIn as $whereNotIn) {
+            list($attribute, $values, $boolean) = array_pad($whereNotIn, 3, null);
+
+            $model = $model->whereNotIn($attribute, $values, $boolean);
+        }
+
+        // Set the "offset" value of the query
+        if ($this->offset > 0) {
+            $model = $model->offset($this->offset);
+        }
+
+        // Set the "limit" value of the query
+        if ($this->limit > 0) {
+            $model = $model->limit($this->limit);
+        }
+
+        // Add an "order by" clause to the query.
+        if (! empty($this->orderBy)) {
+            list($attribute, $direction) = $this->orderBy;
+
+            $model = $model->orderBy($attribute, $direction);
+        }
+
+        return $model;
+    }
+
+    /**
+     * Store cache keys by mimicking cache tags.
+     *
+     * @param string $class
+     * @param string $method
+     * @param string $hash
+     *
+     * @return void
+     */
+    protected function storeCacheKeys($class, $method, $hash)
+    {
+        $keysFile  = $this->getContainer('config')->get('rinvex.repository.cache.keys_file');
+        $cacheKeys = $this->getCacheKeys($keysFile);
+
+        if (! isset($cacheKeys[$class]) || ! in_array($method.'.'.$hash, $cacheKeys[$class])) {
+            $cacheKeys[$class][] = $method.'.'.$hash;
+            file_put_contents($keysFile, json_encode($cacheKeys));
+        }
+    }
+
+    /**
+     * Get cache keys.
+     *
+     * @param string $file
+     *
+     * @return array
+     */
+    protected function getCacheKeys($file)
+    {
+        if (! file_exists($file)) {
+            file_put_contents($file, null);
+        }
+
+        return json_decode(file_get_contents($file), true) ?: [];
+    }
+
+    /**
+     * Flush cache keys by mimicking cache tags.
+     *
+     * @return array
+     */
+    protected function flushCacheKeys()
+    {
+        $flushedKeys  = [];
+        $calledClasss = get_called_class();
+        $config       = $this->getContainer('config')->get('rinvex.repository.cache');
+        $cacheKeys    = $this->getCacheKeys($config['keys_file']);
+
+        if (isset($cacheKeys[$calledClasss]) && is_array($cacheKeys[$calledClasss])) {
+            foreach ($cacheKeys[$calledClasss] as $cacheKey) {
+                $flushedKeys[] = $calledClasss.'@'.$cacheKey;
+            }
+
+            unset($cacheKeys[$calledClasss]);
+            file_put_contents($config['keys_file'], json_encode($cacheKeys));
+        }
+
+        return $flushedKeys;
     }
 
     /**
@@ -129,7 +350,7 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @param string|null $service
      *
-     * @return mixed
+     * @return object
      */
     public function getContainer($service = null)
     {
@@ -161,9 +382,33 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
+     * Set the repository model.
+     *
+     * @param string $model
+     *
+     * @return $this
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Get the repository model.
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model ?: str_replace(['Repositories', 'Repository'], ['Models', ''], get_called_class());
+    }
+
+    /**
      * Set the repository cache lifetime.
      *
-     * @param int $cacheLifetime
+     * @param float|int $cacheLifetime
      *
      * @return $this
      */
@@ -177,10 +422,11 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return int
+     * @return float|int
      */
     public function getCacheLifetime()
     {
+        // Return value even if it's zero "0" (which means cache is disabled)
         return ! is_null($this->cacheLifetime)
             ? $this->cacheLifetime
             : $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
@@ -208,30 +454,6 @@ abstract class BaseRepository implements RepositoryContract
     public function getCacheDriver()
     {
         return $this->cacheDriver;
-    }
-
-    /**
-     * Enable repository cache.
-     *
-     * @param bool $status
-     *
-     * @return $this
-     */
-    public function enableCache($status = true)
-    {
-        $this->cacheEnabled = $status;
-
-        return $this;
-    }
-
-    /**
-     * Determine if repository cache is enabled.
-     *
-     * @return bool
-     */
-    public function isCacheEnabled()
-    {
-        return $this->cacheEnabled;
     }
 
     /**
@@ -265,11 +487,12 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function forgetCache()
     {
-        if ($this->isCacheEnabled() && $this->getCacheLifetime()) {
+        if ($this->getCacheLifetime()) {
+            // Flush cache tags
             if (method_exists($this->getContainer('cache')->getStore(), 'tags')) {
                 $this->getContainer('cache')->tags($this->getRepositoryId())->flush();
             } else {
-                // Flush cache keys by mimicking cache tags
+                // Flush cache keys, then forget actual cache
                 foreach ($this->flushCacheKeys() as $cacheKey) {
                     $this->getContainer('cache')->forget($cacheKey);
                 }
@@ -284,57 +507,109 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param mixed $relations
+     * @param array $relations
      *
      * @return $this
      */
-    public function with($relations)
+    public function with(array $relations)
     {
-        $this->model = $this->model->with($relations);
+        $this->relations = $relations;
 
         return $this;
     }
 
     /**
-     * Add an "order by" clause to the repository.
+     * Add a basic where clause to the query.
      *
-     * @param string $column
+     * @param string $attribute
+     * @param string $operator
+     * @param mixed  $value
+     * @param string $boolean
+     *
+     * @return $this
+     */
+    public function where($attribute, $operator = null, $value = null, $boolean = 'and')
+    {
+        // The last `$boolean` expression is intentional to fix list() & array_pad() results
+        $this->where[] = [$attribute, $operator, $value, $boolean ?: 'and'];
+
+        return $this;
+    }
+
+    /**
+     * Add a "where in" clause to the query.
+     *
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     * @param bool   $not
+     *
+     * @return $this
+     */
+    public function whereIn($attribute, $values, $boolean = 'and', $not = false)
+    {
+        // The last `$boolean` & `$not` expressions are intentional to fix list() & array_pad() results
+        $this->whereIn[] = [$attribute, $values, $boolean ?: 'and', (bool) $not];
+
+        return $this;
+    }
+
+    /**
+     * Add a "where not in" clause to the query.
+     *
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     *
+     * @return $this
+     */
+    public function whereNotIn($attribute, $values, $boolean = 'and')
+    {
+        // The last `$boolean` expression is intentional to fix list() & array_pad() results
+        $this->whereNotIn[] = [$attribute, $values, $boolean ?: 'and'];
+
+        return $this;
+    }
+
+    /**
+     * Set the "offset" value of the query.
+     *
+     * @param int $offset
+     *
+     * @return $this
+     */
+    public function offset($offset)
+    {
+        $this->offset = $offset;
+
+        return $this;
+    }
+
+    /**
+     * Set the "limit" value of the query.
+     *
+     * @param int $limit
+     *
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * Add an "order by" clause to the query.
+     *
+     * @param string $attribute
      * @param string $direction
      *
      * @return $this
      */
-    public function orderBy($column, $direction = 'asc')
+    public function orderBy($attribute, $direction = 'asc')
     {
-        $this->model = $this->model->orderBy($column, $direction);
-
-        return $this;
-    }
-
-    /**
-     * Register a new global scope.
-     *
-     * @param \Illuminate\Database\Eloquent\Scope|\Closure|string $scope
-     * @param \Closure|null                                       $implementation
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
-     */
-    public function addGlobalScope($scope, Closure $implementation = null)
-    {
-        return $this->model->addGlobalScope($scope, $implementation);
-    }
-
-    /**
-     * Remove all or passed registered global scopes.
-     *
-     * @param array|null $scopes
-     *
-     * @return $this
-     */
-    public function withoutGlobalScopes(array $scopes = null)
-    {
-        $this->model = $this->model->withoutGlobalScopes($scopes);
+        $this->orderBy = [$attribute, $direction];
 
         return $this;
     }
@@ -365,74 +640,5 @@ abstract class BaseRepository implements RepositoryContract
         $model = $this->model;
 
         return call_user_func_array([$model, $method], $parameters);
-    }
-
-    /**
-     * Store cache keys by mimicking cache tags.
-     *
-     * @param string $class
-     * @param string $method
-     * @param string $hash
-     *
-     * @return void
-     */
-    protected function storeCacheKeys($class, $method, $hash)
-    {
-        $keysFile  = $this->getContainer('config')->get('rinvex.repository.cache.keys_file');
-        $cacheKeys = $this->getCacheKeys($keysFile);
-
-        if (! isset($cacheKeys[$class]) || ! in_array($method.'.'.$hash, $cacheKeys[$class])) {
-            $cacheKeys[$class][] = $method.'.'.$hash;
-            file_put_contents($keysFile, json_encode($cacheKeys));
-        }
-    }
-
-    /**
-     * Flush cache keys by mimicking cache tags.
-     *
-     * @return array
-     */
-    protected function flushCacheKeys()
-    {
-        $flushedKeys  = [];
-        $calledClasss = get_called_class();
-        $config       = $this->getContainer('config')->get('rinvex.repository.cache');
-        $cacheKeys    = $this->getCacheKeys($config['keys_file']);
-
-        if (isset($cacheKeys[$calledClasss]) && is_array($cacheKeys[$calledClasss])) {
-            foreach ($cacheKeys[$calledClasss] as $cacheKey) {
-                $flushedKeys[] = $calledClasss.'@'.$cacheKey;
-            }
-
-            unset($cacheKeys[$calledClasss]);
-            file_put_contents($config['keys_file'], json_encode($cacheKeys));
-        }
-
-        return $flushedKeys;
-    }
-
-    /**
-     * Get cache keys.
-     *
-     * @param string $file
-     *
-     * @return array
-     */
-    protected function getCacheKeys($file)
-    {
-        return json_decode(file_get_contents(file_exists($file) ? $file : file_put_contents($file, null)), true) ?: [];
-    }
-
-    /**
-     * Determine if repository is cacheable.
-     *
-     * @return bool
-     */
-    protected function isCacheable()
-    {
-        $skipUri = $this->getContainer('config')->get('rinvex.repository.cache.skip_uri');
-
-        return $this->isCacheEnabled() && $this->getCacheLifetime()
-               && ! $this->getContainer('request')->has($skipUri);
     }
 }
