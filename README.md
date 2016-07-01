@@ -287,7 +287,11 @@ class BarController
 }
 ```
 
-![Rinvex Repository Workflow](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.workflow.gif)
+**First: Create Your Repository**
+![Rinvex Repository Workflow - Create Repository](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-1.gif)
+
+**Second: Use Your Repository In Controllers**
+![Rinvex Repository Workflow - Use In Controller](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-2.gif)
 
 ___
 
