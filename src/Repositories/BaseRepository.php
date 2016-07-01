@@ -45,7 +45,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * The repository cache lifetime.
      *
-     * @var int
+     * @var float|int
      */
     protected $cacheLifetime;
 
@@ -226,7 +226,7 @@ abstract class BaseRepository implements RepositoryContract
     protected function prepareQuery($model)
     {
         // Set the relationships that should be eager loaded
-        if ($this->relations) {
+        if (! empty($this->relations)) {
             $model = $model->with($this->relations);
         }
 
@@ -262,7 +262,7 @@ abstract class BaseRepository implements RepositoryContract
         }
 
         // Add an "order by" clause to the query.
-        if ($this->orderBy) {
+        if (! empty($this->orderBy)) {
             list($attribute, $direction) = $this->orderBy;
 
             $model = $model->orderBy($attribute, $direction);
@@ -517,10 +517,10 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Add a basic where clause to the query.
      *
-     * @param  string  $attribute
-     * @param  string  $operator
-     * @param  mixed   $value
-     * @param  string  $boolean
+     * @param  string $attribute
+     * @param  string $operator
+     * @param  mixed  $value
+     * @param  string $boolean
      *
      * @return $this
      */
@@ -535,10 +535,10 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Add a "where in" clause to the query.
      *
-     * @param  string  $attribute
-     * @param  mixed   $values
-     * @param  string  $boolean
-     * @param  bool    $not
+     * @param  string $attribute
+     * @param  mixed  $values
+     * @param  string $boolean
+     * @param  bool   $not
      *
      * @return $this
      */

@@ -145,10 +145,10 @@ interface RepositoryContract
     /**
      * Add a basic where clause to the query.
      *
-     * @param  string  $attribute
-     * @param  string  $operator
-     * @param  mixed   $value
-     * @param  string  $boolean
+     * @param  string $attribute
+     * @param  string $operator
+     * @param  mixed  $value
+     * @param  string $boolean
      *
      * @return $this
      */
