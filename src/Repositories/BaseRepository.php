@@ -232,21 +232,21 @@ abstract class BaseRepository implements RepositoryContract
 
         // Add a basic where clause to the query
         foreach ($this->where as $where) {
-            list($attribute, $operator, $value, $boolean) = $where;
+            list($attribute, $operator, $value, $boolean) = array_pad($where, 4, null);
 
             $model = $model->where($attribute, $operator, $value, $boolean);
         }
 
         // Add a "where in" clause to the query
         foreach ($this->whereIn as $whereIn) {
-            list($attribute, $values, $boolean, $not) = $whereIn;
+            list($attribute, $values, $boolean, $not) = array_pad($whereIn, 4, null);
 
             $model = $model->whereIn($attribute, $values, $boolean, $not);
         }
 
         // Add a "where not in" clause to the query
         foreach ($this->whereNotIn as $whereNotIn) {
-            list($attribute, $values, $boolean) = $whereNotIn;
+            list($attribute, $values, $boolean) = array_pad($whereNotIn, 3, null);
 
             $model = $model->whereNotIn($attribute, $values, $boolean);
         }
@@ -526,7 +526,8 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function where($attribute, $operator = null, $value = null, $boolean = 'and')
     {
-        $this->where[] = [$attribute, $operator, $value, $boolean];
+        // The last `$boolean` expression is intentional to fix list() & array_pad() results
+        $this->where[] = [$attribute, $operator, $value, $boolean ?: 'and'];
 
         return $this;
     }
@@ -543,7 +544,8 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function whereIn($attribute, $values, $boolean = 'and', $not = false)
     {
-        $this->whereIn[] = [$attribute, $values, $boolean, $not];
+        // The last `$boolean` & `$not` expressions are intentional to fix list() & array_pad() results
+        $this->whereIn[] = [$attribute, $values, $boolean ?: 'and', (bool) $not];
 
         return $this;
     }
@@ -559,7 +561,8 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function whereNotIn($attribute, $values, $boolean = 'and')
     {
-        $this->whereNotIn[] = [$attribute, $values, $boolean];
+        // The last `$boolean` expression is intentional to fix list() & array_pad() results
+        $this->whereNotIn[] = [$attribute, $values, $boolean ?: 'and'];
 
         return $this;
     }

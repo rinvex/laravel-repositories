@@ -135,7 +135,7 @@ class EloquentRepository extends BaseRepository
     public function findWhere(array $where, $attributes = ['*'])
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
-            list($attribute, $operator, $value, $boolean) = $where;
+            list($attribute, $operator, $value, $boolean) = array_pad($where, 4, null);
 
             $this->where($attribute, $operator, $value, $boolean);
 
@@ -154,7 +154,7 @@ class EloquentRepository extends BaseRepository
     public function findWhereIn(array $where, $attributes = ['*'])
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
-            list($attribute, $values, $boolean, $not) = $where;
+            list($attribute, $values, $boolean, $not) = array_pad($where, 4, null);
 
             $this->whereIn($attribute, $values, $boolean, $not);
 
@@ -173,7 +173,7 @@ class EloquentRepository extends BaseRepository
     public function findWhereNotIn(array $where, $attributes = ['*'])
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
-            list($attribute, $values, $boolean) = $where;
+            list($attribute, $values, $boolean) = array_pad($where, 3, null);
 
             $this->whereNotIn($attribute, $values, $boolean);
 
