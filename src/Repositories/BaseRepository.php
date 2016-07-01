@@ -300,7 +300,11 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function getCacheKeys($file)
     {
-        return json_decode(file_get_contents(file_exists($file) ? $file : file_put_contents($file, null)), true) ?: [];
+        if (! file_exists($file)) {
+            file_put_contents($file, null);
+        }
+
+        return json_decode(file_get_contents($file), true) ?: [];
     }
 
     /**
