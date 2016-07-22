@@ -544,9 +544,10 @@ As a best practice, it's recommended to code for an interface, specifically for 
 
 First, create an interface (abstract) for every entity you've:
 ```php
+use Rinvex\Repository\Contracts\CacheableContract;
 use Rinvex\Repository\Contracts\RepositoryContract;
 
-interface UserRepositoryContract extends RepositoryContract
+interface UserRepositoryContract extends RepositoryContract, CacheableContract
 {
     //
 }
