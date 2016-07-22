@@ -163,6 +163,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Models Directory
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the default models directory, just write
+    | directory name, like 'Models' not the full path.
+    |
+    | Default: 'Models'
+    |
+    */
+
+    'models' => 'Models',
+
+    /*
+    |--------------------------------------------------------------------------
     | Caching Strategy
     |--------------------------------------------------------------------------
     */
@@ -265,7 +279,7 @@ class FooRepository extends EloquentRepository
 }
 ```
 
-Now inside your controller, you can either instantiate the repository traditionaly through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
+Now inside your controller, you can either instantiate the repository traditionally through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
 ```php
 namespace App\Http\Controllers;
 
@@ -312,10 +326,10 @@ ___
 The `setContainer` method sets the IoC container instance, while `getContainer` returns it:
 ```php
 // Set the IoC container instance
-$this->setContainer(new \Illuminate\Container\Container());
+$repository->setContainer(new \Illuminate\Container\Container());
 
 // Get the IoC container instance:
-$container = $this->getContainer();
+$container = $repository->getContainer();
 ```
 
 #### `setModel()`, `getModel()`
@@ -593,7 +607,7 @@ Repositories fire events at every action, like `create`, `update`, `delete`. All
 
 For your convenience, the events suffixed with `.entity.created`, `.entity.updated`, or `.entity.deleted` have listeners that take actions accordingly. Usually we need to flush cache -if enabled & exists- upon every success action.
 
-There's one more event `rinvex.repository.uniqueid.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it if you've model relashions for further actions.
+There's one more event `rinvex.repository.uniqueid.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it if you've model relations for further actions.
 
 ### Mandatory Repository Conventions
 
@@ -645,7 +659,7 @@ Here some conventions important to know while using this package. This package a
 
 ### Automatic Guessing
 
-While it's **recomended** to explicitly set IoC container, repository identifier, and repository model; This package is smart enough to guess any of these required data whenever missing.
+While it's **recommended** to explicitly set IoC container, repository identifier, and repository model; This package is smart enough to guess any of these required data whenever missing.
 
 - **IoC Container** `app()` helper is used as a fallback if IoC container instance not provided explicitly.
 - **Repository Identifier** It's recommended to set repository identifier as a doted name like `rinvex.repository.uniqueid`, but if it's missing fully qualified repository class name will be used (actually the result of `get_called_class()` function).

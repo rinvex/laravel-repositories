@@ -107,17 +107,17 @@ trait Cacheable
      */
     protected function flushCacheKeys()
     {
-        $flushedKeys  = [];
-        $calledClasss = get_called_class();
-        $config       = $this->getContainer('config')->get('rinvex.repository.cache');
-        $cacheKeys    = $this->getCacheKeys($config['keys_file']);
+        $flushedKeys = [];
+        $calledClass = get_called_class();
+        $config      = $this->getContainer('config')->get('rinvex.repository.cache');
+        $cacheKeys   = $this->getCacheKeys($config['keys_file']);
 
-        if (isset($cacheKeys[$calledClasss]) && is_array($cacheKeys[$calledClasss])) {
-            foreach ($cacheKeys[$calledClasss] as $cacheKey) {
-                $flushedKeys[] = $calledClasss.'@'.$cacheKey;
+        if (isset($cacheKeys[$calledClass]) && is_array($cacheKeys[$calledClass])) {
+            foreach ($cacheKeys[$calledClass] as $cacheKey) {
+                $flushedKeys[] = $calledClass.'@'.$cacheKey;
             }
 
-            unset($cacheKeys[$calledClasss]);
+            unset($cacheKeys[$calledClass]);
             file_put_contents($config['keys_file'], json_encode($cacheKeys));
         }
 
