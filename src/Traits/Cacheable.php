@@ -224,7 +224,7 @@ trait Cacheable
     }
 
     /**
-     * Cache given callback
+     * Cache given callback.
      *
      * @param string   $class
      * @param string   $method
