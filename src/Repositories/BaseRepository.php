@@ -402,7 +402,7 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function getModel()
     {
-        return $this->model ?: str_replace(['Repositories', 'Repository'], ['Models', ''], get_called_class());
+        return $this->model ?: str_replace(['Repositories', 'Repository'], [$this->getContainer('config')->get('rinvex.repository.models'), ''], get_called_class());
     }
 
     /**
