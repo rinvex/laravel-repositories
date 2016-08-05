@@ -409,5 +409,4 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
 
         return call_user_func_array([$model, $method], $parameters);
     }
-
 }
