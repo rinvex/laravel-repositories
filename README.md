@@ -263,6 +263,21 @@ The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only av
 ```php
 namespace App\Repositories;
 
+use Rinvex\Repository\Repositories\EloquentRepository;
+
+class FooRepository extends EloquentRepository
+{
+    protected $repositoryId = 'rinvex.repository.uniqueid';
+
+    protected $model = 'App\User';
+}
+```
+That's it, you're done! Yes, it's that simple.
+
+But if you'd like more control over the container instance, or would like to pass model name dynamically you can alternatively to as follow:
+```php
+namespace App\Repositories;
+
 use Illuminate\Contracts\Container\Container;
 use Rinvex\Repository\Repositories\EloquentRepository;
 
@@ -480,8 +495,9 @@ $allEntities = $repository->findAll();
 
 The `paginate` method paginates all entities:
 ```php
-$entitiesPagination = $repository->paginate(15);
+$entitiesPagination = $repository->paginate(15, ['*'], 'page', 2);
 ```
+As you can guess, this query the first 15 records, in the second page.
 
 #### `simplePaginate()`
 
