@@ -267,13 +267,9 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function getModel()
     {
-        return $this->model ?: str_replace([
-            'Repositories',
-            'Repository'
-        ], [
-            $this->getContainer('config')->get('rinvex.repository.models'),
-            ''
-        ], get_called_class());
+        $model = $this->getContainer('config')->get('rinvex.repository.models');
+
+        return $this->model ?: str_replace(['Repositories', 'Repository'], [$model, ''], get_called_class());
     }
 
     /**
@@ -303,12 +299,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     public function where($attribute, $operator = null, $value = null, $boolean = 'and')
     {
         // The last `$boolean` expression is intentional to fix list() & array_pad() results
-        $this->where[] = [
-            $attribute,
-            $operator,
-            $value,
-            $boolean ?: 'and'
-        ];
+        $this->where[] = [$attribute, $operator, $value, $boolean ?: 'and'];
 
         return $this;
     }
@@ -326,12 +317,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     public function whereIn($attribute, $values, $boolean = 'and', $not = false)
     {
         // The last `$boolean` & `$not` expressions are intentional to fix list() & array_pad() results
-        $this->whereIn[] = [
-            $attribute,
-            $values,
-            $boolean ?: 'and',
-            (bool) $not
-        ];
+        $this->whereIn[] = [$attribute, $values, $boolean ?: 'and', (bool) $not];
 
         return $this;
     }
@@ -348,11 +334,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     public function whereNotIn($attribute, $values, $boolean = 'and')
     {
         // The last `$boolean` expression is intentional to fix list() & array_pad() results
-        $this->whereNotIn[] = [
-            $attribute,
-            $values,
-            $boolean ?: 'and'
-        ];
+        $this->whereNotIn[] = [$attribute, $values, $boolean ?: 'and'];
 
         return $this;
     }
@@ -395,10 +377,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function orderBy($attribute, $direction = 'asc')
     {
-        $this->orderBy = [
-            $attribute,
-            $direction
-        ];
+        $this->orderBy = [$attribute, $direction];
 
         return $this;
     }
@@ -413,10 +392,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public static function __callStatic($method, $parameters)
     {
-        return call_user_func_array([
-            new static(),
-            $method
-        ], $parameters);
+        return call_user_func_array([new static(), $method], $parameters);
     }
 
     /**
@@ -431,10 +407,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     {
         $model = $this->model;
 
-        return call_user_func_array([
-            $model,
-            $method
-        ], $parameters);
+        return call_user_func_array([$model, $method], $parameters);
     }
 
 }
