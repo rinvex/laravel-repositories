@@ -46,6 +46,9 @@
         "illuminate/container": "5.1.*|5.2.*|5.3.*",
         "illuminate/contracts": "5.1.*|5.2.*|5.3.*"
     },
+    "suggest": {
+        "illuminate/pagination": "Required to paginate the result set."
+    },
     "autoload": {
         "psr-4": {
             "Rinvex\\Repository\\": "src/"
