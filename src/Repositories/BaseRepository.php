@@ -269,10 +269,10 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     {
         return $this->model ?: str_replace([
             'Repositories',
-            'Repository'
+            'Repository',
         ], [
             $this->getContainer('config')->get('rinvex.repository.models'),
-            ''
+            '',
         ], get_called_class());
     }
 
@@ -307,7 +307,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             $attribute,
             $operator,
             $value,
-            $boolean ?: 'and'
+            $boolean ?: 'and',
         ];
 
         return $this;
@@ -330,7 +330,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             $attribute,
             $values,
             $boolean ?: 'and',
-            (bool) $not
+            (bool) $not,
         ];
 
         return $this;
@@ -351,7 +351,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->whereNotIn[] = [
             $attribute,
             $values,
-            $boolean ?: 'and'
+            $boolean ?: 'and',
         ];
 
         return $this;
@@ -397,7 +397,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     {
         $this->orderBy = [
             $attribute,
-            $direction
+            $direction,
         ];
 
         return $this;
@@ -415,7 +415,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     {
         return call_user_func_array([
             new static(),
-            $method
+            $method,
         ], $parameters);
     }
 
@@ -433,8 +433,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
 
         return call_user_func_array([
             $model,
-            $method
+            $method,
         ], $parameters);
     }
-
 }
