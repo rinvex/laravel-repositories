@@ -163,6 +163,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Models Directory
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the default models directory, just write
+    | directory name, like 'Models' not the full path.
+    |
+    | Default: 'Models'
+    |
+    */
+
+    'models' => 'Models',
+
+    /*
+    |--------------------------------------------------------------------------
     | Caching Strategy
     |--------------------------------------------------------------------------
     */
@@ -249,6 +263,21 @@ The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only av
 ```php
 namespace App\Repositories;
 
+use Rinvex\Repository\Repositories\EloquentRepository;
+
+class FooRepository extends EloquentRepository
+{
+    protected $repositoryId = 'rinvex.repository.uniqueid';
+
+    protected $model = 'App\User';
+}
+```
+That's it, you're done! Yes, it's that simple.
+
+But if you'd like more control over the container instance, or would like to pass model name dynamically you can alternatively to as follow:
+```php
+namespace App\Repositories;
+
 use Illuminate\Contracts\Container\Container;
 use Rinvex\Repository\Repositories\EloquentRepository;
 
@@ -265,7 +294,7 @@ class FooRepository extends EloquentRepository
 }
 ```
 
-Now inside your controller, you can either instantiate the repository traditionaly through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
+Now inside your controller, you can either instantiate the repository traditionally through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
 ```php
 namespace App\Http\Controllers;
 
@@ -312,10 +341,10 @@ ___
 The `setContainer` method sets the IoC container instance, while `getContainer` returns it:
 ```php
 // Set the IoC container instance
-$this->setContainer(new \Illuminate\Container\Container());
+$repository->setContainer(new \Illuminate\Container\Container());
 
 // Get the IoC container instance:
-$container = $this->getContainer();
+$container = $repository->getContainer();
 ```
 
 #### `setModel()`, `getModel()`
@@ -466,8 +495,9 @@ $allEntities = $repository->findAll();
 
 The `paginate` method paginates all entities:
 ```php
-$entitiesPagination = $repository->paginate(15);
+$entitiesPagination = $repository->paginate(15, ['*'], 'page', 2);
 ```
+As you can guess, this query the first 15 records, in the second page.
 
 #### `simplePaginate()`
 
@@ -544,9 +574,10 @@ As a best practice, it's recommended to code for an interface, specifically for 
 
 First, create an interface (abstract) for every entity you've:
 ```php
+use Rinvex\Repository\Contracts\CacheableContract;
 use Rinvex\Repository\Contracts\RepositoryContract;
 
-interface UserRepositoryContract extends RepositoryContract
+interface UserRepositoryContract extends RepositoryContract, CacheableContract
 {
     //
 }
@@ -592,7 +623,7 @@ Repositories fire events at every action, like `create`, `update`, `delete`. All
 
 For your convenience, the events suffixed with `.entity.created`, `.entity.updated`, or `.entity.deleted` have listeners that take actions accordingly. Usually we need to flush cache -if enabled & exists- upon every success action.
 
-There's one more event `rinvex.repository.uniqueid.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it if you've model relashions for further actions.
+There's one more event `rinvex.repository.uniqueid.entity.cache.flushed` that's fired on cache flush. It has no listeners by default, but you may need to listen to it if you've model relations for further actions.
 
 ### Mandatory Repository Conventions
 
@@ -644,7 +675,7 @@ Here some conventions important to know while using this package. This package a
 
 ### Automatic Guessing
 
-While it's **recomended** to explicitly set IoC container, repository identifier, and repository model; This package is smart enough to guess any of these required data whenever missing.
+While it's **recommended** to explicitly set IoC container, repository identifier, and repository model; This package is smart enough to guess any of these required data whenever missing.
 
 - **IoC Container** `app()` helper is used as a fallback if IoC container instance not provided explicitly.
 - **Repository Identifier** It's recommended to set repository identifier as a doted name like `rinvex.repository.uniqueid`, but if it's missing fully qualified repository class name will be used (actually the result of `get_called_class()` function).

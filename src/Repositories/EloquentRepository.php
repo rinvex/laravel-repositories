@@ -16,6 +16,7 @@
 namespace Rinvex\Repository\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 use Rinvex\Repository\Exceptions\RepositoryException;
 
 class EloquentRepository extends BaseRepository
@@ -103,7 +104,9 @@ class EloquentRepository extends BaseRepository
      */
     public function paginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null)
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($perPage, $attributes, $pageName, $page) {
+        $page = $page ?: Paginator::resolveCurrentPage($pageName);
+
+        return $this->executeCallback(get_called_class(), __FUNCTION__, array_merge(func_get_args(), compact('page')), function () use ($perPage, $attributes, $pageName, $page) {
             return $this->prepareQuery($this->createModel())->paginate($perPage, $attributes, $pageName, $page);
         });
     }
@@ -114,13 +117,16 @@ class EloquentRepository extends BaseRepository
      * @param int|null $perPage
      * @param array    $attributes
      * @param string   $pageName
+     * @param int|null $page
      *
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
-    public function simplePaginate($perPage = null, $attributes = ['*'], $pageName = 'page')
+    public function simplePaginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null)
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($perPage, $attributes, $pageName) {
-            return $this->prepareQuery($this->createModel())->simplePaginate($perPage, $attributes, $pageName);
+        $page = $page ?: Paginator::resolveCurrentPage($pageName);
+
+        return $this->executeCallback(get_called_class(), __FUNCTION__, array_merge(func_get_args(), compact('page')), function () use ($perPage, $attributes, $pageName, $page) {
+            return $this->prepareQuery($this->createModel())->simplePaginate($perPage, $attributes, $pageName, $page);
         });
     }
 
