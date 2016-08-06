@@ -234,7 +234,6 @@ class EloquentRepository extends BaseRepository
 
             // Fire the updated event
             $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $instance]);
-
         }
 
         return $updated ? $instance : $updated;
