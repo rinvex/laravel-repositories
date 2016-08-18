@@ -14,7 +14,7 @@
         "cache"
     ],
     "license": "MIT",
-    "homepage": "https://rinvex.com/marketplace/rinvex-repository/",
+    "homepage": "https://rinvex.com",
     "support": {
         "email": "help@rinvex.com",
         "issues": "https://github.com/rinvex/repository/issues",
@@ -34,7 +34,7 @@
             "role": "Project Lead"
         },
         {
-            "name": "The Generous PHP Community",
+            "name": "The Generous Laravel Community",
             "homepage": "https://github.com/rinvex/repository/contributors"
         }
     ],

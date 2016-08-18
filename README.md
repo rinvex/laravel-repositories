@@ -45,6 +45,7 @@
         - [`orderBy()`](#orderby)
         - [`find()`](#find)
         - [`findBy()`](#findby)
+        - [`findFirst()`](#findFirst)
         - [`findAll()`](#findall)
         - [`paginate()`](#paginate)
         - [`simplePaginate()`](#simplepaginate)
@@ -484,6 +485,13 @@ The `findBy` method finds an entity by one of it's attributes:
 $entity = $repository->findBy('id', 1);
 ```
 
+#### `findFirst()`
+
+The `findFirst` method finds first entity:
+```php
+$firstEntity = $repository->findFirst();
+```
+
 #### `findAll()`
 
 The `findAll` method finds all entities:
@@ -531,6 +539,17 @@ $excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8);
 > **Notes:**
 > - Signature of all of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods has been changed since **v2.0.0**.
 > - All of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods utilize the `where`, `whereIn`, and `whereNotIn` methods respectively, and thus takes first argument as an array of same parameters required by the later ones.
+> - All of the `find*` methods are could be filtered with preceding `where` clauses, which is chainable by the way. All `where` clauses been hold in an array internally and applied before executing the query. Check the following example:
+
+Example of filtered `findAll` method:
+```php
+$allFilteredEntities = $repository->where('slug', '=', 'example')->findAll();
+```
+
+Another example of filtered `findFirst` method with chained clauses:
+```php
+$allFilteredEntities = $repository->where('name', 'LIKE', '%TEST%')->where('slug', '=', 'example')->findFirst();
+```
 
 #### `create()`
 

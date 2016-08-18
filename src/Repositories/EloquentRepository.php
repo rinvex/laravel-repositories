@@ -77,6 +77,20 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
+     * Find the first entity.
+     *
+     * @param array $attributes
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function findFirst($attributes = ['*'])
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attributes) {
+            return $this->prepareQuery($this->createModel())->first($attributes);
+        });
+    }
+
+    /**
      * Find all entities.
      *
      * @param array $attributes

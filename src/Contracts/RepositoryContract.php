@@ -172,6 +172,15 @@ interface RepositoryContract
     public function findBy($attribute, $value, $attributes = ['*']);
 
     /**
+     * Find the first entity.
+     *
+     * @param array $attributes
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function findFirst($attributes = ['*']);
+
+    /**
      * Find all entities.
      *
      * @param array $attributes
