@@ -209,10 +209,7 @@ class EloquentRepository extends BaseRepository
         $this->getContainer('events')->fire($this->getRepositoryId().'.entity.created', [$this, $instance]);
 
         // Return instance
-        return [
-            $created,
-            $instance,
-        ];
+        return $created ? $instance : $created;
     }
 
     /**
@@ -226,24 +223,20 @@ class EloquentRepository extends BaseRepository
     public function update($id, array $attributes = [])
     {
         // Find the given instance
-        $updated  = false;
         $instance = $id instanceof Model ? $id : $this->find($id);
 
         if ($instance) {
             // Fill instance with data
             $instance->fill($attributes);
 
-            // Save the instance
+            // Update the instance
             $updated = $instance->save();
 
             // Fire the updated event
             $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $instance]);
         }
 
-        return [
-            $updated,
-            $instance,
-        ];
+        return $updated ? $instance : $updated;
     }
 
     /**
@@ -257,6 +250,8 @@ class EloquentRepository extends BaseRepository
     {
         // Find the given instance
         $deleted  = false;
+
+        // Find the given instance
         $instance = $id instanceof Model ? $id : $this->find($id);
 
         if ($instance) {
@@ -267,9 +262,6 @@ class EloquentRepository extends BaseRepository
             $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleted', [$this, $instance]);
         }
 
-        return [
-            $deleted,
-            $instance,
-        ];
+        return $deleted ? $instance : $deleted;
     }
 }
