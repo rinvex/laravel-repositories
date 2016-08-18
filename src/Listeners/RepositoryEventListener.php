@@ -27,9 +27,25 @@ class RepositoryEventListener
      */
     public function subscribe(Dispatcher $dispatcher)
     {
+        $dispatcher->listen('*.entity.creating', __CLASS__.'@entityCreating');
         $dispatcher->listen('*.entity.created', __CLASS__.'@entityCreated');
+        $dispatcher->listen('*.entity.updating', __CLASS__.'@entityUpdating');
         $dispatcher->listen('*.entity.updated', __CLASS__.'@entityUpdated');
+        $dispatcher->listen('*.entity.deleting', __CLASS__.'@entityDeleting');
         $dispatcher->listen('*.entity.deleted', __CLASS__.'@entityDeleted');
+    }
+
+    /**
+     * Listen to entities being created.
+     *
+     * @param \Rinvex\Repository\Contracts\RepositoryContract $repository
+     * @param mixed                                           $entity
+     *
+     * @return void
+     */
+    public function entityCreating(RepositoryContract $repository, $entity)
+    {
+        //
     }
 
     /**
@@ -50,6 +66,19 @@ class RepositoryEventListener
     }
 
     /**
+     * Listen to entities being updated.
+     *
+     * @param \Rinvex\Repository\Contracts\RepositoryContract $repository
+     * @param mixed                                           $entity
+     *
+     * @return void
+     */
+    public function entityUpdating(RepositoryContract $repository, $entity)
+    {
+        //
+    }
+
+    /**
      * Listen to entities updated.
      *
      * @param \Rinvex\Repository\Contracts\RepositoryContract $repository
@@ -64,6 +93,19 @@ class RepositoryEventListener
         if ($repository->isCacheClearEnabled() && in_array('update', $clearOn)) {
             $repository->forgetCache();
         }
+    }
+
+    /**
+     * Listen to entities being deleted.
+     *
+     * @param \Rinvex\Repository\Contracts\RepositoryContract $repository
+     * @param mixed                                           $entity
+     *
+     * @return void
+     */
+    public function entityDeleting(RepositoryContract $repository, $entity)
+    {
+        //
     }
 
     /**
