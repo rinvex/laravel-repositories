@@ -357,10 +357,10 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * Add a relationship count / exists condition to the query with where clauses.
      *
-     * @param  string   $relation
-     * @param  \Closure $callback
-     * @param  string   $operator
-     * @param  int      $count
+     * @param string   $relation
+     * @param \Closure $callback
+     * @param string   $operator
+     * @param int      $count
      *
      * @return $this
      */
