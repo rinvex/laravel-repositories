@@ -52,6 +52,7 @@
         - [`findWhere()`](#findwhere)
         - [`findWhereIn()`](#findwherein)
         - [`findWhereNotIn()`](#findwherenotin)
+        - [`findWhereHas()`](#findwherehas)
         - [`create()`](#create)
         - [`update()`](#update)
         - [`delete()`](#delete)
@@ -540,6 +541,18 @@ $excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8]);
 > - Signature of all of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods has been changed since **v2.0.0**.
 > - All of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods utilize the `where`, `whereIn`, and `whereNotIn` methods respectively, and thus takes first argument as an array of same parameters required by the later ones.
 > - All of the `find*` methods are could be filtered with preceding `where` clauses, which is chainable by the way. All `where` clauses been hold in an array internally and applied before executing the query. Check the following example:
+
+#### `findWhereHas()`
+
+The `findWhereHas` method finds all entities matching whereHas conditions:
+```php
+$entities = $repository->findWhereHas([
+    'events', 
+    function ($query) use ($event) {
+        $query->where('event_id', $event);
+    }
+]);
+```
 
 Example of filtered `findAll` method:
 ```php
