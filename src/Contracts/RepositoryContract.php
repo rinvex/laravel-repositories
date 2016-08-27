@@ -123,6 +123,18 @@ interface RepositoryContract
     public function whereNotIn($attribute, $values, $boolean = 'and');
 
     /**
+     * Add a relationship count / exists condition to the query with where clauses.
+     *
+     * @param  string   $relation
+     * @param  \Closure $callback
+     * @param  string   $operator
+     * @param  int      $count
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function whereHas($relation, \Closure $callback, $operator = '>=', $count = 1);
+
+    /**
      * Set the "offset" value of the query.
      *
      * @param int $offset
@@ -243,6 +255,16 @@ interface RepositoryContract
      * @return \Illuminate\Support\Collection
      */
     public function findWhereNotIn(array $where, $attributes = ['*']);
+
+    /**
+     * Add a relationship count / exists condition to the query with where clauses.
+     *
+     * @param array $where
+     * @param array $attributes
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function findWhereHas(array $where, $attributes = ['*']);
 
     /**
      * Create a new entity with the given attributes.
