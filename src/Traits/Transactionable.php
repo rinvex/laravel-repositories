@@ -23,8 +23,9 @@ trait Transactionable
      *
      * @param array $attributes
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     public function create(array $attributes = [])
     {
@@ -49,8 +50,9 @@ trait Transactionable
      * @param mixed $id
      * @param array $attributes
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     public function update($id, array $attributes = [])
     {
@@ -74,8 +76,9 @@ trait Transactionable
      *
      * @param mixed $id
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     public function delete($id)
     {

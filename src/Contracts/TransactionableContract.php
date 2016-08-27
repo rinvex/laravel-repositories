@@ -22,6 +22,8 @@ interface TransactionableContract
      *
      * @param array $attributes
      *
+     * @throws \Exception
+     *
      * @return array
      */
     public function create(array $attributes = []);
@@ -32,6 +34,8 @@ interface TransactionableContract
      * @param mixed $id
      * @param array $attributes
      *
+     * @throws \Exception
+     *
      * @return array
      */
     public function update($id, array $attributes = []);
@@ -40,6 +44,8 @@ interface TransactionableContract
      * Delete an entity with the given id.
      *
      * @param mixed $id
+     *
+     * @throws \Exception
      *
      * @return array
      */
