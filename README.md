@@ -64,6 +64,7 @@
         - [Whole Application Cache](#whole-application-cache)
         - [Individual Query Cache](#individual-query-cache)
         - [Temporary Skip Individual HTTP Request Cache](#temporary-skip-individual-http-request-cache)
+    - [Transactions](#transactions)
 - [Final Thoughts](#final-thoughts)
 - [Changelog](#changelog)
 - [Support](#support)
@@ -747,6 +748,9 @@ Caching results is totally up to you, while all retrieval `find*` methods have c
 
 Lastly, you can skip cache for an individual request by passing the following query string in your URL `skipCache=true`. You can modify this parameter to whatever name you may need through the `rinvex.repository.cache.skip_uri` config option.
 
+## Transactions
+
+Your repositories should implement `TransactionableContract` and use `Transactionable` trait to override the `create`, `update` and `delete` methods in order to run the insert, update and delete queries under a transaction.
 
 ## Final Thoughts
 
