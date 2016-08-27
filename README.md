@@ -553,6 +553,9 @@ $entities = $repository->findWhereHas([
     }
 ]);
 ```
+> **Notes:**
+> - This will return a collection of entities that match the condition inside the closure. If you need to embed the `events` relation, in this case, you'll need to call `with()` method before calling `findWhereHas()` like this: `$repository->with('events')->findWhereHas([...]);`
+
 
 Example of filtered `findAll` method:
 ```php
