@@ -202,6 +202,25 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
+     * Add a relationship count / exists condition to the query with where clauses.
+     *
+     * @param array $where
+     * @param array $attributes
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function findWhereHas(array $where, $attributes = ['*'])
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+            list($relation, $callback, $operator, $count) = array_pad($where, 4, null);
+
+            $this->whereHas($relation, $callback, $operator, $count);
+
+            return $this->prepareQuery($this->createModel())->get($attributes);
+        });
+    }
+
+    /**
      * Create a new entity with the given attributes.
      *
      * @param array $attributes

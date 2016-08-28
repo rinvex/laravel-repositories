@@ -75,6 +75,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $whereNotIn = [];
 
     /**
+     * The query whereHas clauses.
+     *
+     * @var array
+     */
+    protected $whereHas = [];
+
+    /**
      * The "offset" value of the query.
      *
      * @var int
@@ -137,6 +144,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
+        $this->whereHas   = [];
 
         return $this;
     }
@@ -174,6 +182,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             list($attribute, $values, $boolean) = array_pad($whereNotIn, 3, null);
 
             $model = $model->whereNotIn($attribute, $values, $boolean);
+        }
+
+        // Add a "where has" clause to the query
+        foreach ($this->whereHas as $whereHas) {
+            list($relation, $callback, $operator, $count) = array_pad($whereHas, 4, null);
+
+            $model = $model->whereHas($relation, $callback, $operator, $count);
         }
 
         // Set the "offset" value of the query
@@ -335,6 +350,23 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     {
         // The last `$boolean` expression is intentional to fix list() & array_pad() results
         $this->whereNotIn[] = [$attribute, $values, $boolean ?: 'and'];
+
+        return $this;
+    }
+
+    /**
+     * Add a relationship count / exists condition to the query with where clauses.
+     *
+     * @param string   $relation
+     * @param \Closure $callback
+     * @param string   $operator
+     * @param int      $count
+     *
+     * @return $this
+     */
+    public function whereHas($relation, \Closure $callback, $operator = '>=', $count = 1)
+    {
+        $this->whereHas[] = [$relation, $callback, $operator ?: '>=', $count ?: 1];
 
         return $this;
     }
