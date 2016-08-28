@@ -1,6 +1,6 @@
 # Rinvex Repository
 
-![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.diagram.png)
+![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.diagram.png)
 
 **Rinvex Repository** is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system for Laravel, used to abstract the data layer, making applications more flexible to maintain.
 
@@ -13,9 +13,100 @@
 [![SensioLabs Insight](https://img.shields.io/sensiolabs/i/8394bf3e-26c8-415a-8952-078b41110181.svg?label=SensioLabs&style=flat-square)](https://insight.sensiolabs.com/projects/8394bf3e-26c8-415a-8952-078b41110181)
 
 
+## Features
+
+- Cache, Cache, Cache!
+- Prevent code duplication.
+- Reduce potential programming errors.
+- Granularly cache queries with flexible control.
+- Apply centrally managed, consistent access rules and logic.
+- Implement and centralize a caching strategy for the domain model.
+- Improve the code’s maintainability and readability by separating client objects from domain models.
+- Maximize the amount of code that can be tested with automation and to isolate both the client object and the domain model to support unit testing.
+- Associate a behavior with the related data. For example, calculate fields or enforce complex relationships or business rules between the data elements within an entity.
+
+
+## Quick Example (TL;DR)
+
+The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum that concrete implementations must extend.
+
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and [you can develop your own](#add-custom-implementation)), it makes it easy to create new eloquent model instances and to manipulate them easily. To use `EloquentRepository` your repository MUST extend it first:
+```php
+namespace App\Repositories;
+
+use Rinvex\Repository\Repositories\EloquentRepository;
+
+class FooRepository extends EloquentRepository
+{
+    protected $repositoryId = 'rinvex.repository.uniqueid';
+
+    protected $model = 'App\User';
+}
+```
+That's it, you're done! Yes, it's that simple.
+
+But if you'd like more control over the container instance, or would like to pass model name dynamically you can alternatively do as follow:
+```php
+namespace App\Repositories;
+
+use Illuminate\Contracts\Container\Container;
+use Rinvex\Repository\Repositories\EloquentRepository;
+
+class FooRepository extends EloquentRepository
+{
+    // Instantiate repository object with required data
+    public function __construct(Container $container)
+    {
+        $this->setContainer($container)
+             ->setModel(\App\User::class)
+             ->setRepositoryId('rinvex.repository.uniqueid');
+
+    }
+}
+```
+
+Now inside your controller, you can either instantiate the repository traditionally through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
+```php
+namespace App\Http\Controllers;
+
+use App\Repositories\FooRepository;
+
+class BarController
+{
+    // Inject `FooRepository` from the IoC
+    public function baz(FooRepository $repository)
+    {
+        // Find entity by primary key
+        $repository->find(1);
+
+        // Find all entities
+        $repository->findAll();
+
+        // Create a new entity
+        $repository->create(['name' => 'Example']);
+    }
+}
+```
+
+**Rinvex Repository Workflow - Create Repository**
+![Rinvex Repository Workflow - Create Repository](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-1.gif)
+
+**Rinvex Repository Workflow - Use In Controller**
+![Rinvex Repository Workflow - Use In Controller](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-2.gif)
+
+[UML Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.uml-diagram.png)
+
+---
+
+**Mission accomplished! You're good to use this package right now! :white_check_mark:**
+
+**Unless you need to dig deeper & know some advanced stuff, you can skip the following steps! :wink:**
+
+---
+
+
 ## Table Of Contents
 
-- [Features](#features)
 - [Installation](#installation)
     - [Compatibility](#compatibility)
     - [Prerequisites](#prerequisites)
@@ -40,6 +131,7 @@
         - [`where()`](#where)
         - [`whereIn()`](#wherein)
         - [`whereNotIn()`](#wherenotin)
+        - [`whereHas()`](#wherehas)
         - [`offset()`](#offset)
         - [`limit()`](#limit)
         - [`orderBy()`](#orderby)
@@ -72,19 +164,6 @@
 - [Security Vulnerabilities](#security-vulnerabilities)
 - [About Rinvex](#about-rinvex)
 - [License](#license)
-
-
-## Features
-
-- Cache, Cache, Cache!
-- Prevent code duplication.
-- Reduce potential programming errors.
-- Granularly cache queries with flexible control.
-- Apply centrally managed, consistent access rules and logic.
-- Implement and centralize a caching strategy for the domain model.
-- Improve the code’s maintainability and readability by separating client objects from domain models.
-- Maximize the amount of code that can be tested with automation and to isolate both the client object and the domain model to support unit testing.
-- Associate a behavior with the related data. For example, calculate fields or enforce complex relationships or business rules between the data elements within an entity.
 
 
 ## Installation
@@ -257,85 +336,6 @@ return [
 
 ## Usage
 
-### Quick Example
-
-The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum that concrete implementations must extend.
-
-The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and [you can develop your own](#add-custom-implementation)), it makes it easy to create new eloquent model instances and to manipulate them easily. To use `EloquentRepository` your repository MUST extend it first:
-```php
-namespace App\Repositories;
-
-use Rinvex\Repository\Repositories\EloquentRepository;
-
-class FooRepository extends EloquentRepository
-{
-    protected $repositoryId = 'rinvex.repository.uniqueid';
-
-    protected $model = 'App\User';
-}
-```
-That's it, you're done! Yes, it's that simple.
-
-But if you'd like more control over the container instance, or would like to pass model name dynamically you can alternatively to as follow:
-```php
-namespace App\Repositories;
-
-use Illuminate\Contracts\Container\Container;
-use Rinvex\Repository\Repositories\EloquentRepository;
-
-class FooRepository extends EloquentRepository
-{
-    // Instantiate repository object with required data
-    public function __construct(Container $container)
-    {
-        $this->setContainer($container)
-             ->setModel(\App\User::class)
-             ->setRepositoryId('rinvex.repository.uniqueid');
-
-    }
-}
-```
-
-Now inside your controller, you can either instantiate the repository traditionally through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
-```php
-namespace App\Http\Controllers;
-
-use App\Repositories\FooRepository;
-
-class BarController
-{
-    // Inject `FooRepository` from the IoC
-    public function baz(FooRepository $repository)
-    {
-        // Find entity by primary key
-        $repository->find(1);
-
-        // Find all entities
-        $repository->findAll();
-
-        // Create a new entity
-        $repository->create(['name' => 'Example']);
-    }
-}
-```
-
-**Rinvex Repository Workflow - Create Repository**
-![Rinvex Repository Workflow - Create Repository](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-1.gif)
-
-**Rinvex Repository Workflow - Use In Controller**
-![Rinvex Repository Workflow - Use In Controller](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-2.gif)
-
-[UML Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.uml-diagram.png)
-___
-
-_**You're good to go! That's pretty enough knowledge to use this package.**_
-
-> A good programmer is someone who always looks both ways before crossing a one-way street. -Doug Linder
-
-_**So, you decided to proceed, ha?! Awesome!! :D**_
-
-___
-
 ### Detailed Documentation
 
 #### `setContainer()`, `getContainer()`
@@ -449,7 +449,16 @@ The `whereNotIn` method adds a "where not in" clause to the query:
 $repository->whereNotIn('id', [1, 2, 5, 8]);
 ```
 
-> **Note:** All of the `where`, `whereIn`, and `whereNotIn` methods are chainable & could be called multiple times in a single request. It will hold all where clauses in an array internally and apply them all before executing the query.
+#### `whereHas()`
+
+The `whereHas` method adds a "where has relationship" clause to the query:
+```php
+$repository->whereHas('attachments', function ($query) use ($attachment) {
+    $query->where('attachment_id', $attachment->id);
+});
+```
+
+> **Note:** All of the `where*` methods are chainable & could be called multiple times in a single request. It will hold all where clauses in an array internally and apply them all before executing the query.
 
 #### `offset()`
 
@@ -537,25 +546,23 @@ The `findWhereNotIn` method finds all entities matching whereNotIn conditions:
 $excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8]);
 ```
 
-> **Notes:**
-> - Signature of all of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods has been changed since **v2.0.0**.
-> - All of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods utilize the `where`, `whereIn`, and `whereNotIn` methods respectively, and thus takes first argument as an array of same parameters required by the later ones.
-> - All of the `find*` methods are could be filtered with preceding `where` clauses, which is chainable by the way. All `where` clauses been hold in an array internally and applied before executing the query. Check the following example:
-
 #### `findWhereHas()`
 
 The `findWhereHas` method finds all entities matching whereHas conditions:
 ```php
 $entities = $repository->findWhereHas([
-    'events', 
-    function ($query) use ($event) {
-        $query->where('event_id', $event);
+    'attachments', 
+    function ($query) use ($attachment) {
+        $query->where('attachment_id', $attachment->id);
     }
 ]);
 ```
-> **Notes:**
-> - This will return a collection of entities that match the condition inside the closure. If you need to embed the `events` relation, in this case, you'll need to call `with()` method before calling `findWhereHas()` like this: `$repository->with('events')->findWhereHas([...]);`
 
+> **Notes:**
+> - The `findWhereHas` method will return a collection of entities that match the condition inside the closure. If you need to embed the `attachments` relation, in this case, you'll need to call `with()` method before calling `findWhereHas()` like this: `$repository->with('attachments')->findWhereHas([...]);`
+> - Signature of all of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods has been changed since **v2.0.0**.
+> - All of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods utilize the `where`, `whereIn`, and `whereNotIn` methods respectively, and thus takes first argument as an array of same parameters required by the later ones.
+> - All of the `find*` methods are could be filtered with preceding `where` clauses, which is chainable by the way. All `where` clauses been hold in an array internally and applied before executing the query. Check the following examples:
 
 Example of filtered `findAll` method:
 ```php

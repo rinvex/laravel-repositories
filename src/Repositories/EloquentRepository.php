@@ -22,11 +22,7 @@ use Rinvex\Repository\Exceptions\RepositoryException;
 class EloquentRepository extends BaseRepository
 {
     /**
-     * Create a new repository model instance.
-     *
-     * @throws \Rinvex\Repository\Exceptions\RepositoryException
-     *
-     * @return \Illuminate\Database\Eloquent\Model
+     * {@inheritdoc}
      */
     public function createModel()
     {
@@ -46,12 +42,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find an entity by it's primary key.
-     *
-     * @param int   $id
-     * @param array $attributes
-     *
-     * @return \Illuminate\Database\Eloquent\Model
+     * {@inheritdoc}
      */
     public function find($id, $attributes = ['*'])
     {
@@ -61,13 +52,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find an entity by one of it's attributes.
-     *
-     * @param string $attribute
-     * @param string $value
-     * @param array  $attributes
-     *
-     * @return \Illuminate\Database\Eloquent\Model
+     * {@inheritdoc}
      */
     public function findBy($attribute, $value, $attributes = ['*'])
     {
@@ -77,11 +62,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find the first entity.
-     *
-     * @param array $attributes
-     *
-     * @return \Illuminate\Database\Eloquent\Model
+     * {@inheritdoc}
      */
     public function findFirst($attributes = ['*'])
     {
@@ -91,11 +72,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find all entities.
-     *
-     * @param array $attributes
-     *
-     * @return \Illuminate\Support\Collection
+     * {@inheritdoc}
      */
     public function findAll($attributes = ['*'])
     {
@@ -105,16 +82,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Paginate all entities.
-     *
-     * @param int|null $perPage
-     * @param array    $attributes
-     * @param string   $pageName
-     * @param int|null $page
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * {@inheritdoc}
      */
     public function paginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null)
     {
@@ -126,14 +94,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Paginate all entities into a simple paginator.
-     *
-     * @param int|null $perPage
-     * @param array    $attributes
-     * @param string   $pageName
-     * @param int|null $page
-     *
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * {@inheritdoc}
      */
     public function simplePaginate($perPage = null, $attributes = ['*'], $pageName = 'page', $page = null)
     {
@@ -145,12 +106,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find all entities matching where conditions.
-     *
-     * @param array $where
-     * @param array $attributes
-     *
-     * @return \Illuminate\Support\Collection
+     * {@inheritdoc}
      */
     public function findWhere(array $where, $attributes = ['*'])
     {
@@ -164,12 +120,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find all entities matching whereIn conditions.
-     *
-     * @param array $where
-     * @param array $attributes
-     *
-     * @return \Illuminate\Support\Collection
+     * {@inheritdoc}
      */
     public function findWhereIn(array $where, $attributes = ['*'])
     {
@@ -183,12 +134,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Find all entities matching whereNotIn conditions.
-     *
-     * @param array $where
-     * @param array $attributes
-     *
-     * @return \Illuminate\Support\Collection
+     * {@inheritdoc}
      */
     public function findWhereNotIn(array $where, $attributes = ['*'])
     {
@@ -202,12 +148,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Add a relationship count / exists condition to the query with where clauses.
-     *
-     * @param array $where
-     * @param array $attributes
-     *
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * {@inheritdoc}
      */
     public function findWhereHas(array $where, $attributes = ['*'])
     {
@@ -221,11 +162,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Create a new entity with the given attributes.
-     *
-     * @param array $attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function create(array $attributes = [])
     {
@@ -249,12 +186,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Update an entity with the given attributes.
-     *
-     * @param mixed $id
-     * @param array $attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function update($id, array $attributes = [])
     {
@@ -279,11 +211,7 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Delete an entity with the given id.
-     *
-     * @param mixed $id
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function delete($id)
     {

@@ -15,6 +15,7 @@
 
 namespace Rinvex\Repository\Contracts;
 
+use Closure;
 use Illuminate\Contracts\Container\Container;
 
 interface RepositoryContract
@@ -123,16 +124,16 @@ interface RepositoryContract
     public function whereNotIn($attribute, $values, $boolean = 'and');
 
     /**
-     * Add a relationship count / exists condition to the query with where clauses.
+     * Add a "where has relationship" clause to the query.
      *
      * @param string   $relation
      * @param \Closure $callback
      * @param string   $operator
      * @param int      $count
      *
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return $this
      */
-    public function whereHas($relation, \Closure $callback, $operator = '>=', $count = 1);
+    public function whereHas($relation, Closure $callback, $operator = '>=', $count = 1);
 
     /**
      * Set the "offset" value of the query.
@@ -257,12 +258,12 @@ interface RepositoryContract
     public function findWhereNotIn(array $where, $attributes = ['*']);
 
     /**
-     * Add a relationship count / exists condition to the query with where clauses.
+     * Find all entities matching whereHas conditions.
      *
      * @param array $where
      * @param array $attributes
      *
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \Illuminate\Support\Collection
      */
     public function findWhereHas(array $where, $attributes = ['*']);
 

@@ -141,10 +141,10 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->where      = [];
         $this->whereIn    = [];
         $this->whereNotIn = [];
+        $this->whereHas   = [];
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
-        $this->whereHas   = [];
 
         return $this;
     }
@@ -212,11 +212,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Set the IoC container instance.
-     *
-     * @param \Illuminate\Contracts\Container\Container $container
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setContainer(Container $container)
     {
@@ -226,11 +222,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Get the IoC container instance or any of it's services.
-     *
-     * @param string|null $service
-     *
-     * @return object
+     * {@inheritdoc}
      */
     public function getContainer($service = null)
     {
@@ -238,11 +230,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Set the repository identifier.
-     *
-     * @param string $repositoryId
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setRepositoryId($repositoryId)
     {
@@ -252,9 +240,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Get the repository identifier.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getRepositoryId()
     {
@@ -262,11 +248,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Set the repository model.
-     *
-     * @param string $model
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setModel($model)
     {
@@ -276,9 +258,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Get the repository model.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getModel()
     {
@@ -288,11 +268,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Set the relationships that should be eager loaded.
-     *
-     * @param array $relations
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function with(array $relations)
     {
@@ -302,14 +278,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Add a basic where clause to the query.
-     *
-     * @param string $attribute
-     * @param string $operator
-     * @param mixed  $value
-     * @param string $boolean
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function where($attribute, $operator = null, $value = null, $boolean = 'and')
     {
@@ -320,14 +289,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Add a "where in" clause to the query.
-     *
-     * @param string $attribute
-     * @param mixed  $values
-     * @param string $boolean
-     * @param bool   $not
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function whereIn($attribute, $values, $boolean = 'and', $not = false)
     {
@@ -338,13 +300,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Add a "where not in" clause to the query.
-     *
-     * @param string $attribute
-     * @param mixed  $values
-     * @param string $boolean
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function whereNotIn($attribute, $values, $boolean = 'and')
     {
@@ -355,28 +311,18 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Add a relationship count / exists condition to the query with where clauses.
-     *
-     * @param string   $relation
-     * @param \Closure $callback
-     * @param string   $operator
-     * @param int      $count
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function whereHas($relation, \Closure $callback, $operator = '>=', $count = 1)
+    public function whereHas($relation, Closure $callback, $operator = '>=', $count = 1)
     {
+        // The last `$operator` & `$count` expressions are intentional to fix list() & array_pad() results
         $this->whereHas[] = [$relation, $callback, $operator ?: '>=', $count ?: 1];
 
         return $this;
     }
 
     /**
-     * Set the "offset" value of the query.
-     *
-     * @param int $offset
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function offset($offset)
     {
@@ -386,11 +332,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Set the "limit" value of the query.
-     *
-     * @param int $limit
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function limit($limit)
     {
@@ -400,12 +342,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Add an "order by" clause to the query.
-     *
-     * @param string $attribute
-     * @param string $direction
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function orderBy($attribute, $direction = 'asc')
     {
@@ -415,12 +352,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Dynamically pass missing static methods to the model.
-     *
-     * @param $method
-     * @param $parameters
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public static function __callStatic($method, $parameters)
     {
@@ -428,12 +360,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Dynamically pass missing methods to the model.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function __call($method, $parameters)
     {
