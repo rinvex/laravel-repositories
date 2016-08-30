@@ -50,4 +50,27 @@ interface TransactionableContract
      * @return array
      */
     public function delete($id);
+
+    /**
+     * Start a new database transaction.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function beginTransaction();
+
+    /**
+     * Commit the active database transaction.
+     *
+     * @return void
+     */
+    public function commit();
+
+
+    /**
+     * Rollback the active database transaction.
+     *
+     * @return void
+     */
+    public function rollBack();
 }

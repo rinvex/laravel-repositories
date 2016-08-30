@@ -30,16 +30,16 @@ trait Transactionable
     public function create(array $attributes = [])
     {
         // Start transaction!
-        $this->getContainer('db')->beginTransaction();
+        $this->beginTransaction();
         try {
             $result = parent::create($attributes);
         } catch (\Exception $e) {
             // Rollback if something went wrong
-            $this->getContainer('db')->rollback();
+            $this->rollback();
             throw $e;
         }
         // Commit the queries!
-        $this->getContainer('db')->commit();
+        $this->commit();
 
         return $result;
     }
@@ -57,16 +57,16 @@ trait Transactionable
     public function update($id, array $attributes = [])
     {
         // Start transaction!
-        $this->getContainer('db')->beginTransaction();
+        $this->beginTransaction();
         try {
             $result = parent::update($id, $attributes);
         } catch (\Exception $e) {
             // Rollback if something went wrong
-            $this->getContainer('db')->rollback();
+            $this->rollback();
             throw $e;
         }
         // Commit the queries!
-        $this->getContainer('db')->commit();
+        $this->commit();
 
         return $result;
     }
@@ -83,17 +83,48 @@ trait Transactionable
     public function delete($id)
     {
         // Start transaction!
-        $this->getContainer('db')->beginTransaction();
+        $this->beginTransaction();
         try {
             $result = parent::delete($id);
         } catch (\Exception $e) {
             // Rollback if something went wrong
-            $this->getContainer('db')->rollback();
+            $this->rollback();
             throw $e;
         }
         // Commit the queries!
-        $this->getContainer('db')->commit();
 
         return $result;
+    }
+
+    /**
+     * Start a new database transaction.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function beginTransaction()
+    {
+        $this->getContainer('db')->beginTransaction();
+    }
+
+    /**
+     * Commit the active database transaction.
+     *
+     * @return void
+     */
+    public function commit()
+    {
+        $this->getContainer('db')->commit();
+    }
+
+
+    /**
+     * Rollback the active database transaction.
+     *
+     * @return void
+     */
+    public function rollBack()
+    {
+        $this->getContainer('db')->rollback();
     }
 }
