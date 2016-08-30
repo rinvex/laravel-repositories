@@ -54,8 +54,9 @@ interface TransactionableContract
     /**
      * Start a new database transaction.
      *
+     * @throws \Exception
+     *
      * @return void
-     * @throws Exception
      */
     public function beginTransaction();
 
