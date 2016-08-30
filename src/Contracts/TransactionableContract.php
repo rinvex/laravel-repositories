@@ -67,7 +67,6 @@ interface TransactionableContract
      */
     public function commit();
 
-
     /**
      * Rollback the active database transaction.
      *

@@ -118,7 +118,6 @@ trait Transactionable
         $this->getContainer('db')->commit();
     }
 
-
     /**
      * Rollback the active database transaction.
      *
