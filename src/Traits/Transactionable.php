@@ -92,6 +92,7 @@ trait Transactionable
             throw $e;
         }
         // Commit the queries!
+        $this->commit();
 
         return $result;
     }
