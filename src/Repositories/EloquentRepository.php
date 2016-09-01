@@ -34,6 +34,11 @@ class EloquentRepository extends BaseRepository
             $model = $this->getContainer()->make($class);
         }
 
+        // Set the connection used by the model
+        if (! empty($this->connection)) {
+            $model = $model->setConnection($this->connection);
+        }
+
         if (! $model instanceof Model) {
             throw new RepositoryException("Class {$model} must be an instance of \\Illuminate\\Database\\Eloquent\\Model");
         }

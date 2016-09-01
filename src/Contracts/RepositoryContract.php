@@ -39,6 +39,22 @@ interface RepositoryContract
     public function getContainer($service = null);
 
     /**
+     * Set the connection associated with the repository.
+     *
+     * @param  string $name
+     *
+     * @return $this
+     */
+    public function setConnection($name);
+
+    /**
+     * Get the current connection for the repository.
+     *
+     * @return string
+     */
+    public function getConnection();
+
+    /**
      * Set the repository identifier.
      *
      * @param string $repositoryId

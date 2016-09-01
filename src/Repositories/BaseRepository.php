@@ -33,6 +33,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $container;
 
     /**
+     * The connection name for the repository.
+     *
+     * @var string
+     */
+    protected $connection;
+
+    /**
      * The repository identifier.
      *
      * @var string
@@ -227,6 +234,24 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     public function getContainer($service = null)
     {
         return is_null($service) ? ($this->container ?: app()) : ($this->container[$service] ?: app($service));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setConnection($name)
+    {
+        $this->connection = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConnection()
+    {
+        return $this->connection;
     }
 
     /**
