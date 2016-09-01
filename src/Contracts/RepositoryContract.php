@@ -41,7 +41,7 @@ interface RepositoryContract
     /**
      * Set the connection associated with the repository.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return $this
      */
