@@ -245,6 +245,14 @@ class EloquentRepository extends BaseRepository
             $instance,
         ];
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function store($id, array $input)
+    {
+        return ! $id ? $this->create($input) : $this->update($id, $input);
+    }
 
     /**
      * Delete an entity with the given id.
