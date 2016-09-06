@@ -120,6 +120,7 @@ class BarController
     - [Quick Example](#quick-example)
     - [Detailed Documentation](#detailed-documentation)
         - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
+        - [`setConnection()`, `getConnection()`](#setconnection-getconnection)
         - [`setModel()`, `getModel()`](#setmodel-getmodel)
         - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
         - [`setCacheLifetime()`, `getCacheLifetime()`](#setcachelifetime-getcachelifetime)
@@ -345,9 +346,22 @@ The `setContainer` method sets the IoC container instance, while `getContainer` 
 // Set the IoC container instance
 $repository->setContainer(new \Illuminate\Container\Container());
 
-// Get the IoC container instance:
+// Get the IoC container instance
 $container = $repository->getContainer();
 ```
+
+#### `setConnection()`, `getConnection()`
+
+The `setConnection` method sets the connection associated with the repository, while `getConnection` returns it:
+```php
+// Set the connection associated with the repository
+$repository->setConnection('mysql');
+
+// Get the current connection for the repository
+$connection = $repository->getConnection();
+```
+
+> **Note:** The name passed to the `setConnection` method should correspond to one of the connections listed in your `config/database.php` configuration file.
 
 #### `setModel()`, `getModel()`
 

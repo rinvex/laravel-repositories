@@ -15,8 +15,8 @@
 
 namespace Rinvex\Repository\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Model;
 use Rinvex\Repository\Exceptions\RepositoryException;
 
 class EloquentRepository extends BaseRepository
