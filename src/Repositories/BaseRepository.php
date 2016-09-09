@@ -128,7 +128,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             return $this->cacheCallback($class, $method, $args, $closure);
         }
 
-        // Cache disabled, just execute qurey & return result
+        // Cache disabled, just execute query & return result
         $result = call_user_func($closure);
 
         // We're done, let's clean up!
@@ -152,6 +152,10 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
+
+        if (method_exists($this, 'flushCriteria')) {
+            $this->flushCriteria();
+        }
 
         return $this;
     }
@@ -213,6 +217,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             list($attribute, $direction) = $this->orderBy;
 
             $model = $model->orderBy($attribute, $direction);
+        }
+
+        // Apply all criteria to the query
+        if (method_exists($this, 'applyCriteria')) {
+            $model = $this->applyCriteria($model, $this);
         }
 
         return $model;
