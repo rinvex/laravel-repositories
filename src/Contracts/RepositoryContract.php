@@ -295,8 +295,8 @@ interface RepositoryContract
     /**
      * Update an entity with the given attributes.
      *
-     * @param mixed $id
-     * @param array $attributes
+     * @param int|object $id
+     * @param array      $attributes
      *
      * @return array
      */

@@ -550,14 +550,14 @@ $repository->findWhere(['slug', '=', 'example']);
 
 The `findWhereIn` method finds all entities matching whereIn conditions:
 ```php
-$includedEntities = $repository->findwhereIn('id', [1, 2, 5, 8]);
+$includedEntities = $repository->findwhereIn(['id', [1, 2, 5, 8]]);
 ```
 
 #### `findWhereNotIn()`
 
 The `findWhereNotIn` method finds all entities matching whereNotIn conditions:
 ```php
-$excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8]);
+$excludedEntities = $repository->findWhereNotIn(['id', [1, 2, 5, 8]]);
 ```
 
 #### `findWhereHas()`
