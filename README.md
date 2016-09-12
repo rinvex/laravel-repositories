@@ -149,6 +149,9 @@ class BarController
         - [`create()`](#create)
         - [`update()`](#update)
         - [`delete()`](#delete)
+        - [`beginTransaction()`](#begintransaction)
+        - [`commit()`](#commit)
+        - [`rollback()`](#rollback)
     - [Code To An Interface](#code-to-an-interface)
     - [Add Custom Implementation](#add-custom-implementation)
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
@@ -616,6 +619,27 @@ $deletedEntity = $repository->delete(1);
 
 // Assign deleted entity status and instance variables
 list($status, $instance) = $deletedEntity;
+```
+
+#### `beginTransaction()`
+
+The `beginTransaction` method starts a database transaction:
+```php
+$repository->beginTransaction();
+```
+
+#### `commit()`
+
+The `commit` method commits a database transaction:
+```php
+$repository->commit();
+```
+
+#### `rollback()`
+
+The `rollback` method rollbacks a database transaction:
+```php
+$repository->rollback();
 ```
 
 > **Notes:**
