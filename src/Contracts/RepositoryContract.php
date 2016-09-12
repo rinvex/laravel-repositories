@@ -312,6 +312,29 @@ interface RepositoryContract
     public function delete($id);
 
     /**
+     * Start a new database transaction.
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function beginTransaction();
+
+    /**
+     * Commit the active database transaction.
+     *
+     * @return void
+     */
+    public function commit();
+
+    /**
+     * Rollback the active database transaction.
+     *
+     * @return void
+     */
+    public function rollBack();
+
+    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method
