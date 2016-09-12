@@ -405,7 +405,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function rollBack()
     {
-        $this->getContainer('db')->rollback();
+        $this->getContainer('db')->rollBack();
     }
 
     /**

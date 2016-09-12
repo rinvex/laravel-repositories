@@ -151,7 +151,7 @@ class BarController
         - [`delete()`](#delete)
         - [`beginTransaction()`](#begintransaction)
         - [`commit()`](#commit)
-        - [`rollback()`](#rollback)
+        - [`rollBack()`](#rollBack)
     - [Code To An Interface](#code-to-an-interface)
     - [Add Custom Implementation](#add-custom-implementation)
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
@@ -635,11 +635,11 @@ The `commit` method commits a database transaction:
 $repository->commit();
 ```
 
-#### `rollback()`
+#### `rollBack()`
 
 The `rollback` method rollbacks a database transaction:
 ```php
-$repository->rollback();
+$repository->rollBack();
 ```
 
 > **Notes:**
