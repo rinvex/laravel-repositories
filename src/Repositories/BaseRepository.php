@@ -377,6 +377,38 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
+     * Start a new database transaction.
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function beginTransaction()
+    {
+        $this->getContainer('db')->beginTransaction();
+    }
+
+    /**
+     * Commit the active database transaction.
+     *
+     * @return void
+     */
+    public function commit()
+    {
+        $this->getContainer('db')->commit();
+    }
+
+    /**
+     * Rollback the active database transaction.
+     *
+     * @return void
+     */
+    public function rollBack()
+    {
+        $this->getContainer('db')->rollback();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function __callStatic($method, $parameters)
