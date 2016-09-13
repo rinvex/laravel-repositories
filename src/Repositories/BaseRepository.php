@@ -295,8 +295,12 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
-    public function with(array $relations)
+    public function with($relations)
     {
+        if (is_string($relations)) {
+            $relations = func_get_args();
+        }
+
         $this->relations = $relations;
 
         return $this;
@@ -377,11 +381,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Start a new database transaction.
-     *
-     * @throws \Exception
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function beginTransaction()
     {
@@ -389,9 +389,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Commit the active database transaction.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function commit()
     {
@@ -399,9 +397,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Rollback the active database transaction.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function rollBack()
     {

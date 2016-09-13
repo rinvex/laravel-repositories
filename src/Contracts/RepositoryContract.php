@@ -98,11 +98,11 @@ interface RepositoryContract
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param array $relations
+     * @param array|string $relations
      *
      * @return $this
      */
-    public function with(array $relations);
+    public function with($relations);
 
     /**
      * Add a basic where clause to the query.
