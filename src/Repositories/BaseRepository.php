@@ -391,30 +391,6 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
-    public function beginTransaction()
-    {
-        $this->getContainer('db')->beginTransaction();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function commit()
-    {
-        $this->getContainer('db')->commit();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rollBack()
-    {
-        $this->getContainer('db')->rollBack();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function __callStatic($method, $parameters)
     {
         return call_user_func_array([new static(), $method], $parameters);

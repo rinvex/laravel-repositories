@@ -240,4 +240,28 @@ class EloquentRepository extends BaseRepository
 
         return $deleted ? $instance : $deleted;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beginTransaction()
+    {
+        $this->getContainer('db')->beginTransaction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function commit()
+    {
+        $this->getContainer('db')->commit();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rollBack()
+    {
+        $this->getContainer('db')->rollBack();
+    }
 }
