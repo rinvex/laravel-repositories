@@ -114,7 +114,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             return $this->cacheCallback($class, $method, $args, $closure);
         }
 
-        // Cache disabled, just execute qurey & return result
+        // Cache disabled, just execute query & return result
         $result = call_user_func($closure);
 
         // We're done, let's clean up!
