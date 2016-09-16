@@ -456,7 +456,11 @@ $repository->forgetCache();
 
 The `with` method sets the relationships that should be eager loaded:
 ```php
-$repository->with(['relationship']);
+// Pass a string
+$repository->with('relationship');
+
+// Or an array
+$repository->with(['relationship1', 'relationship2']);
 ```
 
 #### `where()`
