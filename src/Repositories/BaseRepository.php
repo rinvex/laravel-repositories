@@ -381,6 +381,19 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
+     * Create or update a new entity with the given attributes.
+     *
+     * @param array $attributes
+     * @param mixed $id
+     *
+     * @return array
+     */
+    public function store($id, array $attributes = [])
+    {
+        return ! $id ? $this->create($attributes) : $this->update($id, $attributes);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function beginTransaction()

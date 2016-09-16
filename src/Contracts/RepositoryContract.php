@@ -303,6 +303,16 @@ interface RepositoryContract
     public function update($id, array $attributes = []);
 
     /**
+     * Create or update a new entity with the given attributes.
+     *
+     * @param array $attributes
+     * @param mixed $id
+     *
+     * @return array
+     */
+    public function store($id, array $attributes = []);
+
+    /**
      * Delete an entity with the given id.
      *
      * @param mixed $id

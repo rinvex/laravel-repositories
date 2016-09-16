@@ -148,6 +148,7 @@ class BarController
         - [`findWhereHas()`](#findwherehas)
         - [`create()`](#create)
         - [`update()`](#update)
+        - [`store()`](#store)
         - [`delete()`](#delete)
         - [`beginTransaction()`](#begintransaction)
         - [`commit()`](#commit)
@@ -610,6 +611,22 @@ $updatedEntity = $repository->update(1, ['name' => 'Example2']);
 // Assign updated entity status and instance variables
 list($status, $instance) = $updatedEntity;
 ```
+
+#### `store()`
+
+The `store` method create or updates entity with the given attributes:
+```php
+
+// Create example
+$storedEntity = $repository->store(null, ['name' => 'Example2']);
+
+// Update example
+$storedEntity = $repository->store(1, ['name' => 'Example2']);
+
+// Assign updated entity status and instance variables
+list($status, $instance) = $storedEntity;
+```
+
 
 #### `delete()`
 
