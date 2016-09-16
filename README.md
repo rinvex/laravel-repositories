@@ -151,7 +151,7 @@ class BarController
         - [`delete()`](#delete)
         - [`beginTransaction()`](#begintransaction)
         - [`commit()`](#commit)
-        - [`rollBack()`](#rollBack)
+        - [`rollBack()`](#rollback)
     - [Code To An Interface](#code-to-an-interface)
     - [Add Custom Implementation](#add-custom-implementation)
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
@@ -596,9 +596,6 @@ $allFilteredEntities = $repository->where('name', 'LIKE', '%TEST%')->where('slug
 The `create` method creates a new entity with the given attributes:
 ```php
 $createdEntity = $repository->create(['name' => 'Example']);
-
-// Assign created entity status and instance variables
-list($status, $instance) = $createdEntity;
 ```
 
 #### `update()`
@@ -606,9 +603,6 @@ list($status, $instance) = $createdEntity;
 The `update` method updates an entity with the given attributes:
 ```php
 $updatedEntity = $repository->update(1, ['name' => 'Example2']);
-
-// Assign updated entity status and instance variables
-list($status, $instance) = $updatedEntity;
 ```
 
 #### `delete()`
@@ -616,9 +610,6 @@ list($status, $instance) = $updatedEntity;
 The `delete` method deletes an entity with the given id:
 ```php
 $deletedEntity = $repository->delete(1);
-
-// Assign deleted entity status and instance variables
-list($status, $instance) = $deletedEntity;
 ```
 
 #### `beginTransaction()`

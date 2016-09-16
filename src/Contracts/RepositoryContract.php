@@ -205,7 +205,7 @@ interface RepositoryContract
      *
      * @param array $attributes
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return object
      */
     public function findFirst($attributes = ['*']);
 
@@ -288,7 +288,7 @@ interface RepositoryContract
      *
      * @param array $attributes
      *
-     * @return array
+     * @return object|bool
      */
     public function create(array $attributes = []);
 
@@ -298,7 +298,7 @@ interface RepositoryContract
      * @param int|object $id
      * @param array      $attributes
      *
-     * @return array
+     * @return object|bool
      */
     public function update($id, array $attributes = []);
 
@@ -307,7 +307,7 @@ interface RepositoryContract
      *
      * @param mixed $id
      *
-     * @return array
+     * @return object|bool
      */
     public function delete($id);
 
