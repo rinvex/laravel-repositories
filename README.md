@@ -148,6 +148,7 @@ class BarController
         - [`findWhereHas()`](#findwherehas)
         - [`create()`](#create)
         - [`update()`](#update)
+        - [`store()`](#store)
         - [`delete()`](#delete)
         - [`beginTransaction()`](#begintransaction)
         - [`commit()`](#commit)
@@ -604,6 +605,19 @@ The `update` method updates an entity with the given attributes:
 ```php
 $updatedEntity = $repository->update(1, ['name' => 'Example2']);
 ```
+
+#### `store()`
+
+The `store` method stores the entity with the given attributes:
+```php
+// Existing Entity
+$storedEntity = $repository->store(1, ['name' => 'Example2']);
+
+// New Entity
+$storedEntity = $repository->store(null, ['name' => 'Example2']);
+```
+
+> **Note:** This method is just an alias for both `create` & `update` methods. It's useful in case where single form is used for both create & update processes.
 
 #### `delete()`
 

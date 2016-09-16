@@ -383,6 +383,14 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
+    public function store($id, array $attributes = [])
+    {
+        return ! $id ? $this->create($attributes) : $this->update($id, $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function beginTransaction()
     {
         $this->getContainer('db')->beginTransaction();
