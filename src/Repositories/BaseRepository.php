@@ -114,7 +114,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      *
      * @var array
      */
-    protected $havings = [];
+    protected $having = [];
 
     /**
      * Execute given callback and return the result.
@@ -159,7 +159,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
-        $this->havings    = [];
+        $this->having    = [];
 
         return $this;
     }
@@ -224,7 +224,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         }
 
         // Add a "having" clause to the query
-        foreach ($this->havings as $having) {
+        foreach ($this->having as $having) {
             list($column, $operator, $value, $boolean) = array_pad($having, 4, null);
 
             $model = $model->having($column, $operator, $value, $boolean);
@@ -408,7 +408,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function having($column, $operator = null, $value = null, $boolean = 'and')
     {
-        $this->havings[] = [$column, $operator, $value, $boolean ?: 'and'];
+        $this->having[] = [$column, $operator, $value, $boolean ?: 'and'];
 
         return $this;
     }
