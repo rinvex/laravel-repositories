@@ -201,6 +201,17 @@ interface RepositoryContract
     public function having($column, $operator = null, $value = null, $boolean = 'and');
 
     /**
+     * Add a "or having" clause to the query.
+     *
+     * @param string $column
+     * @param string $operator
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function orHaving($column, $operator = null, $value = null);
+
+    /**
      * Find an entity by it's primary key.
      *
      * @param int   $id

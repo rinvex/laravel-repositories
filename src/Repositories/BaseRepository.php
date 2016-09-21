@@ -416,6 +416,14 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
+    public function orHaving($column, $operator = null, $value = null, $boolean = 'and')
+    {
+        return $this->having($column, $operator, $value, 'or');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function store($id, array $attributes = [])
     {
         return ! $id ? $this->create($attributes) : $this->update($id, $attributes);
