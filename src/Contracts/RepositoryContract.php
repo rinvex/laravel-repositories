@@ -354,6 +354,14 @@ interface RepositoryContract
     public function rollBack();
 
     /**
+     * Retrieve the "count" result of the query.
+     *
+     * @param  string  $columns
+     * @return int
+     */
+    public function count($columns = '*');
+
+    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method

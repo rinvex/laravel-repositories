@@ -264,4 +264,14 @@ class EloquentRepository extends BaseRepository
     {
         $this->getContainer('db')->rollBack();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count($columns = '*')
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($columns) {
+            return $this->prepareQuery($this->createModel())->count($columns);
+        });
+    }
 }
