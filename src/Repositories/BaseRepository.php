@@ -159,7 +159,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
-        $this->having    = [];
+        $this->having     = [];
 
         return $this;
     }
