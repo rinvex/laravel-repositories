@@ -378,6 +378,14 @@ interface RepositoryContract
     public function max($column);
 
     /**
+     * Retrieve the average value of a given column.
+     *
+     * @param  string  $column
+     * @return mixed
+     */
+    public function avg($column);
+
+    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method

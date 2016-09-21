@@ -294,4 +294,14 @@ class EloquentRepository extends BaseRepository
             return $this->prepareQuery($this->createModel())->max($column);
         });
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function avg($column)
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+            return $this->prepareQuery($this->createModel())->avg($column);
+        });
+    }
 }
