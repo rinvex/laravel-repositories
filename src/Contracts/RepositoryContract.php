@@ -362,6 +362,14 @@ interface RepositoryContract
     public function count($columns = '*');
 
     /**
+     * Retrieve the minimum value of a given column.
+     *
+     * @param  string  $column
+     * @return mixed
+     */
+    public function min($column);
+
+    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method
