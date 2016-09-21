@@ -356,7 +356,7 @@ interface RepositoryContract
     /**
      * Retrieve the "count" result of the query.
      *
-     * @param  string  $columns
+     * @param string $columns
      * @return int
      */
     public function count($columns = '*');
@@ -364,7 +364,7 @@ interface RepositoryContract
     /**
      * Retrieve the minimum value of a given column.
      *
-     * @param  string  $column
+     * @param string $column
      * @return mixed
      */
     public function min($column);
@@ -372,7 +372,7 @@ interface RepositoryContract
     /**
      * Retrieve the maximum value of a given column.
      *
-     * @param  string  $column
+     * @param string $column
      * @return mixed
      */
     public function max($column);
@@ -380,7 +380,7 @@ interface RepositoryContract
     /**
      * Retrieve the average value of a given column.
      *
-     * @param  string  $column
+     * @param string $column
      * @return mixed
      */
     public function avg($column);
@@ -388,7 +388,7 @@ interface RepositoryContract
     /**
      * Retrieve the sum of the values of a given column.
      *
-     * @param  string  $column
+     * @param string $column
      * @return mixed
      */
     public function sum($column);
