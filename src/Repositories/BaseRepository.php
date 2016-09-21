@@ -110,7 +110,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $orderBy = [];
 
     /**
-     * The query having clauses
+     * The query having clauses.
      *
      * @var array
      */
