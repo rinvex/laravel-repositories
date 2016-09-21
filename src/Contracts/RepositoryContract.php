@@ -386,6 +386,14 @@ interface RepositoryContract
     public function avg($column);
 
     /**
+     * Retrieve the sum of the values of a given column.
+     *
+     * @param  string  $column
+     * @return mixed
+     */
+    public function sum($column);
+
+    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method
