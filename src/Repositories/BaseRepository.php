@@ -110,6 +110,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $orderBy = [];
 
     /**
+     * The query having clauses
+     *
+     * @var array
+     */
+    protected $havings = [];
+
+    /**
      * Execute given callback and return the result.
      *
      * @param string   $class
@@ -152,6 +159,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
+        $this->havings    = [];
 
         return $this;
     }
@@ -213,6 +221,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             list($attribute, $direction) = $this->orderBy;
 
             $model = $model->orderBy($attribute, $direction);
+        }
+
+        // Add a "having" clause to the query
+        foreach ($this->havings as $having) {
+            list($column, $operator, $value, $boolean) = array_pad($having, 4, null);
+
+            $model = $model->having($column, $operator, $value, $boolean);
         }
 
         return $model;
@@ -384,6 +399,16 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     public function orderBy($attribute, $direction = 'asc')
     {
         $this->orderBy = [$attribute, $direction];
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function having($column, $operator = null, $value = null, $boolean = 'and')
+    {
+        $this->havings[] = [$column, $operator, $value, $boolean ?: 'and'];
 
         return $this;
     }

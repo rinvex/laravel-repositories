@@ -189,6 +189,18 @@ interface RepositoryContract
     public function orderBy($attribute, $direction = 'asc');
 
     /**
+     * Add a "having" clause to the query.
+     *
+     * @param string $column
+     * @param string $operator
+     * @param string $value
+     * @param string $boolean
+     *
+     * @return $this
+     */
+    public function having($column, $operator = null, $value = null, $boolean = 'and');
+
+    /**
      * Find an entity by it's primary key.
      *
      * @param int   $id
