@@ -370,6 +370,14 @@ interface RepositoryContract
     public function min($column);
 
     /**
+     * Retrieve the maximum value of a given column.
+     *
+     * @param  string  $column
+     * @return mixed
+     */
+    public function max($column);
+
+    /**
      * Dynamically pass missing static methods to the model.
      *
      * @param $method
