@@ -36,15 +36,15 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
     {
         $config          = [
             'models' => 'Models',
-            'cache' => [
+            'cache'  => [
                 'keys_file' => '',
-                'lifetime' => 0,
-                'clear_on' => [
+                'lifetime'  => 0,
+                'clear_on'  => [
                     'create',
                     'update',
                     'delete',
                 ],
-                'skip_uri' => 'skipCache',
+                'skip_uri'  => 'skipCache',
             ],
         ];
         $this->container = new \Illuminate\Container\Container();
@@ -55,7 +55,7 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
     protected function setupDatabase(Manager $db)
     {
         $db->addConnection([
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
         ]);
 
