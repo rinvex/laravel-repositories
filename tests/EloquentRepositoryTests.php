@@ -13,7 +13,7 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
     public function testFindAllUsingGroupBy()
     {
         $userRepository = $this->userRepository();
-        $result = $userRepository->groupBy('name')->findAll();
+        $result         = $userRepository->groupBy('name')->findAll();
         $this->assertCount(3, $result);
     }
 
