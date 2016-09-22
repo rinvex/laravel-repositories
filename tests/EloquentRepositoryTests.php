@@ -17,6 +17,13 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
         $this->assertCount(3, $result);
     }
 
+    public function testFindAllUsingHaving()
+    {
+        $userRepository = $this->userRepository();
+        $result = $userRepository->groupBy('name')->having('age', '>', 24)->findAll();
+        $this->assertCount(3, $result);
+    }
+
     public function testFind()
     {
         $userRepository = $this->userRepository();
