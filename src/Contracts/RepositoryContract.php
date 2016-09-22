@@ -189,6 +189,15 @@ interface RepositoryContract
     public function orderBy($attribute, $direction = 'asc');
 
     /**
+     * Add a "group by" clause to the query.
+     *
+     * @param array|string $column
+     *
+     * @return $this
+     */
+    public function groupBy($column);
+
+    /**
      * Add a "having" clause to the query.
      *
      * @param string $column

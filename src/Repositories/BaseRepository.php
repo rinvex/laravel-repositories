@@ -110,6 +110,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $orderBy = [];
 
     /**
+     * The column to order results by.
+     *
+     * @var array
+     */
+    protected $groupBy = [];
+
+    /**
      * The query having clauses.
      *
      * @var array
@@ -159,6 +166,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
+        $this->groupBy    = [];
         $this->having     = [];
 
         if (method_exists($this, 'flushCriteria')) {
@@ -225,6 +233,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             list($attribute, $direction) = $this->orderBy;
 
             $model = $model->orderBy($attribute, $direction);
+        }
+
+        // Add an "group by" clause to the query.
+        if (! empty($this->groupBy)) {
+            foreach ($this->groupBy as $group) {
+                $model = $model->groupBy($group);
+            }
         }
 
         // Add a "having" clause to the query
@@ -408,6 +423,16 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     public function orderBy($attribute, $direction = 'asc')
     {
         $this->orderBy = [$attribute, $direction];
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function groupBy($column)
+    {
+        $this->groupBy = array_merge((array) $this->groupBy, is_array($column) ? $column : [$column]);
 
         return $this;
     }
