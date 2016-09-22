@@ -24,6 +24,20 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
         $this->assertCount(3, $result);
     }
 
+    public function testFindAllUsingHavingAndOrHaving()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->groupBy('name')->having('age', '>', 24)->orHaving('name', 'like', '%o%')->findAll();
+        $this->assertCount(3, $result);
+    }
+
+    public function testFindAllUsingMultipleHaving()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->groupBy('name')->having('age', '>', 24)->having('age', '<', 26)->findAll();
+        $this->assertCount(1, $result);
+    }
+
     public function testFind()
     {
         $userRepository = $this->userRepository();
