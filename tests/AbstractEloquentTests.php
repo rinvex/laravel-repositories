@@ -93,6 +93,8 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
     {
         $evsign  = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com']);
         $omranic = EloquentUser::create(['name' => 'omranic', 'email' => 'me@omranic.com']);
+        $ionut = EloquentUser::create(['name' => 'ionut', 'email' => 'ionutz2k@gmail.com']);
+        $anotherIonut = EloquentUser::create(['name' => 'ionut', 'email' => 'ionut@example.com']);
 
         $evsign->posts()->saveMany([
             new EloquentPost(['name' => 'first post']),
@@ -102,6 +104,16 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
         $omranic->posts()->saveMany([
             new EloquentPost(['name' => 'third post']),
             new EloquentPost(['name' => 'fourth post']),
+        ]);
+
+        $ionut->posts()->saveMany([
+            new EloquentPost(['name' => 'fifth post']),
+            new EloquentPost(['name' => 'sixth post']),
+        ]);
+
+        $anotherIonut->posts()->saveMany([
+            new EloquentPost(['name' => 'seventh post']),
+            new EloquentPost(['name' => 'eighth post']),
         ]);
     }
 

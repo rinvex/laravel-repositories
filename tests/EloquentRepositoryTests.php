@@ -6,8 +6,15 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
     {
         $userRepository = $this->userRepository();
         $result         = $userRepository->findAll();
-        $this->assertCount(2, $result);
+        $this->assertCount(4, $result);
         $this->assertContainsOnlyInstancesOf(\Rinvex\Tests\Stubs\EloquentUser::class, $result);
+    }
+
+    public function testFindAllUsingGroupBy()
+    {
+        $userRepository = $this->userRepository();
+        $result = $userRepository->groupBy('name')->findAll();
+        $this->assertCount(3, $result);
     }
 
     public function testFind()
