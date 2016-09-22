@@ -67,4 +67,39 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
         $this->assertContainsOnlyInstancesOf(\Rinvex\Tests\Stubs\EloquentUser::class, $result);
         $this->assertEquals(['evsign', 'omranic'], $result->pluck('name')->toArray());
     }
+
+    public function testCount()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->count();
+        $this->assertEquals(4, $result);
+    }
+
+    public function testMin()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->min('age');
+        $this->assertEquals(24, $result);
+    }
+
+    public function testMax()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->max('age');
+        $this->assertEquals(28, $result);
+    }
+
+    public function testAvg()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->avg('age');
+        $this->assertEquals(25.75, $result);
+    }
+
+    public function testSum()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->sum('age');
+        $this->assertEquals(103, $result);
+    }
 }
