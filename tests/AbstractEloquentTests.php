@@ -34,12 +34,12 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
      */
     protected function setupContainer()
     {
-        $config = [
+        $config          = [
             'models' => 'Models',
-            'cache'  => [
+            'cache' => [
                 'keys_file' => '',
-                'lifetime'  => 0,
-                'clear_on'  => [
+                'lifetime' => 0,
+                'clear_on' => [
                     'create',
                     'update',
                     'delete',
@@ -55,8 +55,8 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
     protected function setupDatabase(Manager $db)
     {
         $db->addConnection([
-            'driver'    => 'sqlite',
-            'database'  => ':memory:',
+            'driver' => 'sqlite',
+            'database' => ':memory:',
         ]);
 
         $db->bootEloquent();
@@ -92,9 +92,9 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
      */
     protected function seed()
     {
-        $evsign  = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com', 'age' => '25']);
-        $omranic = EloquentUser::create(['name' => 'omranic', 'email' => 'me@omranic.com', 'age' => '26']);
-        $ionut = EloquentUser::create(['name' => 'ionut', 'email' => 'ionutz2k@gmail.com', 'age' => '24']);
+        $evsign       = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com', 'age' => '25']);
+        $omranic      = EloquentUser::create(['name' => 'omranic', 'email' => 'me@omranic.com', 'age' => '26']);
+        $ionut        = EloquentUser::create(['name' => 'ionut', 'email' => 'ionutz2k@gmail.com', 'age' => '24']);
         $anotherIonut = EloquentUser::create(['name' => 'ionut', 'email' => 'ionut@example.com', 'age' => '28']);
 
         $evsign->posts()->saveMany([
