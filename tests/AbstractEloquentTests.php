@@ -91,9 +91,9 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
      */
     protected function seed()
     {
-        $evsign  = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com']);
-        $omranic = EloquentUser::create(['name' => 'omranic', 'email' => 'me@omranic.com']);
-        $ionut = EloquentUser::create(['name' => 'ionut', 'email' => 'ionutz2k@gmail.com']);
+        $evsign       = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com']);
+        $omranic      = EloquentUser::create(['name' => 'omranic', 'email' => 'me@omranic.com']);
+        $ionut        = EloquentUser::create(['name' => 'ionut', 'email' => 'ionutz2k@gmail.com']);
         $anotherIonut = EloquentUser::create(['name' => 'ionut', 'email' => 'ionut@example.com']);
 
         $evsign->posts()->saveMany([
