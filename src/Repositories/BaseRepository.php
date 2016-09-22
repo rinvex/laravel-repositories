@@ -161,6 +161,10 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->orderBy    = [];
         $this->having     = [];
 
+        if (method_exists($this, 'flushCriteria')) {
+            $this->flushCriteria();
+        }
+
         return $this;
     }
 
@@ -228,6 +232,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             list($column, $operator, $value, $boolean) = array_pad($having, 4, null);
 
             $model = $model->having($column, $operator, $value, $boolean);
+        }
+
+        // Apply all criteria to the query
+        if (method_exists($this, 'applyCriteria')) {
+            $model = $this->applyCriteria($model, $this);
         }
 
         return $model;

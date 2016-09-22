@@ -264,4 +264,54 @@ class EloquentRepository extends BaseRepository
     {
         $this->getContainer('db')->rollBack();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count($columns = '*')
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($columns) {
+            return $this->prepareQuery($this->createModel())->count($columns);
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function min($column)
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+            return $this->prepareQuery($this->createModel())->min($column);
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function max($column)
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+            return $this->prepareQuery($this->createModel())->max($column);
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function avg($column)
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+            return $this->prepareQuery($this->createModel())->avg($column);
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function sum($column)
+    {
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+            return $this->prepareQuery($this->createModel())->sum($column);
+        });
+    }
 }

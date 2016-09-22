@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         verbose="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         syntaxCheck="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="EloquentRepository Test Suite">
+            <file>tests/AbstractEloquentTests.php</file>
+            <file>tests/EloquentRepositoryTests.php</file>
+        </testsuite>
+
+        <testsuite name="EloquentRepositoryCriteria Test Suite">
+            <directory suffix="Tests.php">tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
