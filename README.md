@@ -510,6 +510,20 @@ The `find` method finds an entity by it's primary key:
 $entity = $repository->find(1);
 ```
 
+#### `findOrFail()`
+
+The `findOrFail()` method finds an entity by its primary key or throw an exception:
+```php
+$entity = $repository->findOrFail(1);
+```
+
+#### `findOrNew()`
+
+The `findOrNew()` method finds an entity by its primary key or return fresh entity instance:
+```php
+$entity = $repository->findOrNew(1);
+```
+
 #### `findBy()`
 
 The `findBy` method finds an entity by one of it's attributes:

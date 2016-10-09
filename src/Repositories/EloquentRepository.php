@@ -18,6 +18,7 @@ namespace Rinvex\Repository\Repositories;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Rinvex\Repository\Exceptions\RepositoryException;
+use Rinvex\Repository\Exceptions\EntityNotFoundException;
 
 class EloquentRepository extends BaseRepository
 {
@@ -54,6 +55,36 @@ class EloquentRepository extends BaseRepository
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($id, $attributes) {
             return $this->prepareQuery($this->createModel())->find($id, $attributes);
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOrFail($id, $attributes = ['*'])
+    {
+        $result = $this->find($id, $attributes);
+
+        if (is_array($id)) {
+            if (count($result) == count(array_unique($id))) {
+                return $result;
+            }
+        } elseif (! is_null($result)) {
+            return $result;
+        }
+
+        throw new EntityNotFoundException($this->getModel(), $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOrNew($id, $attributes = ['*'])
+    {
+        if (! is_null($entity = $this->find($id, $attributes))) {
+            return $entity;
+        }
+
+        return $this->createModel();
     }
 
     /**
