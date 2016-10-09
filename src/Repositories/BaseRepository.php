@@ -334,14 +334,6 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
-    public function getModelInstance($id)
-    {
-        return $id ? $this->find($id) : $this->createModel();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function with($relations)
     {
         if (is_string($relations)) {

@@ -96,15 +96,6 @@ interface RepositoryContract
     public function createModel();
 
     /**
-     * Get model instance of the given ID or a new empty one.
-     *
-     * @throws \Rinvex\Repository\Exceptions\RepositoryException
-     *
-     * @return object|null
-     */
-    public function getModelInstance($id);
-
-    /**
      * Set the relationships that should be eager loaded.
      *
      * @param array|string $relations

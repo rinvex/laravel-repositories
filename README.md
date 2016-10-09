@@ -432,19 +432,6 @@ The `createModel()` method creates a new repository model instance:
 $repositoryModelInstance = $repository->createModel();
 ```
 
-#### `getModelInstance()`
-
-The `getModelInstance()` method gets model instance of the given ID or a new empty one:
-```php
-// Return model instance if 123 record exists, null it not
-$instance = $repository->getModelInstance(123);
-
-// Return new model instance if null is given
-$instance = $repository->getModelInstance(null);
-```
-
-> **Note:** This method is just an alias for both `find` & `createModel` methods. It's useful in case where single form is used for both create & update processes.
-
 #### `forgetCache()`
 
 The `forgetCache()` method forgets the repository cache:
