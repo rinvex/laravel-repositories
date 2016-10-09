@@ -224,8 +224,8 @@ interface RepositoryContract
     /**
      * Find an entity by its primary key or throw an exception.
      *
-     * @param  mixed  $id
-     * @param  array  $attributes
+     * @param mixed $id
+     * @param array $attributes
      *
      * @throws \RuntimeException
      *
@@ -236,8 +236,8 @@ interface RepositoryContract
     /**
      * Find an entity by its primary key or return fresh entity instance.
      *
-     * @param  mixed  $id
-     * @param  array  $attributes
+     * @param mixed $id
+     * @param array $attributes
      *
      * @return mixed
      */
