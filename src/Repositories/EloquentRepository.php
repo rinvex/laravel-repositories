@@ -172,22 +172,22 @@ class EloquentRepository extends BaseRepository
     public function create(array $attributes = [])
     {
         // Create a new instance
-        $instance = $this->createModel();
+        $entity = $this->createModel();
 
         // Fire the created event
-        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $instance]);
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $entity]);
 
         // Fill instance with data
-        $instance->fill($attributes);
+        $entity->fill($attributes);
 
         // Save the instance
-        $created = $instance->save();
+        $created = $entity->save();
 
         // Fire the created event
-        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.created', [$this, $instance]);
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.created', [$this, $entity]);
 
         // Return instance
-        return $created ? $instance : $created;
+        return $created ? $entity : $created;
     }
 
     /**
@@ -198,23 +198,23 @@ class EloquentRepository extends BaseRepository
         $updated = false;
 
         // Find the given instance
-        $instance = $id instanceof Model ? $id : $this->find($id);
+        $entity = $id instanceof Model ? $id : $this->find($id);
 
-        if ($instance) {
+        if ($entity) {
             // Fire the updated event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $instance]);
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $entity]);
 
             // Fill instance with data
-            $instance->fill($attributes);
+            $entity->fill($attributes);
 
             // Update the instance
-            $updated = $instance->save();
+            $updated = $entity->save();
 
             // Fire the updated event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $instance]);
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $entity]);
         }
 
-        return $updated ? $instance : $updated;
+        return $updated ? $entity : $updated;
     }
 
     /**
@@ -225,20 +225,20 @@ class EloquentRepository extends BaseRepository
         $deleted  = false;
 
         // Find the given instance
-        $instance = $id instanceof Model ? $id : $this->find($id);
+        $entity = $id instanceof Model ? $id : $this->find($id);
 
-        if ($instance) {
+        if ($entity) {
             // Fire the deleted event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleting', [$this, $instance]);
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleting', [$this, $entity]);
 
             // Delete the instance
-            $deleted = $instance->delete();
+            $deleted = $entity->delete();
 
             // Fire the deleted event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleted', [$this, $instance]);
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleted', [$this, $entity]);
         }
 
-        return $deleted ? $instance : $deleted;
+        return $deleted ? $entity : $deleted;
     }
 
     /**

@@ -65,7 +65,7 @@ trait Criteriable
      *
      * @throws CriterionException
      *
-     * @return object
+     * @return mixed
      */
     protected function instantiateCriterion($class, $arguments)
     {

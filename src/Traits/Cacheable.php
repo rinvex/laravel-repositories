@@ -271,7 +271,7 @@ trait Cacheable
     }
 
     /**
-     * Reset cached repository to it's defaults.
+     * Reset cached repository to its defaults.
      *
      * @return $this
      */

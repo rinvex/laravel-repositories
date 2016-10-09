@@ -152,7 +152,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Reset repository to it's defaults.
+     * Reset repository to its defaults.
      *
      * @return $this
      */
@@ -181,7 +181,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      *
      * @param object $model
      *
-     * @return object
+     * @return mixed
      */
     protected function prepareQuery($model)
     {

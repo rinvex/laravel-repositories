@@ -30,11 +30,11 @@ interface RepositoryContract
     public function setContainer(Container $container);
 
     /**
-     * Get the IoC container instance or any of it's services.
+     * Get the IoC container instance or any of its services.
      *
      * @param string|null $service
      *
-     * @return object
+     * @return mixed
      */
     public function getContainer($service = null);
 
@@ -91,7 +91,7 @@ interface RepositoryContract
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
      *
-     * @return object
+     * @return mixed
      */
     public function createModel();
 
@@ -221,23 +221,23 @@ interface RepositoryContract
     public function orHaving($column, $operator = null, $value = null);
 
     /**
-     * Find an entity by it's primary key.
+     * Find an entity by its primary key.
      *
      * @param int   $id
      * @param array $attributes
      *
-     * @return object
+     * @return mixed
      */
     public function find($id, $attributes = ['*']);
 
     /**
-     * Find an entity by one of it's attributes.
+     * Find an entity by one of its attributes.
      *
      * @param string $attribute
      * @param string $value
      * @param array  $attributes
      *
-     * @return object
+     * @return mixed
      */
     public function findBy($attribute, $value, $attributes = ['*']);
 
@@ -246,7 +246,7 @@ interface RepositoryContract
      *
      * @param array $attributes
      *
-     * @return object
+     * @return mixed
      */
     public function findFirst($attributes = ['*']);
 
@@ -329,7 +329,7 @@ interface RepositoryContract
      *
      * @param array $attributes
      *
-     * @return object|bool
+     * @return mixed
      */
     public function create(array $attributes = []);
 
@@ -339,7 +339,7 @@ interface RepositoryContract
      * @param int|object $id
      * @param array      $attributes
      *
-     * @return object|bool
+     * @return mixed
      */
     public function update($id, array $attributes = []);
 
@@ -349,7 +349,7 @@ interface RepositoryContract
      * @param int   $id
      * @param array $attributes
      *
-     * @return object|bool
+     * @return mixed
      */
     public function store($id, array $attributes = []);
 
@@ -358,7 +358,7 @@ interface RepositoryContract
      *
      * @param mixed $id
      *
-     * @return object|bool
+     * @return mixed
      */
     public function delete($id);
 
