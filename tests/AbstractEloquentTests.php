@@ -34,7 +34,7 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
      */
     protected function setupContainer()
     {
-        $config = [
+        $config          = [
             'models' => 'Models',
             'cache'  => [
                 'keys_file' => '',
@@ -44,7 +44,7 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
                     'update',
                     'delete',
                 ],
-                'skip_uri' => 'skipCache',
+                'skip_uri'  => 'skipCache',
             ],
         ];
         $this->container = new \Illuminate\Container\Container();
@@ -55,8 +55,8 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
     protected function setupDatabase(Manager $db)
     {
         $db->addConnection([
-            'driver'    => 'sqlite',
-            'database'  => ':memory:',
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
         ]);
 
         $db->bootEloquent();
@@ -74,6 +74,7 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('email');
+            $table->integer('age');
             $table->timestamps();
         });
 
@@ -91,8 +92,10 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
      */
     protected function seed()
     {
-        $evsign  = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com']);
-        $omranic = EloquentUser::create(['name' => 'omranic', 'email' => 'me@omranic.com']);
+        $evsign       = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com', 'age' => '25']);
+        $omranic      = EloquentUser::create(['name' => 'omranic', 'email' => 'me@omranic.com', 'age' => '26']);
+        $ionut        = EloquentUser::create(['name' => 'ionut', 'email' => 'ionutz2k@gmail.com', 'age' => '24']);
+        $anotherIonut = EloquentUser::create(['name' => 'ionut', 'email' => 'ionut@example.com', 'age' => '28']);
 
         $evsign->posts()->saveMany([
             new EloquentPost(['name' => 'first post']),
@@ -102,6 +105,16 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
         $omranic->posts()->saveMany([
             new EloquentPost(['name' => 'third post']),
             new EloquentPost(['name' => 'fourth post']),
+        ]);
+
+        $ionut->posts()->saveMany([
+            new EloquentPost(['name' => 'fifth post']),
+            new EloquentPost(['name' => 'sixth post']),
+        ]);
+
+        $anotherIonut->posts()->saveMany([
+            new EloquentPost(['name' => 'seventh post']),
+            new EloquentPost(['name' => 'eighth post']),
         ]);
     }
 

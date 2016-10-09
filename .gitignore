@@ -1,3 +1,4 @@
 /vendor
 /node_modules
 composer.phar
+composer.lock

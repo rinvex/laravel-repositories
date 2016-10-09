@@ -110,6 +110,20 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $orderBy = [];
 
     /**
+     * The column to order results by.
+     *
+     * @var array
+     */
+    protected $groupBy = [];
+
+    /**
+     * The query having clauses.
+     *
+     * @var array
+     */
+    protected $having = [];
+
+    /**
      * Execute given callback and return the result.
      *
      * @param string   $class
@@ -152,6 +166,8 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->offset     = null;
         $this->limit      = null;
         $this->orderBy    = [];
+        $this->groupBy    = [];
+        $this->having     = [];
 
         if (method_exists($this, 'flushCriteria')) {
             $this->flushCriteria();
@@ -217,6 +233,20 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             list($attribute, $direction) = $this->orderBy;
 
             $model = $model->orderBy($attribute, $direction);
+        }
+
+        // Add an "group by" clause to the query.
+        if (! empty($this->groupBy)) {
+            foreach ($this->groupBy as $group) {
+                $model = $model->groupBy($group);
+            }
+        }
+
+        // Add a "having" clause to the query
+        foreach ($this->having as $having) {
+            list($column, $operator, $value, $boolean) = array_pad($having, 4, null);
+
+            $model = $model->having($column, $operator, $value, $boolean);
         }
 
         // Apply all criteria to the query
@@ -395,6 +425,34 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->orderBy = [$attribute, $direction];
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function groupBy($column)
+    {
+        $this->groupBy = array_merge((array) $this->groupBy, is_array($column) ? $column : [$column]);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function having($column, $operator = null, $value = null, $boolean = 'and')
+    {
+        $this->having[] = [$column, $operator, $value, $boolean ?: 'and'];
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function orHaving($column, $operator = null, $value = null, $boolean = 'and')
+    {
+        return $this->having($column, $operator, $value, 'or');
     }
 
     /**

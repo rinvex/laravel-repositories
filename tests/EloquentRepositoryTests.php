@@ -6,8 +6,36 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
     {
         $userRepository = $this->userRepository();
         $result         = $userRepository->findAll();
-        $this->assertCount(2, $result);
+        $this->assertCount(4, $result);
         $this->assertContainsOnlyInstancesOf(\Rinvex\Tests\Stubs\EloquentUser::class, $result);
+    }
+
+    public function testFindAllUsingGroupBy()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->groupBy('name')->findAll();
+        $this->assertCount(3, $result);
+    }
+
+    public function testFindAllUsingHaving()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->groupBy('name')->having('age', '>', 24)->findAll();
+        $this->assertCount(3, $result);
+    }
+
+    public function testFindAllUsingHavingAndOrHaving()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->groupBy('name')->having('age', '>', 24)->orHaving('name', 'like', '%o%')->findAll();
+        $this->assertCount(3, $result);
+    }
+
+    public function testFindAllUsingMultipleHaving()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->groupBy('name')->having('age', '>', 24)->having('age', '<', 26)->findAll();
+        $this->assertCount(1, $result);
     }
 
     public function testFind()
@@ -52,5 +80,40 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
         $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $result);
         $this->assertContainsOnlyInstancesOf(\Rinvex\Tests\Stubs\EloquentUser::class, $result);
         $this->assertEquals(['evsign', 'omranic'], $result->pluck('name')->toArray());
+    }
+
+    public function testCount()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->count();
+        $this->assertEquals(4, $result);
+    }
+
+    public function testMin()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->min('age');
+        $this->assertEquals(24, $result);
+    }
+
+    public function testMax()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->max('age');
+        $this->assertEquals(28, $result);
+    }
+
+    public function testAvg()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->avg('age');
+        $this->assertEquals(25.75, $result);
+    }
+
+    public function testSum()
+    {
+        $userRepository = $this->userRepository();
+        $result         = $userRepository->sum('age');
+        $this->assertEquals(103, $result);
     }
 }

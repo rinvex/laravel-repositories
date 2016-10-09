@@ -61,7 +61,7 @@ class EloquentRepositoryCriteriaIntegrationTests extends AbstractEloquentTests
 
         $result = $userRepository->skipCriteria()->findAll();
 
-        $this->assertCount(2, $result);
+        $this->assertCount(4, $result);
         $this->assertContainsOnlyInstancesOf(\Rinvex\Tests\Stubs\EloquentUser::class, $result);
     }
 
@@ -75,7 +75,7 @@ class EloquentRepositoryCriteriaIntegrationTests extends AbstractEloquentTests
 
         $result = $userRepository->skipCriteria()->findAll();
 
-        $this->assertCount(2, $result);
+        $this->assertCount(4, $result);
         $this->assertContainsOnlyInstancesOf(\Rinvex\Tests\Stubs\EloquentUser::class, $result);
 
         $result = $userRepository->skipCriteria(false)->findAll();

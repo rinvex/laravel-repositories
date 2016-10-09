@@ -189,6 +189,38 @@ interface RepositoryContract
     public function orderBy($attribute, $direction = 'asc');
 
     /**
+     * Add a "group by" clause to the query.
+     *
+     * @param array|string $column
+     *
+     * @return $this
+     */
+    public function groupBy($column);
+
+    /**
+     * Add a "having" clause to the query.
+     *
+     * @param string $column
+     * @param string $operator
+     * @param string $value
+     * @param string $boolean
+     *
+     * @return $this
+     */
+    public function having($column, $operator = null, $value = null, $boolean = 'and');
+
+    /**
+     * Add a "or having" clause to the query.
+     *
+     * @param string $column
+     * @param string $operator
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function orHaving($column, $operator = null, $value = null);
+
+    /**
      * Find an entity by it's primary key.
      *
      * @param int   $id

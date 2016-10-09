@@ -5,7 +5,7 @@ namespace Rinvex\Tests\Stubs;
 class EloquentUser extends \Illuminate\Database\Eloquent\Model
 {
     protected $table    = 'users';
-    protected $fillable = ['name', 'email'];
+    protected $fillable = ['name', 'email', 'age'];
 
     public function posts()
     {
