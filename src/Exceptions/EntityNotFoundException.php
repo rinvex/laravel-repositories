@@ -36,8 +36,8 @@ class EntityNotFoundException extends RuntimeException
     /**
      * Set the affected model.
      *
-     * @param  string $model
-     * @param  int    $id
+     * @param string $model
+     * @param int    $id
      *
      * @return void
      */
