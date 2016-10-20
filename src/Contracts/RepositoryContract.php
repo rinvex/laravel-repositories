@@ -349,8 +349,8 @@ interface RepositoryContract
     /**
      * Update an entity with the given attributes.
      *
-     * @param int|object $id
-     * @param array      $attributes
+     * @param mixed $id
+     * @param array $attributes
      *
      * @return mixed
      */
@@ -359,7 +359,7 @@ interface RepositoryContract
     /**
      * Store the entity with the given attributes.
      *
-     * @param int   $id
+     * @param mixed $id
      * @param array $attributes
      *
      * @return mixed
