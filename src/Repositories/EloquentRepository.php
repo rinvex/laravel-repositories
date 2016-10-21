@@ -214,6 +214,10 @@ class EloquentRepository extends BaseRepository
         // Save the instance
         $created = $entity->save();
 
+        // Extract and sync relationships
+        $relations = $this->extractRelations($entity, $attributes);
+        $this->syncRelations($entity, $relations);
+
         // Fire the created event
         $this->getContainer('events')->fire($this->getRepositoryId().'.entity.created', [$this, $entity]);
 
@@ -240,6 +244,10 @@ class EloquentRepository extends BaseRepository
 
             // Update the instance
             $updated = $entity->save();
+
+            // Extract and sync relationships
+            $relations = $this->extractRelations($entity, $attributes);
+            $this->syncRelations($entity, $relations);
 
             // Fire the updated event
             $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $entity]);
@@ -344,5 +352,51 @@ class EloquentRepository extends BaseRepository
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
             return $this->prepareQuery($this->createModel())->sum($column);
         });
+    }
+
+    /**
+     * Extract relationships.
+     *
+     * @param mixed $entity
+     * @param array $attributes
+     *
+     * @return array
+     */
+    protected function extractRelations($entity, array $attributes)
+    {
+        $relations = [];
+        $potential = array_diff(array_keys($attributes), $entity->getFillable());
+
+        array_walk($potential, function ($item) use ($entity, $attributes, &$relations) {
+            if (method_exists($entity, $item)) {
+                $relations[$item] = [
+                    'values' => $attributes[$item],
+                    'class'  => get_class($entity->$item()),
+                ];
+            }
+        });
+
+        return $relations;
+    }
+
+    /**
+     * Sync relationships.
+     *
+     * @param mixed $entity
+     * @param array $relations
+     * @param bool  $detaching
+     *
+     * @return void
+     */
+    protected function syncRelations($entity, array $relations, $detaching = true)
+    {
+        foreach ($relations as $method => $relation) {
+            switch ($relation['class']) {
+                case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
+                default:
+                    $entity->$method()->sync($relation['values'], $detaching);
+                    break;
+            }
+        }
     }
 }
