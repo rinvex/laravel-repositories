@@ -381,7 +381,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
-    public function whereHas($relation, Closure $callback, $operator = '>=', $count = 1)
+    public function whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1)
     {
         // The last `$operator` & `$count` expressions are intentional to fix list() & array_pad() results
         $this->whereHas[] = [$relation, $callback, $operator ?: '>=', $count ?: 1];
