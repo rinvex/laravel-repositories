@@ -149,7 +149,7 @@ interface RepositoryContract
      *
      * @return $this
      */
-    public function whereHas($relation, Closure $callback, $operator = '>=', $count = 1);
+    public function whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1);
 
     /**
      * Set the "offset" value of the query.
