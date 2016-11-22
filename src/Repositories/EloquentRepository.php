@@ -233,11 +233,16 @@ class EloquentRepository extends BaseRepository
             // Fill instance with data
             $instance->fill($attributes);
 
+            //Check if we are updating attributes values
+            $dirty = $instance->getDirty();
+
             // Save the instance
             $updated = $instance->save();
 
-            // Fire the updated event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $instance]);
+            if (count($dirty) > 0) {
+                // Fire the updated event
+                $this->getContainer('events')->fire($this->getRepositoryId() . '.entity.updated', [$this, $instance]);
+            }
         }
 
         return [
