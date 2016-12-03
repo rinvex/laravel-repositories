@@ -747,6 +747,11 @@ Here some conventions important to know while using this package. This package a
 |   └── lang
 |       └── en              --> English language files
 |
+├── routes                  --> Routes files
+|   ├── api.php
+|   ├── console.php
+|   └── web.php
+|
 ├── src                     --> self explanatory directories
 |   ├── Console
 |   |   └── Commands
@@ -754,8 +759,7 @@ Here some conventions important to know while using this package. This package a
 |   ├── Http
 |   |   ├── Controllers
 |   |   ├── Middleware
-|   |   ├── Requests
-|   |   └── routes.php
+|   |   └── Requests
 |   |
 |   ├── Events
 |   ├── Exceptions
