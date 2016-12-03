@@ -22,7 +22,7 @@ class CriterionException extends Exception
 {
     public static function wrongCriterionType($criterion)
     {
-        $type  = gettype($criterion);
+        $type = gettype($criterion);
         $value = $type === 'object' ? get_class($criterion) : $criterion;
 
         return new static('Given criterion with type '.$type.' and value '.$value.' is not allowed');

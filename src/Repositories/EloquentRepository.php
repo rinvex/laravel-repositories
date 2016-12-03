@@ -261,7 +261,7 @@ class EloquentRepository extends BaseRepository
      */
     public function delete($id)
     {
-        $deleted  = false;
+        $deleted = false;
 
         // Find the given instance
         $entity = $id instanceof Model ? $id : $this->find($id);
