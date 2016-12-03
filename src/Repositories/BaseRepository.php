@@ -158,16 +158,16 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     protected function resetRepository()
     {
-        $this->relations  = [];
-        $this->where      = [];
-        $this->whereIn    = [];
+        $this->relations = [];
+        $this->where = [];
+        $this->whereIn = [];
         $this->whereNotIn = [];
-        $this->whereHas   = [];
-        $this->offset     = null;
-        $this->limit      = null;
-        $this->orderBy    = [];
-        $this->groupBy    = [];
-        $this->having     = [];
+        $this->whereHas = [];
+        $this->offset = null;
+        $this->limit = null;
+        $this->orderBy = [];
+        $this->groupBy = [];
+        $this->having = [];
 
         if (method_exists($this, 'flushCriteria')) {
             $this->flushCriteria();

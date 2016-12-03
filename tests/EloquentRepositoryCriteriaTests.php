@@ -5,7 +5,7 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testObjectCriterionPush()
     {
         $userRepository = $this->userRepository();
-        $criterion      = new FirstTestCriterion();
+        $criterion = new FirstTestCriterion();
         $userRepository->pushCriterion($criterion);
 
         $this->assertAttributeCount(1, 'criteria', $userRepository);
@@ -15,7 +15,7 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testClosureCriterionPush()
     {
         $userRepository = $this->userRepository();
-        $criterion      = function ($query, $repository) {
+        $criterion = function ($query, $repository) {
             return $query->where('id', 1);
         };
 
@@ -28,7 +28,7 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testClassNameCriterionPush()
     {
         $userRepository = $this->userRepository();
-        $criterion      = FirstTestCriterion::class;
+        $criterion = FirstTestCriterion::class;
         $userRepository->pushCriterion($criterion);
 
         $this->assertAttributeCount(1, 'criteria', $userRepository);
@@ -89,8 +89,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
 
     public function testPushTwoDifferentCriteria()
     {
-        $userRepository  = $this->userRepository();
-        $firstCriterion  = FirstTestCriterion::class;
+        $userRepository = $this->userRepository();
+        $firstCriterion = FirstTestCriterion::class;
         $secondCriterion = SecondTestCriterion::class;
 
         $userRepository->pushCriterion([$firstCriterion]);
@@ -130,9 +130,9 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     {
         $userRepository = $this->userRepository();
 
-        $firstCriterion  = FirstTestCriterion::class;
+        $firstCriterion = FirstTestCriterion::class;
         $secondCriterion = new SecondTestCriterion();
-        $thirdCriterion  = function ($query, $repository) {
+        $thirdCriterion = function ($query, $repository) {
             return $query->where('id', 1);
         };
 
@@ -147,8 +147,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
 
     public function testRemoveCriterionWhenPushedByClassName()
     {
-        $userRepository  = $this->userRepository();
-        $firstCriterion  = FirstTestCriterion::class;
+        $userRepository = $this->userRepository();
+        $firstCriterion = FirstTestCriterion::class;
         $secondCriterion = SecondTestCriterion::class;
 
         $userRepository->pushCriterion($firstCriterion);
@@ -171,8 +171,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
 
     public function testRemoveCriterionWhenPushedObject()
     {
-        $userRepository  = $this->userRepository();
-        $firstCriterion  = new FirstTestCriterion();
+        $userRepository = $this->userRepository();
+        $firstCriterion = new FirstTestCriterion();
         $secondCriterion = new SecondTestCriterion();
 
         $userRepository->pushCriterion($firstCriterion);
@@ -280,7 +280,7 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testGetDefaultCriteria()
     {
         $userRepository = $this->userRepository();
-        $criteria       = [
+        $criteria = [
             new FirstTestCriterion(),
             new SecondTestCriterion(),
         ];
@@ -295,7 +295,7 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testGetCriteria()
     {
         $userRepository = $this->userRepository();
-        $criteria       = [
+        $criteria = [
             new FirstTestCriterion(),
             new SecondTestCriterion(),
         ];
@@ -398,7 +398,7 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testHasCriterionByClosure()
     {
         $userRepository = $this->userRepository();
-        $firstCriteria  = function ($query, $repository) {
+        $firstCriteria = function ($query, $repository) {
             return $query->where('id', 1);
         };
 
@@ -427,7 +427,7 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testGetCriterionByClosure()
     {
         $userRepository = $this->userRepository();
-        $firstCriteria  = function ($query, $repository) {
+        $firstCriteria = function ($query, $repository) {
             return $query->where('id', 1);
         };
 
@@ -496,7 +496,7 @@ class ThirdTestWithArgumentsCriterion implements \Rinvex\Repository\Contracts\Cr
     public function __construct($from, $to)
     {
         $this->from = $from;
-        $this->to   = $to;
+        $this->to = $to;
     }
 
     public function apply($query, $repository)
