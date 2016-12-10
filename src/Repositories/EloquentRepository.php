@@ -242,6 +242,9 @@ class EloquentRepository extends BaseRepository
             // Fill instance with data
             $entity->fill($attributes);
 
+            //Check if we are updating attributes values
+            $dirty = $entity->getDirty();
+
             // Update the instance
             $updated = $entity->save();
 
@@ -249,8 +252,10 @@ class EloquentRepository extends BaseRepository
             $relations = $this->extractRelations($entity, $attributes);
             $this->syncRelations($entity, $relations);
 
-            // Fire the updated event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $entity]);
+            if (count($dirty) > 0) {
+                // Fire the updated event
+                $this->getContainer('events')->fire($this->getRepositoryId() . '.entity.updated', [$this, $entity]);
+            }
         }
 
         return $updated ? $entity : $updated;
