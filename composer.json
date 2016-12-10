@@ -39,7 +39,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": "^7.0",
         "illuminate/events": "5.1.*|5.2.*|5.3.*",
         "illuminate/support": "5.1.*|5.2.*|5.3.*",
         "illuminate/database": "5.1.*|5.2.*|5.3.*",
