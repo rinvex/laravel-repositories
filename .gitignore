@@ -1,4 +1,6 @@
-/vendor
-/node_modules
-composer.phar
+build/
+vendor/
+node_modules/
 composer.lock
+composer.phar
+phpunit.xml
