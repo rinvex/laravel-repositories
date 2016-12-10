@@ -216,39 +216,40 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Update an entity with the given attributes.
-     *
-     * @param mixed $id
-     * @param array $attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function update($id, array $attributes = [])
     {
-        // Find the given instance
-        $updated  = false;
-        $instance = $id instanceof Model ? $id : $this->find($id);
+        $updated = false;
 
-        if ($instance) {
+        // Find the given instance
+        $entity = $id instanceof Model ? $id : $this->find($id);
+
+        if ($entity) {
+            // Fire the updated event
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $entity]);
+
             // Fill instance with data
-            $instance->fill($attributes);
+            $entity->fill($attributes);
 
             //Check if we are updating attributes values
-            $dirty = $instance->getDirty();
+            $dirty = $entity->getDirty();
 
-            // Save the instance
-            $updated = $instance->save();
+            // Update the instance
+            $updated = $entity->save();
+
+            // Extract and sync relationships
+            $relations = $this->extractRelations($entity, $attributes);
+            $this->syncRelations($entity, $relations);
 
             if (count($dirty) > 0) {
                 // Fire the updated event
-                $this->getContainer('events')->fire($this->getRepositoryId() . '.entity.updated', [$this, $instance]);
+                $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $entity]);
             }
+
         }
 
-        return [
-            $updated,
-            $instance,
-        ];
+        return $updated ? $entity : $updated;
     }
 
     /**
