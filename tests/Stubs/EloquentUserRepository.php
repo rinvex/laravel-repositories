@@ -9,6 +9,6 @@ class EloquentUserRepository extends EloquentRepository
 {
     use Criteriable;
 
-    protected $model        = EloquentUser::class;
+    protected $model = EloquentUser::class;
     protected $repositoryId = 'rinvex.repository.user';
 }
