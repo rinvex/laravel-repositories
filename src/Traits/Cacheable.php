@@ -75,7 +75,7 @@ trait Cacheable
      */
     protected function storeCacheKeys($class, $method, $hash)
     {
-        $keysFile  = $this->getContainer('config')->get('rinvex.repository.cache.keys_file');
+        $keysFile = $this->getContainer('config')->get('rinvex.repository.cache.keys_file');
         $cacheKeys = $this->getCacheKeys($keysFile);
 
         if (! isset($cacheKeys[$class]) || ! in_array($method.'.'.$hash, $cacheKeys[$class])) {
@@ -109,8 +109,8 @@ trait Cacheable
     {
         $flushedKeys = [];
         $calledClass = get_called_class();
-        $config      = $this->getContainer('config')->get('rinvex.repository.cache');
-        $cacheKeys   = $this->getCacheKeys($config['keys_file']);
+        $config = $this->getContainer('config')->get('rinvex.repository.cache');
+        $cacheKeys = $this->getCacheKeys($config['keys_file']);
 
         if (isset($cacheKeys[$calledClass]) && is_array($cacheKeys[$calledClass])) {
             foreach ($cacheKeys[$calledClass] as $cacheKey) {
@@ -236,9 +236,9 @@ trait Cacheable
     protected function cacheCallback($class, $method, $args, Closure $closure)
     {
         $repositoryId = $this->getRepositoryId();
-        $lifetime     = $this->getCacheLifetime();
-        $hash         = $this->generateCacheHash($args);
-        $cacheKey     = $class.'@'.$method.'.'.$hash;
+        $lifetime = $this->getCacheLifetime();
+        $hash = $this->generateCacheHash($args);
+        $cacheKey = $class.'@'.$method.'.'.$hash;
 
         // Switch cache driver on runtime
         if ($driver = $this->getCacheDriver()) {
@@ -280,7 +280,7 @@ trait Cacheable
         $this->resetRepository();
 
         $this->cacheLifetime = null;
-        $this->cacheDriver   = null;
+        $this->cacheDriver = null;
 
         return $this;
     }
