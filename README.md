@@ -184,19 +184,19 @@ While this package tends to be framework-agnostic, it embraces Laravel culture a
 ### Prerequisites
 
 ```json
-"php": ">=5.5.9",
-"illuminate/events": "5.1.*|5.2.*|5.3.*",
-"illuminate/support": "5.1.*|5.2.*|5.3.*",
-"illuminate/database": "5.1.*|5.2.*|5.3.*",
-"illuminate/container": "5.1.*|5.2.*|5.3.*",
-"illuminate/contracts": "5.1.*|5.2.*|5.3.*"
+"php": "^7.0",
+"illuminate/events": "~5.1.0|~5.2.0|~5.3.0",
+"illuminate/support": "~5.1.0|~5.2.0|~5.3.0",
+"illuminate/database": "~5.1.0|~5.2.0|~5.3.0",
+"illuminate/container": "~5.1.0|~5.2.0|~5.3.0",
+"illuminate/contracts": "~5.1.0|~5.2.0|~5.3.0"
 ```
 
 ### Require Package
 
 Open your application's `composer.json` file and add the following line to the `require` array:
 ```json
-"rinvex/repository": "2.0.*"
+"rinvex/repository": "3.0.*"
 ```
 
 > **Note:** Make sure that after the required changes your `composer.json` file is valid by running `composer validate`.
@@ -866,14 +866,19 @@ Thank you for considering contributing to this project! The contribution guide c
 Bug reports, feature requests, and pull requests are very welcome.
 
 - [Versioning](CONTRIBUTING.md#versioning)
-- [Support Policy](CONTRIBUTING.md#support-policy)
-- [Coding Standards](CONTRIBUTING.md#coding-standards)
 - [Pull Requests](CONTRIBUTING.md#pull-requests)
+- [Coding Standards](CONTRIBUTING.md#coding-standards)
+- [Feature Requests](CONTRIBUTING.md#feature-requests)
+- [Git Flow](CONTRIBUTING.md#git-flow)
 
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within this project, please send an e-mail to help@rinvex.com. All security vulnerabilities will be promptly addressed.
+We want to ensure that this package is secure for everyone. If you've discovered a security vulnerability in this package, we appreciate your help in disclosing it to us in a [responsible manner](https://en.wikipedia.org/wiki/Responsible_disclosure).
+
+Publicly disclosing a vulnerability can put the entire community at risk. If you've discovered a security concern, please email us at [security@rinvex.com](mailto:security@rinvex.com). We'll work with you to make sure that we understand the scope of the issue, and that we fully address your concern. We consider correspondence sent to [security@rinvex.com](mailto:security@rinvex.com) our highest priority, and work to address any issues that arise as quickly as possible.
+
+After a security vulnerability has been corrected, a security hotfix release will be deployed as soon as possible.
 
 
 ## About Rinvex
