@@ -152,6 +152,16 @@ interface RepositoryContract
     public function whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1);
 
     /**
+     * Add a scope to the query.
+     *
+     * @param string $name
+     * @param array  $parameters
+     *
+     * @return $this
+     */
+    public function scope($name, array $parameters = []);
+
+    /**
      * Set the "offset" value of the query.
      *
      * @param int $offset

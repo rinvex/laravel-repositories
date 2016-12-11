@@ -89,6 +89,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $whereHas = [];
 
     /**
+     * The query scopes.
+     *
+     * @var array
+     */
+    protected $scopes = [];
+
+    /**
      * The "offset" value of the query.
      *
      * @var int
@@ -163,6 +170,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         $this->whereIn = [];
         $this->whereNotIn = [];
         $this->whereHas = [];
+        $this->scopes = [];
         $this->offset = null;
         $this->limit = null;
         $this->orderBy = [];
@@ -216,6 +224,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             list($relation, $callback, $operator, $count) = array_pad($whereHas, 4, null);
 
             $model = $model->whereHas($relation, $callback, $operator, $count);
+        }
+
+        // Add a "scope" to the query
+        foreach ($this->scopes as $scope => $parameters) {
+            $model = $model->$scope(...$parameters);
         }
 
         // Set the "offset" value of the query
@@ -392,6 +405,16 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
+    public function scope($name, array $parameters = [])
+    {
+        $this->scopes[$name] = $parameters;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function offset($offset)
     {
         $this->offset = $offset;
@@ -468,6 +491,12 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function __call($method, $parameters)
     {
+        if (method_exists($model = $this->createModel(), $scope = 'scope'.ucfirst($method))) {
+            $this->scope($method, $parameters);
+
+            return $this;
+        }
+
         return call_user_func_array([$this->createModel(), $method], $parameters);
     }
 }
