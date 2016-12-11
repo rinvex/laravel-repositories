@@ -229,8 +229,8 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         }
 
         // Add an "order by" clause to the query.
-        if (! empty($this->orderBy)) {
-            list($attribute, $direction) = $this->orderBy;
+        foreach ($this->orderBy as $orderBy) {
+            list($attribute, $direction) = $orderBy;
 
             $model = $model->orderBy($attribute, $direction);
         }
@@ -414,7 +414,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function orderBy($attribute, $direction = 'asc')
     {
-        $this->orderBy = [$attribute, $direction];
+        $this->orderBy[] = [$attribute, $direction ?: 'asc'];
 
         return $this;
     }
