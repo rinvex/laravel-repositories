@@ -200,13 +200,13 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function create(array $attributes = [])
+    public function create(array $attributes = [], bool $sync = false)
     {
         // Create a new instance
         $entity = $this->createModel();
 
         // Fire the created event
-        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $entity]);
+        $this->getContainer('events')->fire($this->getRepositoryId() . '.entity.creating', [$this, $entity]);
 
         // Fill instance with data
         $entity->fill($attributes);
@@ -214,9 +214,11 @@ class EloquentRepository extends BaseRepository
         // Save the instance
         $created = $entity->save();
 
-        // Extract and sync relationships
-        $relations = $this->extractRelations($entity, $attributes);
-        $this->syncRelations($entity, $relations);
+        // Extract and sync relationships if sync true
+        if ($sync) {
+            $relations = $this->extractRelations($entity, $attributes);
+            $this->syncRelations($entity, $relations);
+        }
 
         // Fire the created event
         $this->getContainer('events')->fire($this->getRepositoryId().'.entity.created', [$this, $entity]);
@@ -228,7 +230,7 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function update($id, array $attributes = [])
+    public function update($id, array $attributes = [], bool $sync = false)
     {
         $updated = false;
 
@@ -248,9 +250,11 @@ class EloquentRepository extends BaseRepository
             // Update the instance
             $updated = $entity->save();
 
-            // Extract and sync relationships
-            $relations = $this->extractRelations($entity, $attributes);
-            $this->syncRelations($entity, $relations);
+            // Extract and sync relationships if sync true
+            if($sync) {
+                $relations = $this->extractRelations($entity, $attributes);
+                $this->syncRelations($entity, $relations);
+            }
 
             if (count($dirty) > 0) {
                 // Fire the updated event
