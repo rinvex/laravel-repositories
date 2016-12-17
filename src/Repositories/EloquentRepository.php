@@ -206,7 +206,7 @@ class EloquentRepository extends BaseRepository
         $entity = $this->createModel();
 
         // Fire the created event
-        $this->getContainer('events')->fire($this->getRepositoryId() . '.entity.creating', [$this, $entity]);
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $entity]);
 
         // Fill instance with data
         $entity->fill($attributes);
@@ -251,7 +251,7 @@ class EloquentRepository extends BaseRepository
             $updated = $entity->save();
 
             // Extract and sync relationships if sync true
-            if($sync) {
+            if ($sync) {
                 $relations = $this->extractRelations($entity, $attributes);
                 $this->syncRelations($entity, $relations);
             }
