@@ -1,26 +1,23 @@
 <?php
 
-use Illuminate\Database\Capsule\Manager;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Container\Container;
 use Rinvex\Tests\Stubs\EloquentPost;
-use Rinvex\Tests\Stubs\EloquentPostRepository;
 use Rinvex\Tests\Stubs\EloquentUser;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Config\Repository as Config;
+use Rinvex\Tests\Stubs\EloquentPostRepository;
 use Rinvex\Tests\Stubs\EloquentUserRepository;
+use Illuminate\Support\Traits\CapsuleManagerTrait;
 
 abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
 {
-    use \Illuminate\Support\Traits\CapsuleManagerTrait;
+    use CapsuleManagerTrait;
 
-    /**
-     * @var \Illuminate\Container\Container
-     */
+    /** @var \Illuminate\Container\Container */
     protected $container;
 
-    /**
-     * Setup the database schema.
-     *
-     * @return void
-     */
+    /** Setup the database schema. */
     public function setUp()
     {
         $this->setupContainer();
@@ -29,9 +26,7 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
         $this->seed();
     }
 
-    /**
-     * Setup the IoC container instance.
-     */
+    /** Setup the IoC container instance. */
     protected function setupContainer()
     {
         $config = [
@@ -47,11 +42,13 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
                 'skip_uri'  => 'skipCache',
             ],
         ];
-        $this->container = new \Illuminate\Container\Container();
-        $this->container->instance('config', new \Illuminate\Config\Repository());
+
+        $this->container = new Container();
+        $this->container->instance('config', new Config());
         $this->getContainer()['config']->offsetSet('rinvex.repository', $config);
     }
 
+    /** Setup the database. */
     protected function setupDatabase(Manager $db)
     {
         $db->addConnection([
@@ -63,11 +60,7 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
         $db->setAsGlobal();
     }
 
-    /**
-     * Create tables.
-     *
-     * @return void
-     */
+    /** Create tables. */
     protected function migrate()
     {
         $this->schema()->create('users', function ($table) {
@@ -87,9 +80,7 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
         });
     }
 
-    /**
-     * Create test users and posts.
-     */
+    /** Create test users and posts. */
     protected function seed()
     {
         $evsign = EloquentUser::create(['name' => 'evsign', 'email' => 'evsign.alex@gmail.com', 'age' => '25']);
@@ -155,6 +146,6 @@ abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
     protected function postRepository()
     {
         return (new EloquentPostRepository())
-            ->setContainer(new \Illuminate\Container\Container());
+            ->setContainer(new Container());
     }
 }
