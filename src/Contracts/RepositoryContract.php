@@ -386,6 +386,15 @@ interface RepositoryContract
     public function delete($id);
 
     /**
+     * Restore an entity with the given id.
+     *
+     * @param mixed $id
+     *
+     * @return mixed
+     */
+    public function restore($id);
+
+    /**
      * Start a new database transaction.
      *
      * @throws \Exception

@@ -292,6 +292,30 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
+    public function restore($id)
+    {
+        $restored = false;
+
+        // Find the given instance
+        $entity = $id instanceof Model ? $id : $this->find($id);
+
+        if ($entity) {
+            // Fire the restoring event
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restoring', [$this, $entity]);
+
+            // Restore the instance
+            $restored = $entity->restore();
+
+            // Fire the restored event
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restored', [$this, $entity]);
+        }
+
+        return $restored ? $entity : $restored;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function beginTransaction()
     {
         $this->getContainer('db')->beginTransaction();
