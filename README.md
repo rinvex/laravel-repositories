@@ -845,6 +845,7 @@ Lastly, you can skip cache for an individual request by passing the following qu
 - **Rinvex Repository** follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
 - I don't see the benefit of adding a more complex layer by implementing the **Criteria Pattern** for filtration at the moment, rather I'd prefer to keep it as simple as it is now using traditional where clauses since we can achieve same results. (do you've different thoughts? explain please)
 
+
 ## Changelog
 
 Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
