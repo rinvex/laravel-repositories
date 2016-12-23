@@ -44,23 +44,14 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Publish Resources
-        $this->publishResources();
+        if ($this->app->runningInConsole()) {
+            // Publish config
+            $this->publishes([
+                realpath(__DIR__.'/../../config/config.php') => config_path('rinvex.repository.php'),
+            ], 'config');
+        }
 
         // Subscribe the registered event listener
         $this->app['events']->subscribe('rinvex.repository.listener');
-    }
-
-    /**
-     * Publish package resources.
-     *
-     * @return void
-     */
-    protected function publishResources()
-    {
-        // Publish config
-        $this->publishes([
-            realpath(__DIR__.'/../../config/config.php') => config_path('rinvex.repository.php'),
-        ], 'config');
     }
 }
