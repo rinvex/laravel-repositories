@@ -475,7 +475,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function store($id, array $attributes = [], bool $syncRelations = false)
     {
-        return ! $id ? $this->create($attributes) : $this->update($id, $attributes);
+        return ! $id ? $this->create($attributes, $syncRelations) : $this->update($id, $attributes, $syncRelations);
     }
 
     /**
