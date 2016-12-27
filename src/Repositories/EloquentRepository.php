@@ -208,15 +208,20 @@ class EloquentRepository extends BaseRepository
         // Fire the created event
         $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $entity]);
 
+        // Extract relationships
+        if ($syncRelations) {
+            $relations = $this->extractRelations($entity, $attributes);
+            array_forget($attributes, array_keys($relations));
+        }
+
         // Fill instance with data
         $entity->fill($attributes);
 
         // Save the instance
         $created = $entity->save();
 
-        // Extract and sync relationships if sync true
-        if ($syncRelations) {
-            $relations = $this->extractRelations($entity, $attributes);
+        // Sync relationships
+        if ($syncRelations && isset($relations)) {
             $this->syncRelations($entity, $relations);
         }
 
@@ -241,6 +246,12 @@ class EloquentRepository extends BaseRepository
             // Fire the updated event
             $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $entity]);
 
+            // Extract relationships
+            if ($syncRelations) {
+                $relations = $this->extractRelations($entity, $attributes);
+                array_forget($attributes, array_keys($relations));
+            }
+
             // Fill instance with data
             $entity->fill($attributes);
 
@@ -250,9 +261,8 @@ class EloquentRepository extends BaseRepository
             // Update the instance
             $updated = $entity->save();
 
-            // Extract and sync relationships if sync true
-            if ($syncRelations) {
-                $relations = $this->extractRelations($entity, $attributes);
+            // Sync relationships
+            if ($syncRelations && isset($relations)) {
                 $this->syncRelations($entity, $relations);
             }
 
@@ -400,11 +410,11 @@ class EloquentRepository extends BaseRepository
         $relations = [];
         $potential = array_diff(array_keys($attributes), $entity->getFillable());
 
-        array_walk($potential, function ($item) use ($entity, $attributes, &$relations) {
-            if (method_exists($entity, $item)) {
-                $relations[$item] = [
-                    'values' => $attributes[$item],
-                    'class'  => get_class($entity->$item()),
+        array_walk($potential, function ($relation) use ($entity, $attributes, &$relations) {
+            if (method_exists($entity, $relation)) {
+                $relations[$relation] = [
+                    'values' => $attributes[$relation],
+                    'class'  => get_class($entity->$relation()),
                 ];
             }
         });
@@ -427,7 +437,7 @@ class EloquentRepository extends BaseRepository
             switch ($relation['class']) {
                 case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
                 default:
-                    $entity->$method()->sync($relation['values'], $detaching);
+                    $entity->$method()->sync((array) $relation['values'], $detaching);
                     break;
             }
         }
