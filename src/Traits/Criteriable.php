@@ -3,6 +3,7 @@
 namespace Rinvex\Repository\Traits;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Rinvex\Repository\Contracts\CriterionContract;
 use Rinvex\Repository\Contracts\RepositoryContract;
 use Rinvex\Repository\Exceptions\CriterionException;
@@ -75,8 +76,8 @@ trait Criteriable
             throw CriterionException::classNotImplementContract($class);
         }
 
-        //If arguments is an associative array we can assume their order and parameter existence
-        if (count($arguments) && array_keys($arguments) !== range(0, count($arguments) - 1)) {
+        // If arguments is an associative array we can assume their order and parameter existence
+        if (Arr::isAssoc($arguments)) {
             $parameters = array_column($reflection->getConstructor()->getParameters(), 'name');
 
             $arguments = array_filter(array_map(function ($parameter) use ($arguments) {
@@ -104,7 +105,7 @@ trait Criteriable
         }
 
         //If an array is assoc we assume that the key is a class and value is an arguments
-        if (array_keys($criterion) !== range(0, count($criterion) - 1)) {
+        if (Arr::isAssoc($criterion)) {
             $criterion = [array_keys($criterion)[0], array_values($criterion)[0]];
 
         //If an array is not assoc but count is one, we can assume there is a class without arguments.
