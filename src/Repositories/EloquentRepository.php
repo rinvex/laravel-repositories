@@ -200,7 +200,7 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function create(array $attributes = [], bool $sync = false)
+    public function create(array $attributes = [], bool $syncRelations = false)
     {
         // Create a new instance
         $entity = $this->createModel();
@@ -215,7 +215,7 @@ class EloquentRepository extends BaseRepository
         $created = $entity->save();
 
         // Extract and sync relationships if sync true
-        if ($sync) {
+        if ($syncRelations) {
             $relations = $this->extractRelations($entity, $attributes);
             $this->syncRelations($entity, $relations);
         }
@@ -230,7 +230,7 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function update($id, array $attributes = [], bool $sync = false)
+    public function update($id, array $attributes = [], bool $syncRelations = false)
     {
         $updated = false;
 
@@ -251,7 +251,7 @@ class EloquentRepository extends BaseRepository
             $updated = $entity->save();
 
             // Extract and sync relationships if sync true
-            if ($sync) {
+            if ($syncRelations) {
                 $relations = $this->extractRelations($entity, $attributes);
                 $this->syncRelations($entity, $relations);
             }

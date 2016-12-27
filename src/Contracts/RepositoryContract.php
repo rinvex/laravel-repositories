@@ -351,30 +351,33 @@ interface RepositoryContract
      * Create a new entity with the given attributes.
      *
      * @param array $attributes
+     * @param bool  $syncRelations
      *
      * @return mixed
      */
-    public function create(array $attributes = []);
+    public function create(array $attributes = [], bool $syncRelations = false);
 
     /**
      * Update an entity with the given attributes.
      *
      * @param mixed $id
      * @param array $attributes
+     * @param bool  $syncRelations
      *
      * @return mixed
      */
-    public function update($id, array $attributes = []);
+    public function update($id, array $attributes = [], bool $syncRelations = false);
 
     /**
      * Store the entity with the given attributes.
      *
      * @param mixed $id
      * @param array $attributes
+     * @param bool  $syncRelations
      *
      * @return mixed
      */
-    public function store($id, array $attributes = []);
+    public function store($id, array $attributes = [], bool $syncRelations = false);
 
     /**
      * Delete an entity with the given id.
