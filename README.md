@@ -475,7 +475,9 @@ $repository->whereNotIn('id', [1, 2, 5, 8]);
 
 The `whereHas` method adds a "where has relationship" clause to the query:
 ```php
-$repository->whereHas('attachments', function ($query) use ($attachment) {
+use Illuminate\Database\Eloquent\Builder;
+
+$repository->whereHas('attachments', function (Builder $query) use ($attachment) {
     $query->where('attachment_id', $attachment->id);
 });
 ```
@@ -586,12 +588,11 @@ $excludedEntities = $repository->findWhereNotIn(['id', [1, 2, 5, 8]]);
 
 The `findWhereHas` method finds all entities matching whereHas conditions:
 ```php
-$entities = $repository->findWhereHas([
-    'attachments', 
-    function ($query) use ($attachment) {
-        $query->where('attachment_id', $attachment->id);
-    }
-]);
+use Illuminate\Database\Eloquent\Builder;
+
+$entities = $repository->findWhereHas(['attachments', function (Builder $query) use ($attachment) {
+    $query->where('attachment_id', $attachment->id);
+}]);
 ```
 
 > **Notes:**

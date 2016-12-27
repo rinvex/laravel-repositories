@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Eloquent\Builder;
+
 class EloquentRepositoryCriteriaIntegrationTests extends AbstractEloquentTests
 {
     public function testFindAllByClassNameCriterion()
@@ -27,7 +29,7 @@ class EloquentRepositoryCriteriaIntegrationTests extends AbstractEloquentTests
     public function testFindAllByClosureCriterion()
     {
         $userRepository = $this->userRepository();
-        $userRepository->pushCriterion(function ($query, $repository) {
+        $userRepository->pushCriterion(function (Builder $query, $repository) {
             return $query->where('id', 2);
         });
         $result = $userRepository->findAll();
