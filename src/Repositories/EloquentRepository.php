@@ -240,34 +240,32 @@ class EloquentRepository extends BaseRepository
         // Find the given instance
         $entity = $id instanceof Model ? $id : $this->findOrFail($id);
 
-        if ($entity) {
+        // Fire the updated event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $entity]);
+
+        // Extract relationships
+        if ($syncRelations) {
+            $relations = $this->extractRelations($entity, $attributes);
+            array_forget($attributes, array_keys($relations));
+        }
+
+        // Fill instance with data
+        $entity->fill($attributes);
+
+        //Check if we are updating attributes values
+        $dirty = $entity->getDirty();
+
+        // Update the instance
+        $updated = $entity->save();
+
+        // Sync relationships
+        if ($syncRelations && isset($relations)) {
+            $this->syncRelations($entity, $relations);
+        }
+
+        if (count($dirty) > 0) {
             // Fire the updated event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $entity]);
-
-            // Extract relationships
-            if ($syncRelations) {
-                $relations = $this->extractRelations($entity, $attributes);
-                array_forget($attributes, array_keys($relations));
-            }
-
-            // Fill instance with data
-            $entity->fill($attributes);
-
-            //Check if we are updating attributes values
-            $dirty = $entity->getDirty();
-
-            // Update the instance
-            $updated = $entity->save();
-
-            // Sync relationships
-            if ($syncRelations && isset($relations)) {
-                $this->syncRelations($entity, $relations);
-            }
-
-            if (count($dirty) > 0) {
-                // Fire the updated event
-                $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $entity]);
-            }
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $entity]);
         }
 
         return $updated ? $entity : $updated;
@@ -281,16 +279,14 @@ class EloquentRepository extends BaseRepository
         // Find the given instance
         $entity = $id instanceof Model ? $id : $this->findOrFail($id);
 
-        if ($entity) {
-            // Fire the deleted event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleting', [$this, $entity]);
+        // Fire the deleted event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleting', [$this, $entity]);
 
-            // Delete the instance
-            $deleted = $entity->delete();
+        // Delete the instance
+        $deleted = $entity->delete();
 
-            // Fire the deleted event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleted', [$this, $entity]);
-        }
+        // Fire the deleted event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleted', [$this, $entity]);
 
         return $deleted ? $entity : $deleted;
     }
@@ -303,16 +299,14 @@ class EloquentRepository extends BaseRepository
         // Find the given instance
         $entity = $id instanceof Model ? $id : $this->findOrFail($id);
 
-        if ($entity) {
-            // Fire the restoring event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restoring', [$this, $entity]);
+        // Fire the restoring event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restoring', [$this, $entity]);
 
-            // Restore the instance
-            $restored = $entity->restore();
+        // Restore the instance
+        $restored = $entity->restore();
 
-            // Fire the restored event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restored', [$this, $entity]);
-        }
+        // Fire the restored event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restored', [$this, $entity]);
 
         return $restored ? $entity : $restored;
     }
