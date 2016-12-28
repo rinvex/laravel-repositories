@@ -237,8 +237,6 @@ class EloquentRepository extends BaseRepository
      */
     public function update($id, array $attributes = [], bool $syncRelations = false)
     {
-        $updated = false;
-
         // Find the given instance
         $entity = $id instanceof Model ? $id : $this->find($id);
 
@@ -280,8 +278,6 @@ class EloquentRepository extends BaseRepository
      */
     public function delete($id)
     {
-        $deleted = false;
-
         // Find the given instance
         $entity = $id instanceof Model ? $id : $this->find($id);
 
@@ -304,8 +300,6 @@ class EloquentRepository extends BaseRepository
      */
     public function restore($id)
     {
-        $restored = false;
-
         // Find the given instance
         $entity = $id instanceof Model ? $id : $this->find($id);
 
