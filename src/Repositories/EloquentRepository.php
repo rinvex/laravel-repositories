@@ -198,6 +198,9 @@ class EloquentRepository extends BaseRepository
     {
         // Create a new instance
         $instance = $this->createModel();
+        
+        // Fire the creating event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $instance]);
 
         // Fill instance with data
         $instance->fill($attributes);
@@ -228,6 +231,9 @@ class EloquentRepository extends BaseRepository
         // Find the given instance
         $updated  = false;
         $instance = $id instanceof Model ? $id : $this->find($id);
+        
+        // Fire the updating event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $instance]);
 
         if ($instance) {
             // Fill instance with data
