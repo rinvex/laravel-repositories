@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v2.0.3] - 2017-01-27
+- Revert "Add support for Laravel 5.4" (v2.x won't get Laravel 5.4 support #131)
+
 ## [v2.0.2] - 2017-01-27
 - Add support for Laravel 5.4
 
@@ -66,6 +69,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Commit first draft
 
+[v2.0.3]: https://github.com/rinvex/repository/compare/v2.0.2...v2.0.3
 [v2.0.2]: https://github.com/rinvex/repository/compare/v2.0.1...v2.0.2
 [v2.0.1]: https://github.com/rinvex/repository/compare/v2.0.0...v2.0.1
 [v2.0.0]: https://github.com/rinvex/repository/compare/v1.0.5...v2.0.0
