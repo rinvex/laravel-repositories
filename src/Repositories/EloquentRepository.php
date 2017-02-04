@@ -206,7 +206,7 @@ class EloquentRepository extends BaseRepository
         $entity = $this->createModel();
 
         // Fire the created event
-        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $entity]);
+        $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.creating', [$this, $entity]);
 
         // Extract relationships
         if ($syncRelations) {
@@ -226,7 +226,7 @@ class EloquentRepository extends BaseRepository
         }
 
         // Fire the created event
-        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.created', [$this, $entity]);
+        $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.created', [$this, $entity]);
 
         // Return instance
         return $created ? $entity : $created;
@@ -244,7 +244,7 @@ class EloquentRepository extends BaseRepository
 
         if ($entity) {
             // Fire the updated event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $entity]);
+            $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.updating', [$this, $entity]);
 
             // Extract relationships
             if ($syncRelations) {
@@ -268,7 +268,7 @@ class EloquentRepository extends BaseRepository
 
             if (count($dirty) > 0) {
                 // Fire the updated event
-                $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $entity]);
+                $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.updated', [$this, $entity]);
             }
         }
 
@@ -287,13 +287,13 @@ class EloquentRepository extends BaseRepository
 
         if ($entity) {
             // Fire the deleted event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleting', [$this, $entity]);
+            $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.deleting', [$this, $entity]);
 
             // Delete the instance
             $deleted = $entity->delete();
 
             // Fire the deleted event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.deleted', [$this, $entity]);
+            $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.deleted', [$this, $entity]);
         }
 
         return $deleted ? $entity : $deleted;
@@ -311,13 +311,13 @@ class EloquentRepository extends BaseRepository
 
         if ($entity) {
             // Fire the restoring event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restoring', [$this, $entity]);
+            $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.restoring', [$this, $entity]);
 
             // Restore the instance
             $restored = $entity->restore();
 
             // Fire the restored event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.restored', [$this, $entity]);
+            $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.restored', [$this, $entity]);
         }
 
         return $restored ? $entity : $restored;
