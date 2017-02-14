@@ -437,14 +437,14 @@ $repository->where('slug', '=', 'example');
 
 The `whereIn` method adds a "where in" clause to the query:
 ```php
-$repository->whereIn('id', [1, 2, 5, 8);
+$repository->whereIn('id', [1, 2, 5, 8]);
 ```
 
 #### `whereNotIn()`
 
 The `whereNotIn` method adds a "where not in" clause to the query:
 ```php
-$repository->whereNotIn('id', [1, 2, 5, 8);
+$repository->whereNotIn('id', [1, 2, 5, 8]);
 ```
 
 > **Note:** All of the `where`, `whereIn`, and `whereNotIn` methods are chainable & could be called multiple times in a single request. It will hold all where clauses in an array internally and apply them all before executing the query.
@@ -518,14 +518,14 @@ $repository->findWhere(['slug', '=', 'example']);
 
 The `findWhereIn` method finds all entities matching whereIn conditions:
 ```php
-$includedEntities = $repository->findwhereIn('id', [1, 2, 5, 8);
+$includedEntities = $repository->findwhereIn('id', [1, 2, 5, 8]);
 ```
 
 #### `findWhereNotIn()`
 
 The `findWhereNotIn` method finds all entities matching whereNotIn conditions:
 ```php
-$excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8);
+$excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8]);
 ```
 
 > **Notes:**
