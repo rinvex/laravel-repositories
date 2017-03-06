@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rinvex\Tests\Stubs;
 
 use Rinvex\Repository\Traits\Criteriable;

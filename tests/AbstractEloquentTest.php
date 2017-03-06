@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 use Illuminate\Container\Container;
 use Rinvex\Tests\Stubs\EloquentPost;
 use Rinvex\Tests\Stubs\EloquentUser;
