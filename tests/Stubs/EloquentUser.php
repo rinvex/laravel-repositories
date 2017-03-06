@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rinvex\Tests\Stubs;
 
 class EloquentUser extends \Illuminate\Database\Eloquent\Model
