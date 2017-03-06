@@ -65,7 +65,7 @@ class EloquentRepository extends BaseRepository
         $result = $this->find($id, $attributes);
 
         if (is_array($id)) {
-            if (count($result) == count(array_unique($id))) {
+            if (count($result) === count(array_unique($id))) {
                 return $result;
             }
         } elseif (! is_null($result)) {
@@ -414,7 +414,7 @@ class EloquentRepository extends BaseRepository
             if (method_exists($entity, $relation)) {
                 $relations[$relation] = [
                     'values' => $attributes[$relation],
-                    'class'  => get_class($entity->$relation()),
+                    'class' => get_class($entity->$relation()),
                 ];
             }
         });

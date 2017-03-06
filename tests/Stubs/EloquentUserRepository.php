@@ -2,8 +2,8 @@
 
 namespace Rinvex\Tests\Stubs;
 
-use Rinvex\Repository\Repositories\EloquentRepository;
 use Rinvex\Repository\Traits\Criteriable;
+use Rinvex\Repository\Repositories\EloquentRepository;
 
 class EloquentUserRepository extends EloquentRepository
 {
