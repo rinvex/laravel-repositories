@@ -8,6 +8,7 @@ enabled:
   - strict_comparison
   - phpdoc_link_to_see
   - no_php4_constructor
+  - declare_strict_types
   - unalign_double_arrow
   - length_ordered_imports
   - modernize_types_casting
