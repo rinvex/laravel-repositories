@@ -83,7 +83,7 @@ trait Criteriable
             $parameters = array_column($reflection->getConstructor()->getParameters(), 'name');
 
             $arguments = array_filter(array_map(function ($parameter) use ($arguments) {
-                return isset($arguments[$parameter]) ? $arguments[$parameter] : null;
+                return $arguments[$parameter] ?? null;
             }, $parameters));
         }
 
