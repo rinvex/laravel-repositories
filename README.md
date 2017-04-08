@@ -109,7 +109,6 @@ class BarController
 
 - [Installation](#installation)
     - [Compatibility](#compatibility)
-    - [Prerequisites](#prerequisites)
     - [Require Package](#require-package)
     - [Install Dependencies](#install-dependencies)
 - [Integration](#integration)
@@ -180,17 +179,6 @@ The best and easiest way to install this package is through [Composer](https://g
 This package fully compatible with **Laravel** `5.1.*`, `5.2.*`, and `5.3.*`.
 
 While this package tends to be framework-agnostic, it embraces Laravel culture and best practices to some extent. It's tested mainly with Laravel but you still can use it with other frameworks or even without any framework if you want.
-
-### Prerequisites
-
-```json
-"php": "^7.0",
-"illuminate/events": "~5.1.0|~5.2.0|~5.3.0",
-"illuminate/support": "~5.1.0|~5.2.0|~5.3.0",
-"illuminate/database": "~5.1.0|~5.2.0|~5.3.0",
-"illuminate/container": "~5.1.0|~5.2.0|~5.3.0",
-"illuminate/contracts": "~5.1.0|~5.2.0|~5.3.0"
-```
 
 ### Require Package
 
