@@ -66,6 +66,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "3.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Rinvex\\Repository\\Providers\\RepositoryServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
