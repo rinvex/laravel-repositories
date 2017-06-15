@@ -31,6 +31,6 @@ class CriterionException extends Exception
 
     public static function missingPackage($methodName, $packageName)
     {
-        return new static('Method '. $methodName .' is only available with "'.$packageName .'" package installed');
+        return new static('Method '.$methodName.' is only available with "'.$packageName .'" package installed');
     }
 }

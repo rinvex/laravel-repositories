@@ -114,7 +114,7 @@ class EloquentRepository extends BaseRepository
     {
         $model = $this->createModel();
 
-        if(!method_exists($model, 'search')) {
+        if (!method_exists($model, 'search')) {
             throw CriterionException::missingPackage('searchAll', 'laravel/scout');
         }
 

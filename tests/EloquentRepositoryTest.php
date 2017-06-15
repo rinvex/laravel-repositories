@@ -126,7 +126,7 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
         $userRepository = $this->userRepository();
         try {
             $result = $userRepository->searchAll('age');
-        } catch ( CriterionException $exception) {
+        } catch (CriterionException $exception) {
             $this->assertsEquals('Method searchAll is only available with "laravel/scout" package installed', $exception->getMessage());
         }
         $this->fail('Exception not thrown.');
