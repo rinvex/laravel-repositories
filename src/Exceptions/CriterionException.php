@@ -28,4 +28,9 @@ class CriterionException extends Exception
             'Array signature for criterion instantiating must contain only two elements in case of sequential array and one in case of assoc array. '.
             'Array with length "'.count($criterion).'" given');
     }
+
+    public static function missingPackage($methodName, $packageName)
+    {
+        return new static('Method '. $methodName .' is only available with "'.$packageName .'" package installed');
+    }
 }

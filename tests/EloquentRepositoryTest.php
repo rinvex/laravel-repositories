@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rinvex\Repository\Exceptions\CriterionException;
+
 class EloquentRepositoryTests extends \AbstractEloquentTests
 {
     public function testFindAll()
@@ -117,5 +119,16 @@ class EloquentRepositoryTests extends \AbstractEloquentTests
         $userRepository = $this->userRepository();
         $result = $userRepository->sum('age');
         $this->assertEquals(103, $result);
+    }
+
+    public function testSearchNotAllowed()
+    {
+        $userRepository = $this->userRepository();
+        try {
+            $result = $userRepository->searchAll('age');
+        } catch ( CriterionException $exception) {
+            $this->assertsEquals('Method searchAll is only available with "laravel/scout" package installed', $exception->getMessage());
+        }
+        $this->fail('Exception not thrown.');
     }
 }

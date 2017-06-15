@@ -51,7 +51,8 @@
         "illuminate/config": "~5.4.0|~5.5.0"
     },
     "suggest": {
-        "illuminate/pagination": "Required to paginate the result set."
+        "illuminate/pagination": "Required to paginate the result set.",
+        "laravel/scout": "Required to cache full-text searches."
     },
     "autoload": {
         "psr-4": {

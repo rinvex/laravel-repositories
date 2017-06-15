@@ -6,6 +6,7 @@ namespace Rinvex\Repository\Repositories;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
+use Rinvex\Repository\Exceptions\CriterionException;
 use Rinvex\Repository\Exceptions\RepositoryException;
 use Rinvex\Repository\Exceptions\EntityNotFoundException;
 
@@ -103,6 +104,22 @@ class EloquentRepository extends BaseRepository
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attributes) {
             return $this->prepareQuery($this->createModel())->get($attributes);
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function searchAll($value)
+    {
+        $model = $this->createModel();
+
+        if(!method_exists($model, 'search')) {
+            throw CriterionException::missingPackage('searchAll', 'laravel/scout');
+        }
+
+        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($model, $value) {
+            return $this->prepareQuery($model)->search($value)->get();
         });
     }
 
