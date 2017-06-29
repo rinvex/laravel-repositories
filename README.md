@@ -440,7 +440,7 @@ $repository->with(['relationship1', 'relationship2']);
 
 #### `where()`
 
-The `with` method adds a basic where clause to the query:
+The `where` method adds a basic where clause to the query:
 ```php
 $repository->where('slug', '=', 'example');
 ```
