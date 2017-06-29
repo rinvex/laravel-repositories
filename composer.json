@@ -63,6 +63,11 @@
             "Rinvex\\Tests\\": "tests"
         }
     },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "3.0-dev"
