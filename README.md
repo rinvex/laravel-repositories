@@ -465,8 +465,8 @@ The `whereHas` method adds a "where has relationship" clause to the query:
 ```php
 use Illuminate\Database\Eloquent\Builder;
 
-$repository->whereHas('attachments', function (Builder $query) use ($attachment) {
-    $query->where('attachment_id', $attachment->id);
+$repository->whereHas('attachments', function (Builder $builder) use ($attachment) {
+    $builder->where('attachment_id', $attachment->id);
 });
 ```
 
@@ -578,8 +578,8 @@ The `findWhereHas` method finds all entities matching whereHas conditions:
 ```php
 use Illuminate\Database\Eloquent\Builder;
 
-$entities = $repository->findWhereHas(['attachments', function (Builder $query) use ($attachment) {
-    $query->where('attachment_id', $attachment->id);
+$entities = $repository->findWhereHas(['attachments', function (Builder $builder) use ($attachment) {
+    $builder->where('attachment_id', $attachment->id);
 }]);
 ```
 
