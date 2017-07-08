@@ -19,8 +19,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testClosureCriterionPush()
     {
         $userRepository = $this->userRepository();
-        $criterion = function (Builder $query, $repository) {
-            return $query->where('id', 1);
+        $criterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 1);
         };
 
         $userRepository->pushCriterion($criterion);
@@ -106,11 +106,11 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testPushTwoDifferentClosureCriteria()
     {
         $userRepository = $this->userRepository();
-        $firstCriterion = function (Builder $query, $repository) {
-            return $query->where('id', 1);
+        $firstCriterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 1);
         };
-        $secondCriterion = function (Builder $query, $repository) {
-            return $query->where('id', 2);
+        $secondCriterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 2);
         };
 
         $userRepository->pushCriterion($firstCriterion);
@@ -136,8 +136,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
 
         $firstCriterion = FirstTestCriterion::class;
         $secondCriterion = new SecondTestCriterion();
-        $thirdCriterion = function (Builder $query, $repository) {
-            return $query->where('id', 1);
+        $thirdCriterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 1);
         };
 
         $userRepository->pushCriteria([
@@ -204,12 +204,12 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testRemoveCriterionWhenPushedClosures()
     {
         $userRepository = $this->userRepository();
-        $firstCriterion = function (Builder $query, $repository) {
-            return $query->where('id', 1);
+        $firstCriterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 1);
         };
 
-        $secondCriterion = function (Builder $query, $repository) {
-            return $query->where('id', 2);
+        $secondCriterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 2);
         };
 
         $userRepository->pushCriterion($firstCriterion);
@@ -233,12 +233,12 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testRemoveCriteria()
     {
         $userRepository = $this->userRepository();
-        $firstCriterion = function (Builder $query, $repository) {
-            return $query->where('id', 1);
+        $firstCriterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 1);
         };
 
-        $secondCriterion = function (Builder $query, $repository) {
-            return $query->where('id', 2);
+        $secondCriterion = function (Builder $builder, $repository) {
+            return $builder->where('id', 2);
         };
 
         $userRepository->pushCriterion($firstCriterion);
@@ -320,8 +320,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
         ];
 
         $defaultCriteria = [
-            function (Builder $query, $repository) {
-                return $query->where('id', 1);
+            function (Builder $builder, $repository) {
+                return $builder->where('id', 1);
             },
         ];
 
@@ -354,8 +354,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
             new SecondTestCriterion(),
         ];
         $defaultCriteria = [
-            function (Builder $query, $repository) {
-                return $query->where('id', 1);
+            function (Builder $builder, $repository) {
+                return $builder->where('id', 1);
             },
         ];
 
@@ -374,8 +374,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
             new SecondTestCriterion(),
         ];
         $defaultCriteria = [
-            function (Builder $query, $repository) {
-                return $query->where('id', 1);
+            function (Builder $builder, $repository) {
+                return $builder->where('id', 1);
             },
         ];
 
@@ -402,12 +402,12 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testHasCriterionByClosure()
     {
         $userRepository = $this->userRepository();
-        $firstCriteria = function (Builder $query, $repository) {
-            return $query->where('id', 1);
+        $firstCriteria = function (Builder $builder, $repository) {
+            return $builder->where('id', 1);
         };
 
-        $secondCriteria = function (Builder $query, $repository) {
-            return $query->where('id', 2);
+        $secondCriteria = function (Builder $builder, $repository) {
+            return $builder->where('id', 2);
         };
 
         $userRepository->pushCriteria([$firstCriteria, $secondCriteria]);
@@ -431,12 +431,12 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
     public function testGetCriterionByClosure()
     {
         $userRepository = $this->userRepository();
-        $firstCriteria = function (Builder $query, $repository) {
-            return $query->where('id', 1);
+        $firstCriteria = function (Builder $builder, $repository) {
+            return $builder->where('id', 1);
         };
 
-        $secondCriteria = function (Builder $query, $repository) {
-            return $query->where('id', 2);
+        $secondCriteria = function (Builder $builder, $repository) {
+            return $builder->where('id', 2);
         };
 
         $userRepository->pushCriteria([$firstCriteria, $secondCriteria]);
@@ -465,8 +465,8 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
         $userRepository->pushCriteria([
             new FirstTestCriterion(),
             new SecondTestCriterion(),
-        ])->pushCriterion(function (Builder $query, $repository) {
-            return $query->where('id', 3);
+        ])->pushCriterion(function (Builder $builder, $repository) {
+            return $builder->where('id', 3);
         });
 
         $resultQuery = $userRepository->applyCriteria($userRepository->createModel(), $userRepository);
@@ -478,17 +478,17 @@ class EloquentRepositoryCriteriaTests extends AbstractEloquentTests
 
 class FirstTestCriterion implements \Rinvex\Repository\Contracts\CriterionContract
 {
-    public function apply($query, $repository)
+    public function apply($builder, $repository)
     {
-        return $query->where('id', 1);
+        return $builder->where('id', 1);
     }
 }
 
 class SecondTestCriterion implements \Rinvex\Repository\Contracts\CriterionContract
 {
-    public function apply($query, $repository)
+    public function apply($builder, $repository)
     {
-        return $query->where('id', 2);
+        return $builder->where('id', 2);
     }
 }
 
@@ -503,8 +503,8 @@ class ThirdTestWithArgumentsCriterion implements \Rinvex\Repository\Contracts\Cr
         $this->to = $to;
     }
 
-    public function apply($query, $repository)
+    public function apply($builder, $repository)
     {
-        return $query->whereBetween('created_at', [$this->from, $this->to]);
+        return $builder->whereBetween('created_at', [$this->from, $this->to]);
     }
 }

@@ -31,8 +31,8 @@ class EloquentRepositoryCriteriaIntegrationTests extends AbstractEloquentTests
     public function testFindAllByClosureCriterion()
     {
         $userRepository = $this->userRepository();
-        $userRepository->pushCriterion(function (Builder $query, $repository) {
-            return $query->where('id', 2);
+        $userRepository->pushCriterion(function (Builder $builder, $repository) {
+            return $builder->where('id', 2);
         });
         $result = $userRepository->findAll();
 
@@ -44,8 +44,8 @@ class EloquentRepositoryCriteriaIntegrationTests extends AbstractEloquentTests
     public function testFindAllWithDefaultCriteria()
     {
         $userRepository = $this->userRepository();
-        $userRepository->pushCriterion(function ($query, $repository) {
-            return $query->orWhere('id', 1);
+        $userRepository->pushCriterion(function (Builder $builder, $repository) {
+            return $builder->orWhere('id', 1);
         })->setDefaultCriteria([new SecondTestCriterion()]);
 
         $result = $userRepository->findAll();
