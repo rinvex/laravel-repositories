@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\TestCase;
 use Illuminate\Container\Container;
 use Rinvex\Tests\Stubs\EloquentPost;
 use Rinvex\Tests\Stubs\EloquentUser;
@@ -12,7 +13,7 @@ use Rinvex\Tests\Stubs\EloquentPostRepository;
 use Rinvex\Tests\Stubs\EloquentUserRepository;
 use Illuminate\Support\Traits\CapsuleManagerTrait;
 
-abstract class AbstractEloquentTests extends PHPUnit_Framework_TestCase
+abstract class AbstractEloquentTests extends TestCase
 {
     use CapsuleManagerTrait;
 
