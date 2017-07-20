@@ -40,7 +40,7 @@ class FooRepository extends EloquentRepository
 {
     protected $repositoryId = 'rinvex.repository.uniqueid';
 
-    protected $model = 'App\User';
+    protected $model = 'App\Models\User';
 }
 ```
 That's it, you're done! Yes, it's that simple.
@@ -58,7 +58,7 @@ class FooRepository extends EloquentRepository
     public function __construct(Container $container)
     {
         $this->setContainer($container)
-             ->setModel(\App\User::class)
+             ->setModel(\App\Models\User::class)
              ->setRepositoryId('rinvex.repository.uniqueid');
 
     }
@@ -360,7 +360,7 @@ $connection = $repository->getConnection();
 The `setModel` method sets the repository model, while `getModel` returns it:
 ```php
 // Set the repository model
-$repository->setModel(\App\User::class);
+$repository->setModel(\App\Models\User::class);
 
 // Get the repository model
 $repositoryModel = $repository->getModel();
