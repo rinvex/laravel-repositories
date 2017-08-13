@@ -206,17 +206,6 @@ Integrating the package outside of a framework is incredibly easy, just require 
 
 > **Note:** Checkout Composer's [Autoloading](https://getcomposer.org/doc/01-basic-usage.md#autoloading) documentation for further details.
 
-### Laravel Integration
-
-**Rinvex Repository** package supports Laravel by default and it comes bundled with a Service Provider for easy integration with the framework.
-
-After installing the package, open your Laravel config file located at `config/app.php` and add the following service provider to the `$providers` array:
-```php
-Rinvex\Repository\Providers\RepositoryServiceProvider::class,
-```
-
-> **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
-
 Run the following command on your terminal to publish config files:
 ```shell
 php artisan vendor:publish --provider="Rinvex\Repository\Providers\RepositoryServiceProvider" --tag="config"
