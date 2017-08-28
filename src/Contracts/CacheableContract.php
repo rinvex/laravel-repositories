@@ -11,7 +11,7 @@ interface CacheableContract
      *
      * @param float|int $cacheLifetime
      *
-     * @return $this
+     * @return static
      */
     public function setCacheLifetime($cacheLifetime);
 
@@ -27,7 +27,7 @@ interface CacheableContract
      *
      * @param string $cacheDriver
      *
-     * @return $this
+     * @return static
      */
     public function setCacheDriver($cacheDriver);
 
@@ -43,7 +43,7 @@ interface CacheableContract
      *
      * @param bool $status
      *
-     * @return $this
+     * @return static
      */
     public function enableCacheClear($status);
 
@@ -57,7 +57,7 @@ interface CacheableContract
     /**
      * Forget the repository cache.
      *
-     * @return $this
+     * @return static
      */
     public function forgetCache();
 }

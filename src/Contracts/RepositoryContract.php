@@ -14,7 +14,7 @@ interface RepositoryContract
      *
      * @param \Illuminate\Contracts\Container\Container $container
      *
-     * @return $this
+     * @return static
      */
     public function setContainer(Container $container);
 
@@ -32,7 +32,7 @@ interface RepositoryContract
      *
      * @param string $name
      *
-     * @return $this
+     * @return static
      */
     public function setConnection($name);
 
@@ -48,7 +48,7 @@ interface RepositoryContract
      *
      * @param string $repositoryId
      *
-     * @return $this
+     * @return static
      */
     public function setRepositoryId($repositoryId);
 
@@ -64,7 +64,7 @@ interface RepositoryContract
      *
      * @param string $model
      *
-     * @return $this
+     * @return static
      */
     public function setModel($model);
 
@@ -89,7 +89,7 @@ interface RepositoryContract
      *
      * @param array|string $relations
      *
-     * @return $this
+     * @return static
      */
     public function with($relations);
 
@@ -101,7 +101,7 @@ interface RepositoryContract
      * @param mixed  $value
      * @param string $boolean
      *
-     * @return $this
+     * @return static
      */
     public function where($attribute, $operator = null, $value = null, $boolean = 'and');
 
@@ -113,7 +113,7 @@ interface RepositoryContract
      * @param string $boolean
      * @param bool   $not
      *
-     * @return $this
+     * @return static
      */
     public function whereIn($attribute, $values, $boolean = 'and', $not = false);
 
@@ -124,7 +124,7 @@ interface RepositoryContract
      * @param mixed  $values
      * @param string $boolean
      *
-     * @return $this
+     * @return static
      */
     public function whereNotIn($attribute, $values, $boolean = 'and');
 
@@ -136,7 +136,7 @@ interface RepositoryContract
      * @param string   $operator
      * @param int      $count
      *
-     * @return $this
+     * @return static
      */
     public function whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1);
 
@@ -146,7 +146,7 @@ interface RepositoryContract
      * @param string $name
      * @param array  $parameters
      *
-     * @return $this
+     * @return static
      */
     public function scope($name, array $parameters = []);
 
@@ -155,7 +155,7 @@ interface RepositoryContract
      *
      * @param int $offset
      *
-     * @return $this
+     * @return static
      */
     public function offset($offset);
 
@@ -164,7 +164,7 @@ interface RepositoryContract
      *
      * @param int $limit
      *
-     * @return $this
+     * @return static
      */
     public function limit($limit);
 
@@ -174,7 +174,7 @@ interface RepositoryContract
      * @param string $attribute
      * @param string $direction
      *
-     * @return $this
+     * @return static
      */
     public function orderBy($attribute, $direction = 'asc');
 
@@ -183,7 +183,7 @@ interface RepositoryContract
      *
      * @param array|string $column
      *
-     * @return $this
+     * @return static
      */
     public function groupBy($column);
 
@@ -195,7 +195,7 @@ interface RepositoryContract
      * @param string $value
      * @param string $boolean
      *
-     * @return $this
+     * @return static
      */
     public function having($column, $operator = null, $value = null, $boolean = 'and');
 
@@ -206,7 +206,7 @@ interface RepositoryContract
      * @param string $operator
      * @param string $value
      *
-     * @return $this
+     * @return static
      */
     public function orHaving($column, $operator = null, $value = null);
 

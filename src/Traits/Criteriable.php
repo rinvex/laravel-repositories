@@ -129,7 +129,7 @@ trait Criteriable
      * @throws CriterionException
      * @throws RepositoryException
      *
-     * @return $this
+     * @return static
      */
     protected function addCriterion($criterion, $list)
     {
@@ -182,7 +182,7 @@ trait Criteriable
      *
      * @param CriterionContract|Closure|array|string $criterion
      *
-     * @return $this
+     * @return static
      */
     public function pushCriterion($criterion)
     {
@@ -196,7 +196,7 @@ trait Criteriable
      *
      * @param CriterionContract|Closure|string $criterion
      *
-     * @return $this
+     * @return static
      */
     public function removeCriterion($criterion)
     {
@@ -226,7 +226,7 @@ trait Criteriable
      *
      * @param array $criteria
      *
-     * @return $this
+     * @return static
      */
     public function pushCriteria(array $criteria)
     {
@@ -239,7 +239,7 @@ trait Criteriable
      * Flush criteria list.
      * We can flush criteria only when they is not skipped.
      *
-     * @return $this
+     * @return static
      */
     public function flushCriteria()
     {
@@ -255,7 +255,7 @@ trait Criteriable
      *
      * @param array $criteria
      *
-     * @return $this
+     * @return static
      */
     public function setDefaultCriteria(array $criteria)
     {
@@ -293,7 +293,7 @@ trait Criteriable
      *
      * @param bool|true $flag
      *
-     * @return $this
+     * @return static
      */
     public function skipCriteria($flag = true)
     {
@@ -307,7 +307,7 @@ trait Criteriable
      *
      * @param bool|true $flag
      *
-     * @return $this
+     * @return static
      */
     public function skipDefaultCriteria($flag = true)
     {

@@ -150,7 +150,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * Reset repository to its defaults.
      *
-     * @return $this
+     * @return static
      */
     protected function resetRepository()
     {
