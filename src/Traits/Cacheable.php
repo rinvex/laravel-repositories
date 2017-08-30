@@ -118,7 +118,7 @@ trait Cacheable
      *
      * @param float|int $cacheLifetime
      *
-     * @return static
+     * @return $this
      */
     public function setCacheLifetime($cacheLifetime)
     {
@@ -145,7 +145,7 @@ trait Cacheable
      *
      * @param string $cacheDriver
      *
-     * @return static
+     * @return $this
      */
     public function setCacheDriver($cacheDriver)
     {
@@ -169,7 +169,7 @@ trait Cacheable
      *
      * @param bool $status
      *
-     * @return static
+     * @return $this
      */
     public function enableCacheClear($status = true)
     {
@@ -191,7 +191,7 @@ trait Cacheable
     /**
      * Forget the repository cache.
      *
-     * @return static
+     * @return $this
      */
     public function forgetCache()
     {
@@ -262,7 +262,7 @@ trait Cacheable
     /**
      * Reset cached repository to its defaults.
      *
-     * @return static
+     * @return $this
      */
     protected function resetCachedRepository()
     {
