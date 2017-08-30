@@ -35,7 +35,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             // Publish config
-            $this->publishes([realpath(__DIR__.'/../../config/config.php') => config_path('rinvex.repository.php')], 'config');
+            $this->publishes([realpath(__DIR__.'/../../config/config.php') => config_path('rinvex.repository.php')], 'rinvex-repository-config');
         }
 
         // Subscribe the registered event listener

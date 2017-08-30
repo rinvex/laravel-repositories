@@ -208,7 +208,7 @@ Integrating the package outside of a framework is incredibly easy, just require 
 
 Run the following command on your terminal to publish config files:
 ```shell
-php artisan vendor:publish --provider="Rinvex\Repository\Providers\RepositoryServiceProvider" --tag="config"
+php artisan vendor:publish --tag="rinvex-repository-config"
 ```
 
 > **Note:** Checkout Laravel's [Configuration](https://laravel.com/docs/master/#configuration) documentation for further details.
