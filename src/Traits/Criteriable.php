@@ -110,7 +110,7 @@ trait Criteriable
         if (Arr::isAssoc($criterion)) {
             $criterion = [array_keys($criterion)[0], array_values($criterion)[0]];
 
-        //If an array is not assoc but count is one, we can assume there is a class without arguments.
+            //If an array is not assoc but count is one, we can assume there is a class without arguments.
         //Like when a string passed as criterion
         } elseif (count($criterion) === 1) {
             array_push($criterion, []);
