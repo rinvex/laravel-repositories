@@ -211,7 +211,7 @@ Run the following command on your terminal to publish config files:
 php artisan vendor:publish --provider="Rinvex\Repository\Providers\RepositoryServiceProvider" --tag="config"
 ```
 
-> **Note:** Checkout Laravel's [Configuration](https://laravel.com/docs/5.2/#configuration) documentation for further details.
+> **Note:** Checkout Laravel's [Configuration](https://laravel.com/docs/master/#configuration) documentation for further details.
 
 You are good to go. Integration is done and you can now use all the available methods, proceed to the [Usage](#usage) section for an example.
 
@@ -680,7 +680,7 @@ $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class)
 ```
 This way we don't have to instantiate the repository manually, and it's easy to switch between multiple implementations. The IoC Container will take care of the required dependencies.
 
-> **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
+> **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/master/providers) and [Service Container](https://laravel.com/docs/master/container) documentation for further details.
 
 ### Add Custom Implementation
 
@@ -774,7 +774,7 @@ Let's see what caching levels we can control:
 
 #### Whole Application Cache
 
-Checkout Laravel's [Cache](https://laravel.com/docs/5.2/cache) documentation for more details.
+Checkout Laravel's [Cache](https://laravel.com/docs/master/cache) documentation for more details.
 
 #### Individual Query Cache
 
