@@ -106,13 +106,12 @@ trait Criteriable
             throw CriterionException::wrongArraySignature($criterion);
         }
 
-        //If an array is assoc we assume that the key is a class and value is an arguments
+        // If an array is assoc we assume that the key is a class and value is an arguments
         if (Arr::isAssoc($criterion)) {
             $criterion = [array_keys($criterion)[0], array_values($criterion)[0]];
-
-        //If an array is not assoc but count is one, we can assume there is a class without arguments.
-        //Like when a string passed as criterion
         } elseif (count($criterion) === 1) {
+            // If an array is not assoc but count is one, we can assume there is a class without arguments.
+            // Like when a string passed as criterion
             array_push($criterion, []);
         }
 

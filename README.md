@@ -13,6 +13,12 @@
 [![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
 
 
+💡 If you are looking for **Laravel 5.5** support, use the `dev-develop` branch. It's stable but not tagged yet since test suites isn't complete. 💡
+
+
+⚠️ [This package is looking for new maintainer, read details or takeover if interested!](https://github.com/rinvex/repository/issues/156) ⚠️
+
+
 ## Features
 
 - Cache, Cache, Cache!
