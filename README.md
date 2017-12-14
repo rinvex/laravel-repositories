@@ -13,6 +13,12 @@
 [![SensioLabs Insight](https://img.shields.io/sensiolabs/i/8394bf3e-26c8-415a-8952-078b41110181.svg?label=SensioLabs&style=flat-square)](https://insight.sensiolabs.com/projects/8394bf3e-26c8-415a-8952-078b41110181)
 
 
+💡 If you are looking for **Laravel 5.5** support, use the `dev-develop` branch. It's stable but not tagged yet since test suites isn't complete. 💡
+
+
+⚠️ [This package is looking for new maintainer, read details or takeover if interested!](https://github.com/rinvex/repository/issues/156) ⚠️
+
+
 ## Table Of Contents
 
 - [Features](#features)
