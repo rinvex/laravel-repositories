@@ -48,7 +48,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0.0",
-        "illuminate/config": "~5.5.0"
+        "illuminate/config": "~5.5.0",
+        "codedungeon/phpunit-result-printer": "^0.4.0"
     },
     "suggest": {
         "illuminate/pagination": "Required to paginate the result set."
