@@ -188,26 +188,35 @@ class EloquentRepository extends BaseRepository
     }
 
     /**
-     * Create a new entity with the given attributes.
+     * Create a new entity with the given attributes and relationships.
      *
      * @param array $attributes
+     * @param bool $syncRelations
      *
      * @return array
      */
-    public function create(array $attributes = [])
+    public function create(array $attributes = [], bool $syncRelations = false)
     {
         // Create a new instance
         $instance = $this->createModel();
+        // Fire the created event
+        $this->getContainer('events')->fire($this->getRepositoryId().'.entity.creating', [$this, $instance]);
+        // Extract relationships
+        if ($syncRelations) {
+            $relations = $this->extractRelations($instance, $attributes);
 
+            array_forget($attributes, array_keys($relations));
+        }
         // Fill instance with data
         $instance->fill($attributes);
-
         // Save the instance
         $created = $instance->save();
-
+        // Sync relationships
+        if ($syncRelations && isset($relations)) {
+            $this->syncRelations($instance, $relations);
+        }
         // Fire the created event
         $this->getContainer('events')->fire($this->getRepositoryId().'.entity.created', [$this, $instance]);
-
         // Return instance
         return [
             $created,
@@ -220,26 +229,39 @@ class EloquentRepository extends BaseRepository
      *
      * @param mixed $id
      * @param array $attributes
+     * @param bool $syncRelations
      *
      * @return array
      */
-    public function update($id, array $attributes = [])
+    public function update($id, array $attributes = [], bool $syncRelations = false)
     {
+        $updated = false;
         // Find the given instance
-        $updated  = false;
         $instance = $id instanceof Model ? $id : $this->find($id);
-
         if ($instance) {
+            // Fire the updated event
+            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updating', [$this, $instance]);
+            // Extract relationships
+            if ($syncRelations) {
+                $relations = $this->extractRelations($instance, $attributes);
+                array_forget($attributes, array_keys($relations));
+            }
             // Fill instance with data
             $instance->fill($attributes);
-
-            // Save the instance
+            //Check if we are updating attributes values
+            $dirty = $instance->getDirty();
+            // Update the instance
             $updated = $instance->save();
-
-            // Fire the updated event
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $instance]);
+            // Sync relationships
+            if ($syncRelations && isset($relations)) {
+                $this->syncRelations($instance, $relations);
+            }
+            if (count($dirty) > 0) {
+                // Fire the updated event
+                $this->getContainer('events')->fire($this->getRepositoryId().'.entity.updated', [$this, $instance]);
+            }
         }
-
+        
         return [
             $updated,
             $instance,
@@ -271,5 +293,48 @@ class EloquentRepository extends BaseRepository
             $deleted,
             $instance,
         ];
+    }
+
+    /**
+     * Extract relationships.
+     *
+     * @param mixed $entity
+     * @param array $attributes
+     *
+     * @return array
+     */
+    protected function extractRelations($entity, array $attributes)
+    {
+        $relations = [];
+        $potential = array_diff(array_keys($attributes), $entity->getFillable());
+        array_walk($potential, function ($relation) use ($entity, $attributes, &$relations) {
+            if (method_exists($entity, $relation)) {
+                $relations[$relation] = [
+                    'values' => $attributes[$relation],
+                    'class'  => get_class($entity->$relation()),
+                ];
+            }
+        });
+        return $relations;
+    }
+    /**
+     * Sync relationships.
+     *
+     * @param mixed $entity
+     * @param array $relations
+     * @param bool  $detaching
+     *
+     * @return void
+     */
+    protected function syncRelations($entity, array $relations, $detaching = true)
+    {
+        foreach ($relations as $method => $relation) {
+            switch ($relation['class']) {
+                case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
+                default:
+                    $entity->$method()->sync((array) $relation['values'], $detaching);
+                    break;
+            }
+        }
     }
 }
