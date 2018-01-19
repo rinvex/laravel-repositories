@@ -127,7 +127,7 @@ abstract class AbstractEloquentTests extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->schema()->drop('users');
         $this->schema()->drop('posts');

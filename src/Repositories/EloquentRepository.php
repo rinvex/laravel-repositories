@@ -420,7 +420,7 @@ class EloquentRepository extends BaseRepository
      *
      * @return void
      */
-    protected function syncRelations($entity, array $relations, $detaching = true)
+    protected function syncRelations($entity, array $relations, $detaching = true): void
     {
         foreach ($relations as $method => $relation) {
             switch ($relation['class']) {

@@ -31,7 +31,7 @@ class RepositoryEventListener
      *
      * @return void
      */
-    public function entityCreating($eventName, $data)
+    public function entityCreating($eventName, $data): void
     {
         //
     }
@@ -44,7 +44,7 @@ class RepositoryEventListener
      *
      * @return void
      */
-    public function entityCreated($eventName, $data)
+    public function entityCreated($eventName, $data): void
     {
         $clearOn = $data[0]->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
@@ -61,7 +61,7 @@ class RepositoryEventListener
      *
      * @return void
      */
-    public function entityUpdating($eventName, $data)
+    public function entityUpdating($eventName, $data): void
     {
         //
     }
@@ -74,7 +74,7 @@ class RepositoryEventListener
      *
      * @return void
      */
-    public function entityUpdated($eventName, $data)
+    public function entityUpdated($eventName, $data): void
     {
         $clearOn = $data[0]->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
@@ -91,7 +91,7 @@ class RepositoryEventListener
      *
      * @return void
      */
-    public function entityDeleting($eventName, $data)
+    public function entityDeleting($eventName, $data): void
     {
         //
     }
@@ -104,7 +104,7 @@ class RepositoryEventListener
      *
      * @return void
      */
-    public function entityDeleted($eventName, $data)
+    public function entityDeleted($eventName, $data): void
     {
         $clearOn = $data[0]->getContainer('config')->get('rinvex.repository.cache.clear_on');
 

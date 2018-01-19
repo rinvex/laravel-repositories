@@ -24,7 +24,7 @@ trait Bindable
      *
      * @return void
      */
-    protected function bindRepository($abstract, $concrete = null, $shared = true, $alias = null, $force = false)
+    protected function bindRepository($abstract, $concrete = null, $shared = true, $alias = null, $force = false): void
     {
         if (! $this->app->bound($abstract) || $force) {
             $concrete = $concrete ?: $abstract;

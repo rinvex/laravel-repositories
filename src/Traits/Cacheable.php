@@ -62,7 +62,7 @@ trait Cacheable
      *
      * @return void
      */
-    protected function storeCacheKeys($class, $method, $hash)
+    protected function storeCacheKeys($class, $method, $hash): void
     {
         $keysFile = $this->getContainer('config')->get('rinvex.repository.cache.keys_file');
         $cacheKeys = $this->getCacheKeys($keysFile);
