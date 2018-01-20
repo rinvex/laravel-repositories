@@ -36,7 +36,7 @@ trait Cacheable
      *
      * @return string
      */
-    protected function generateCacheHash($args)
+    protected function generateCacheHash($args): string
     {
         return md5(json_encode($args + [
                 $this->getRepositoryId(),
@@ -80,7 +80,7 @@ trait Cacheable
      *
      * @return array
      */
-    protected function getCacheKeys($file)
+    protected function getCacheKeys($file): array
     {
         if (! file_exists($file)) {
             file_put_contents($file, null);
@@ -94,7 +94,7 @@ trait Cacheable
      *
      * @return array
      */
-    protected function flushCacheKeys()
+    protected function flushCacheKeys(): array
     {
         $flushedKeys = [];
         $calledClass = get_called_class();
@@ -159,7 +159,7 @@ trait Cacheable
      *
      * @return string
      */
-    public function getCacheDriver()
+    public function getCacheDriver(): string
     {
         return $this->cacheDriver;
     }
@@ -183,7 +183,7 @@ trait Cacheable
      *
      * @return bool
      */
-    public function isCacheClearEnabled()
+    public function isCacheClearEnabled(): bool
     {
         return $this->cacheClearEnabled;
     }

@@ -36,7 +36,7 @@ interface CacheableContract
      *
      * @return string
      */
-    public function getCacheDriver();
+    public function getCacheDriver(): string;
 
     /**
      * Enable repository cache clear.
@@ -52,7 +52,7 @@ interface CacheableContract
      *
      * @return bool
      */
-    public function isCacheClearEnabled();
+    public function isCacheClearEnabled(): bool;
 
     /**
      * Forget the repository cache.

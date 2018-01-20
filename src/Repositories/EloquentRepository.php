@@ -394,7 +394,7 @@ class EloquentRepository extends BaseRepository
      *
      * @return array
      */
-    protected function extractRelations($entity, array $attributes)
+    protected function extractRelations($entity, array $attributes): array
     {
         $relations = [];
         $potential = array_diff(array_keys($attributes), $entity->getFillable());

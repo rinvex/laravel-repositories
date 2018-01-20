@@ -7,6 +7,7 @@ use Illuminate\Container\Container;
 use Rinvex\Tests\Stubs\EloquentPost;
 use Rinvex\Tests\Stubs\EloquentUser;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Schema\Builder;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Config\Repository as Config;
 use Rinvex\Tests\Stubs\EloquentPostRepository;
@@ -117,7 +118,7 @@ abstract class AbstractEloquentTests extends TestCase
      *
      * @return \Illuminate\Database\Schema\Builder
      */
-    protected function schema()
+    protected function schema(): Builder
     {
         return Model::resolveConnection()->getSchemaBuilder();
     }

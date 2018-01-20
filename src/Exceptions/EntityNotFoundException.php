@@ -42,7 +42,7 @@ class EntityNotFoundException extends RuntimeException
      *
      * @return string
      */
-    public function getModel()
+    public function getModel(): string
     {
         return $this->model;
     }
@@ -52,7 +52,7 @@ class EntityNotFoundException extends RuntimeException
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }

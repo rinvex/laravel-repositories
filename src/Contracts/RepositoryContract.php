@@ -41,7 +41,7 @@ interface RepositoryContract
      *
      * @return string
      */
-    public function getConnection();
+    public function getConnection(): string;
 
     /**
      * Set the repository identifier.
@@ -57,7 +57,7 @@ interface RepositoryContract
      *
      * @return string
      */
-    public function getRepositoryId();
+    public function getRepositoryId(): string;
 
     /**
      * Set the repository model.
@@ -73,7 +73,7 @@ interface RepositoryContract
      *
      * @return string
      */
-    public function getModel();
+    public function getModel(): string;
 
     /**
      * Create a new repository model instance.
@@ -393,21 +393,21 @@ interface RepositoryContract
      *
      * @return void
      */
-    public function beginTransaction();
+    public function beginTransaction(): void;
 
     /**
      * Commit the active database transaction.
      *
      * @return void
      */
-    public function commit();
+    public function commit(): void;
 
     /**
      * Rollback the active database transaction.
      *
      * @return void
      */
-    public function rollBack();
+    public function rollBack(): void;
 
     /**
      * Retrieve the "count" result of the query.
@@ -416,7 +416,7 @@ interface RepositoryContract
      *
      * @return int
      */
-    public function count($columns = '*');
+    public function count($columns = '*'): int;
 
     /**
      * Retrieve the minimum value of a given column.

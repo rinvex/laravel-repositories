@@ -41,7 +41,7 @@ trait Bindable
      *
      * @return string
      */
-    protected function prepareRepositoryAlias($alias, $concrete)
+    protected function prepareRepositoryAlias($alias, $concrete): string
     {
         if (! $alias && ! $concrete instanceof \Closure) {
             $concrete = str_replace('Repositories', 'Contracts', $concrete);
