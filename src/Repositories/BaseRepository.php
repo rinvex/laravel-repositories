@@ -290,7 +290,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
-    public function getConnection()
+    public function getConnection(): string
     {
         return $this->connection;
     }
@@ -308,7 +308,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
-    public function getRepositoryId()
+    public function getRepositoryId(): string
     {
         return $this->repositoryId ?: get_called_class();
     }
@@ -326,7 +326,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     /**
      * {@inheritdoc}
      */
-    public function getModel()
+    public function getModel(): string
     {
         $model = $this->getContainer('config')->get('rinvex.repository.models');
 
