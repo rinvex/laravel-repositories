@@ -315,7 +315,7 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function beginTransaction()
+    public function beginTransaction(): void
     {
         $this->getContainer('db')->beginTransaction();
     }
@@ -323,7 +323,7 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function commit()
+    public function commit(): void
     {
         $this->getContainer('db')->commit();
     }
@@ -331,7 +331,7 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function rollBack()
+    public function rollBack(): void
     {
         $this->getContainer('db')->rollBack();
     }
@@ -339,7 +339,7 @@ class EloquentRepository extends BaseRepository
     /**
      * {@inheritdoc}
      */
-    public function count($columns = '*')
+    public function count($columns = '*'): int
     {
         return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($columns) {
             return $this->prepareQuery($this->createModel())->count($columns);

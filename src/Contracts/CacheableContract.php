@@ -9,7 +9,7 @@ interface CacheableContract
     /**
      * Set the repository cache lifetime.
      *
-     * @param float|int $cacheLifetime
+     * @param int $cacheLifetime
      *
      * @return $this
      */
@@ -18,9 +18,9 @@ interface CacheableContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return float|int
+     * @return int
      */
-    public function getCacheLifetime();
+    public function getCacheLifetime(): int;
 
     /**
      * Set the repository cache driver.

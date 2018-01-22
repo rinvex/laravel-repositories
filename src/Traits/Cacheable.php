@@ -11,7 +11,7 @@ trait Cacheable
     /**
      * The repository cache lifetime.
      *
-     * @var float|int
+     * @var int
      */
     protected $cacheLifetime;
 
@@ -114,11 +114,7 @@ trait Cacheable
     }
 
     /**
-     * Set the repository cache lifetime.
-     *
-     * @param float|int $cacheLifetime
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setCacheLifetime($cacheLifetime)
     {
@@ -128,24 +124,16 @@ trait Cacheable
     }
 
     /**
-     * Get the repository cache lifetime.
-     *
-     * @return float|int
+     * {@inheritdoc}
      */
-    public function getCacheLifetime()
+    public function getCacheLifetime(): int
     {
-        $lifetime = $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
-
         // Return value even if it's zero "0" (which means cache is disabled)
-        return ! is_null($this->cacheLifetime) ? $this->cacheLifetime : $lifetime;
+        return $this->cacheLifetime ?? $this->getContainer('config')->get('rinvex.repository.cache.lifetime');
     }
 
     /**
-     * Set the repository cache driver.
-     *
-     * @param string $cacheDriver
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setCacheDriver($cacheDriver)
     {
@@ -155,9 +143,7 @@ trait Cacheable
     }
 
     /**
-     * Get the repository cache driver.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getCacheDriver(): string
     {
@@ -165,11 +151,7 @@ trait Cacheable
     }
 
     /**
-     * Enable repository cache clear.
-     *
-     * @param bool $status
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function enableCacheClear($status = true)
     {
@@ -179,9 +161,7 @@ trait Cacheable
     }
 
     /**
-     * Determine if repository cache clear is enabled.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isCacheClearEnabled(): bool
     {
@@ -189,9 +169,7 @@ trait Cacheable
     }
 
     /**
-     * Forget the repository cache.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function forgetCache()
     {
