@@ -67,7 +67,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 - Add per repository cache lifetime/driver support (Close #10)
 
 ## v1.0.0 - 2016-06-18
-- Commit first draft
+- Tag first release
 
 [v2.0.3]: https://github.com/rinvex/repository/compare/v2.0.2...v2.0.3
 [v2.0.2]: https://github.com/rinvex/repository/compare/v2.0.1...v2.0.2
