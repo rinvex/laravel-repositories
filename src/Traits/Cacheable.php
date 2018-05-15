@@ -147,7 +147,8 @@ trait Cacheable
      */
     public function getCacheDriver(): string
     {
-        return $this->cacheDriver;
+        // Return value even if cacheDriver did not set in construcor
+        return $this->cacheDriver ?? $this->getContainer('config')->get('rinvex.repository.cache.driver');
     }
 
     /**
