@@ -34,9 +34,9 @@ interface CacheableContract
     /**
      * Get the repository cache driver.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCacheDriver(): string;
+    public function getCacheDriver(): ?string;
 
     /**
      * Enable repository cache clear.
