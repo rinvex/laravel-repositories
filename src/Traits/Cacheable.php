@@ -145,7 +145,7 @@ trait Cacheable
     /**
      * {@inheritdoc}
      */
-    public function getCacheDriver(): string
+    public function getCacheDriver(): ?string
     {
         return $this->cacheDriver;
     }
