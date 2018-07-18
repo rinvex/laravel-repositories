@@ -156,7 +156,7 @@ trait Criteriable
             $criterion = call_user_func_array([$this, 'instantiateCriterion'], $this->extractCriterionClassAndArgs($criterion));
         }
 
-        $this->$list[$this->getCriterionName($criterion)] = $criterion;
+        $this->{$list}[$this->getCriterionName($criterion)] = $criterion;
 
         return $this;
     }

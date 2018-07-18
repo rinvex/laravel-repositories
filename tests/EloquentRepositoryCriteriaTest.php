@@ -495,6 +495,7 @@ class SecondTestCriterion implements \Rinvex\Repository\Contracts\CriterionContr
 class ThirdTestWithArgumentsCriterion implements \Rinvex\Repository\Contracts\CriterionContract
 {
     protected $from;
+
     protected $to;
 
     public function __construct($from, $to)
