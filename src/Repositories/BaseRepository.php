@@ -189,35 +189,35 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
 
         // Add a basic where clause to the query
         foreach ($this->where as $where) {
-            list($attribute, $operator, $value, $boolean) = array_pad($where, 4, null);
+            [$attribute, $operator, $value, $boolean] = array_pad($where, 4, null);
 
             $model = $model->where($attribute, $operator, $value, $boolean);
         }
 
         // Add a "where in" clause to the query
         foreach ($this->whereIn as $whereIn) {
-            list($attribute, $values, $boolean, $not) = array_pad($whereIn, 4, null);
+            [$attribute, $values, $boolean, $not] = array_pad($whereIn, 4, null);
 
             $model = $model->whereIn($attribute, $values, $boolean, $not);
         }
 
         // Add a "where not in" clause to the query
         foreach ($this->whereNotIn as $whereNotIn) {
-            list($attribute, $values, $boolean) = array_pad($whereNotIn, 3, null);
+            [$attribute, $values, $boolean] = array_pad($whereNotIn, 3, null);
 
             $model = $model->whereNotIn($attribute, $values, $boolean);
         }
 
         // Add a "where has" clause to the query
         foreach ($this->whereHas as $whereHas) {
-            list($relation, $callback, $operator, $count) = array_pad($whereHas, 4, null);
+            [$relation, $callback, $operator, $count] = array_pad($whereHas, 4, null);
 
             $model = $model->whereHas($relation, $callback, $operator, $count);
         }
 
         // Add a "scope" to the query
         foreach ($this->scopes as $scope => $parameters) {
-            $model = $model->$scope(...$parameters);
+            $model = $model->{$scope}(...$parameters);
         }
 
         // Set the "offset" value of the query
@@ -232,7 +232,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
 
         // Add an "order by" clause to the query.
         foreach ($this->orderBy as $orderBy) {
-            list($attribute, $direction) = $orderBy;
+            [$attribute, $direction] = $orderBy;
 
             $model = $model->orderBy($attribute, $direction);
         }
@@ -246,7 +246,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
 
         // Add a "having" clause to the query
         foreach ($this->having as $having) {
-            list($column, $operator, $value, $boolean) = array_pad($having, 4, null);
+            [$column, $operator, $value, $boolean] = array_pad($having, 4, null);
 
             $model = $model->having($column, $operator, $value, $boolean);
         }
