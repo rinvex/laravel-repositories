@@ -22,7 +22,7 @@ abstract class AbstractEloquentTests extends TestCase
     protected $container;
 
     /** Setup the database schema. */
-    public function setUp()
+    protected function setUp()
     {
         $this->setupContainer();
         $this->setupDatabase(new Manager($this->getContainer()));
@@ -128,7 +128,7 @@ abstract class AbstractEloquentTests extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->schema()->drop('users');
         $this->schema()->drop('posts');
