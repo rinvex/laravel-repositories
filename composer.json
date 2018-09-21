@@ -47,7 +47,7 @@
         "illuminate/support": "~5.4.0|~5.5.0|~5.6.0"
     },
     "require-dev": {
-        "codedungeon/phpunit-result-printer": "^0.19.0",
+        "codedungeon/phpunit-result-printer": "^0.20.0",
         "illuminate/config": "~5.4.0|~5.5.0|~5.6.0",
         "phpunit/phpunit": "^7.0.0"
     },
