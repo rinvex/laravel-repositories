@@ -1,17 +1,6 @@
 <?php
 
-/*
- * NOTICE OF LICENSE
- *
- * Part of the Rinvex Repository Package.
- *
- * This source file is subject to The MIT License (MIT)
- * that is bundled with this package in the LICENSE file.
- *
- * Package: Rinvex Repository Package
- * License: The MIT License (MIT)
- * Link:    https://rinvex.com
- */
+declare(strict_types=1);
 
 namespace Rinvex\Repository\Contracts;
 
@@ -20,7 +9,7 @@ interface CacheableContract
     /**
      * Set the repository cache lifetime.
      *
-     * @param float|int $cacheLifetime
+     * @param int $cacheLifetime
      *
      * @return $this
      */
@@ -29,9 +18,9 @@ interface CacheableContract
     /**
      * Get the repository cache lifetime.
      *
-     * @return float|int
+     * @return int
      */
-    public function getCacheLifetime();
+    public function getCacheLifetime(): int;
 
     /**
      * Set the repository cache driver.
@@ -45,9 +34,9 @@ interface CacheableContract
     /**
      * Get the repository cache driver.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCacheDriver();
+    public function getCacheDriver(): ?string;
 
     /**
      * Enable repository cache clear.
@@ -63,7 +52,7 @@ interface CacheableContract
      *
      * @return bool
      */
-    public function isCacheClearEnabled();
+    public function isCacheClearEnabled(): bool;
 
     /**
      * Forget the repository cache.

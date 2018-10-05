@@ -1,24 +1,122 @@
 # Rinvex Repository
 
-![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.diagram.png)
+![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.diagram.png)
 
 **Rinvex Repository** is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system for Laravel, used to abstract the data layer, making applications more flexible to maintain.
 
-[![Packagist](https://img.shields.io/packagist/v/rinvex/repository.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/repository)
-[![License](https://img.shields.io/packagist/l/rinvex/repository.svg?label=License&style=flat-square)](https://github.com/rinvex/repository/blob/develop/LICENSE)
-[![VersionEye Dependencies](https://img.shields.io/versioneye/d/php/rinvex:repository.svg?label=Dependencies&style=flat-square)](https://www.versioneye.com/php/rinvex:repository/)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/repository.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/repository/)
-[![Code Climate](https://img.shields.io/codeclimate/github/rinvex/repository.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/repository)
+[![Packagist](https://img.shields.io/packagist/v/rinvex/laravel-repositories.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/laravel-repositories)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/laravel-repositories.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/laravel-repositories/)
+[![Code Climate](https://img.shields.io/codeclimate/github/rinvex/laravel-repositories.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/laravel-repositories)
+[![Travis](https://img.shields.io/travis/rinvex/laravel-repositories.svg?label=TravisCI&style=flat-square)](https://travis-ci.org/rinvex/laravel-repositories)
 [![StyleCI](https://styleci.io/repos/61269204/shield)](https://styleci.io/repos/61269204)
-[![SensioLabs Insight](https://img.shields.io/sensiolabs/i/8394bf3e-26c8-415a-8952-078b41110181.svg?label=SensioLabs&style=flat-square)](https://insight.sensiolabs.com/projects/8394bf3e-26c8-415a-8952-078b41110181)
+[![License](https://img.shields.io/packagist/l/rinvex/laravel-repositories.svg?label=License&style=flat-square)](https://github.com/rinvex/laravel-repositories/blob/develop/LICENSE)
+
+
+💡 If you are looking for **Laravel 5.5** support, use the `dev-develop` branch. It's stable but not tagged yet since test suites isn't complete. 💡
+
+
+⚠️ [This package is looking for new maintainer, read details or takeover if interested!](https://github.com/rinvex/laravel-repositories/issues/156) ⚠️
+
+
+## Features
+
+- Cache, Cache, Cache!
+- Prevent code duplication.
+- Reduce potential programming errors.
+- Granularly cache queries with flexible control.
+- Apply centrally managed, consistent access rules and logic.
+- Implement and centralize a caching strategy for the domain model.
+- Improve the code’s maintainability and readability by separating client objects from domain models.
+- Maximize the amount of code that can be tested with automation and to isolate both the client object and the domain model to support unit testing.
+- Associate a behavior with the related data. For example, calculate fields or enforce complex relationships or business rules between the data elements within an entity.
+
+
+## Quick Example (TL;DR)
+
+The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum that concrete implementations must extend.
+
+The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and [you can develop your own](#add-custom-implementation)), it makes it easy to create new eloquent model instances and to manipulate them easily. To use `EloquentRepository` your repository MUST extend it first:
+
+```php
+namespace App\Repositories;
+
+use Rinvex\Repository\Repositories\EloquentRepository;
+
+class FooRepository extends EloquentRepository
+{
+    protected $repositoryId = 'rinvex.repository.uniqueid';
+
+    protected $model = 'App\Models\User';
+}
+```
+That's it, you're done! Yes, it's that simple.
+
+But if you'd like more control over the container instance, or would like to pass model name dynamically you can alternatively do as follow:
+
+```php
+namespace App\Repositories;
+
+use Illuminate\Contracts\Container\Container;
+use Rinvex\Repository\Repositories\EloquentRepository;
+
+class FooRepository extends EloquentRepository
+{
+    // Instantiate repository object with required data
+    public function __construct(Container $container)
+    {
+        $this->setContainer($container)
+             ->setModel(\App\Models\User::class)
+             ->setRepositoryId('rinvex.repository.uniqueid');
+
+    }
+}
+```
+
+Now inside your controller, you can either instantiate the repository traditionally through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
+
+```php
+namespace App\Http\Controllers;
+
+use App\Repositories\FooRepository;
+
+class BarController
+{
+    // Inject `FooRepository` from the IoC
+    public function baz(FooRepository $repository)
+    {
+        // Find entity by primary key
+        $repository->find(1);
+
+        // Find all entities
+        $repository->findAll();
+
+        // Create a new entity
+        $repository->create(['name' => 'Example']);
+    }
+}
+```
+
+**Rinvex Repository Workflow - Create Repository**
+![Rinvex Repository Workflow - Create Repository](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-1.gif)
+
+**Rinvex Repository Workflow - Use In Controller**
+![Rinvex Repository Workflow - Use In Controller](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-2.gif)
+
+[UML Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.uml-diagram.png)
+
+---
+
+**Mission accomplished! You're good to use this package right now! :white_check_mark:**
+
+**Unless you need to dig deeper & know some advanced stuff, you can skip the following steps! :wink:**
+
+---
 
 
 ## Table Of Contents
 
-- [Features](#features)
 - [Installation](#installation)
     - [Compatibility](#compatibility)
-    - [Prerequisites](#prerequisites)
     - [Require Package](#require-package)
     - [Install Dependencies](#install-dependencies)
 - [Integration](#integration)
@@ -29,6 +127,7 @@
     - [Quick Example](#quick-example)
     - [Detailed Documentation](#detailed-documentation)
         - [`setContainer()`, `getContainer()`](#setcontainer-getcontainer)
+        - [`setConnection()`, `getConnection()`](#setconnection-getconnection)
         - [`setModel()`, `getModel()`](#setmodel-getmodel)
         - [`setRepositoryId()`, `getRepositoryId()`](#setrepositoryid-getrepositoryid)
         - [`setCacheLifetime()`, `getCacheLifetime()`](#setcachelifetime-getcachelifetime)
@@ -40,20 +139,27 @@
         - [`where()`](#where)
         - [`whereIn()`](#wherein)
         - [`whereNotIn()`](#wherenotin)
+        - [`whereHas()`](#wherehas)
         - [`offset()`](#offset)
         - [`limit()`](#limit)
         - [`orderBy()`](#orderby)
         - [`find()`](#find)
         - [`findBy()`](#findby)
+        - [`findFirst()`](#findFirst)
         - [`findAll()`](#findall)
         - [`paginate()`](#paginate)
         - [`simplePaginate()`](#simplepaginate)
         - [`findWhere()`](#findwhere)
         - [`findWhereIn()`](#findwherein)
         - [`findWhereNotIn()`](#findwherenotin)
+        - [`findWhereHas()`](#findwherehas)
         - [`create()`](#create)
         - [`update()`](#update)
+        - [`store()`](#store)
         - [`delete()`](#delete)
+        - [`beginTransaction()`](#begintransaction)
+        - [`commit()`](#commit)
+        - [`rollBack()`](#rollback)
     - [Code To An Interface](#code-to-an-interface)
     - [Add Custom Implementation](#add-custom-implementation)
     - [EloquentRepository Fired Events](#eloquentrepository-fired-events)
@@ -72,19 +178,6 @@
 - [License](#license)
 
 
-## Features
-
-- Cache, Cache, Cache!
-- Prevent code duplication.
-- Reduce potential programming errors.
-- Granularly cache queries with flexible control.
-- Apply centrally managed, consistent access rules and logic.
-- Implement and centralize a caching strategy for the domain model.
-- Improve the code’s maintainability and readability by separating client objects from domain models.
-- Maximize the amount of code that can be tested with automation and to isolate both the client object and the domain model to support unit testing.
-- Associate a behavior with the related data. For example, calculate fields or enforce complex relationships or business rules between the data elements within an entity.
-
-
 ## Installation
 
 The best and easiest way to install this package is through [Composer](https://getcomposer.org/).
@@ -95,22 +188,11 @@ This package fully compatible with **Laravel** `5.1.*`, `5.2.*`, and `5.3.*`.
 
 While this package tends to be framework-agnostic, it embraces Laravel culture and best practices to some extent. It's tested mainly with Laravel but you still can use it with other frameworks or even without any framework if you want.
 
-### Prerequisites
-
-```json
-"php": ">=5.5.9",
-"illuminate/events": "5.1.*|5.2.*|5.3.*",
-"illuminate/support": "5.1.*|5.2.*|5.3.*",
-"illuminate/database": "5.1.*|5.2.*|5.3.*",
-"illuminate/container": "5.1.*|5.2.*|5.3.*",
-"illuminate/contracts": "5.1.*|5.2.*|5.3.*"
-```
-
 ### Require Package
 
 Open your application's `composer.json` file and add the following line to the `require` array:
 ```json
-"rinvex/repository": "2.0.*"
+"rinvex/laravel-repositories": "3.0.*"
 ```
 
 > **Note:** Make sure that after the required changes your `composer.json` file is valid by running `composer validate`.
@@ -132,23 +214,12 @@ Integrating the package outside of a framework is incredibly easy, just require 
 
 > **Note:** Checkout Composer's [Autoloading](https://getcomposer.org/doc/01-basic-usage.md#autoloading) documentation for further details.
 
-### Laravel Integration
-
-**Rinvex Repository** package supports Laravel by default and it comes bundled with a Service Provider for easy integration with the framework.
-
-After installing the package, open your Laravel config file located at `config/app.php` and add the following service provider to the `$providers` array:
-```php
-Rinvex\Repository\Providers\RepositoryServiceProvider::class,
-```
-
-> **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
-
 Run the following command on your terminal to publish config files:
 ```shell
-php artisan vendor:publish --provider="Rinvex\Repository\Providers\RepositoryServiceProvider" --tag="config"
+php artisan vendor:publish --tag="rinvex-repository-config"
 ```
 
-> **Note:** Checkout Laravel's [Configuration](https://laravel.com/docs/5.2/#configuration) documentation for further details.
+> **Note:** Checkout Laravel's [Configuration](https://laravel.com/docs/master/#configuration) documentation for further details.
 
 You are good to go. Integration is done and you can now use all the available methods, proceed to the [Usage](#usage) section for an example.
 
@@ -158,6 +229,7 @@ You are good to go. Integration is done and you can now use all the available me
 If you followed the previous integration steps, then your published config file reside at `config/rinvex.repository.php`.
 
 Config options are very expressive and self explanatory, as follows:
+
 ```php
 return [
 
@@ -255,104 +327,41 @@ return [
 
 ## Usage
 
-### Quick Example
-
-The `Rinvex\Repository\Repositories\BaseRepository` is an abstract class with bare minimum that concrete implementations must extend.
-
-The `Rinvex\Repository\Repositories\EloquentRepository` is currently the only available repository implementation (more to come in the future and [you can develop your own](#add-custom-implementation)), it makes it easy to create new eloquent model instances and to manipulate them easily. To use `EloquentRepository` your repository MUST extend it first:
-```php
-namespace App\Repositories;
-
-use Rinvex\Repository\Repositories\EloquentRepository;
-
-class FooRepository extends EloquentRepository
-{
-    protected $repositoryId = 'rinvex.repository.uniqueid';
-
-    protected $model = 'App\User';
-}
-```
-That's it, you're done! Yes, it's that simple.
-
-But if you'd like more control over the container instance, or would like to pass model name dynamically you can alternatively to as follow:
-```php
-namespace App\Repositories;
-
-use Illuminate\Contracts\Container\Container;
-use Rinvex\Repository\Repositories\EloquentRepository;
-
-class FooRepository extends EloquentRepository
-{
-    // Instantiate repository object with required data
-    public function __construct(Container $container)
-    {
-        $this->setContainer($container)
-             ->setModel(\App\User::class)
-             ->setRepositoryId('rinvex.repository.uniqueid');
-
-    }
-}
-```
-
-Now inside your controller, you can either instantiate the repository traditionally through `$repository = new \App\Repositories\FooRepository();` or to use Laravel's awesome dependency injection and let the IoC do the magic:
-```php
-namespace App\Http\Controllers;
-
-use App\Repositories\FooRepository;
-
-class BarController
-{
-    // Inject `FooRepository` from the IoC
-    public function baz(FooRepository $repository)
-    {
-        // Find entity by primary key
-        $repository->find(1);
-
-        // Find all entities
-        $repository->findAll();
-
-        // Create a new entity
-        $repository->create(['name' => 'Example']);
-    }
-}
-```
-
-**Rinvex Repository Workflow - Create Repository**
-![Rinvex Repository Workflow - Create Repository](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-1.gif)
-
-**Rinvex Repository Workflow - Use In Controller**
-![Rinvex Repository Workflow - Use In Controller](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.workflow-2.gif)
-
-[UML Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.uml-diagram.png)
-___
-
-_**You're good to go! That's pretty enough knowledge to use this package.**_
-
-> A good programmer is someone who always looks both ways before crossing a one-way street. -Doug Linder
-
-_**So, you decided to proceed, ha?! Awesome!! :D**_
-
-___
-
 ### Detailed Documentation
 
 #### `setContainer()`, `getContainer()`
 
 The `setContainer` method sets the IoC container instance, while `getContainer` returns it:
+
 ```php
 // Set the IoC container instance
 $repository->setContainer(new \Illuminate\Container\Container());
 
-// Get the IoC container instance:
+// Get the IoC container instance
 $container = $repository->getContainer();
 ```
+
+#### `setConnection()`, `getConnection()`
+
+The `setConnection` method sets the connection associated with the repository, while `getConnection` returns it:
+
+```php
+// Set the connection associated with the repository
+$repository->setConnection('mysql');
+
+// Get the current connection for the repository
+$connection = $repository->getConnection();
+```
+
+> **Note:** The name passed to the `setConnection` method should correspond to one of the connections listed in your `config/database.php` configuration file.
 
 #### `setModel()`, `getModel()`
 
 The `setModel` method sets the repository model, while `getModel` returns it:
+
 ```php
 // Set the repository model
-$repository->setModel(\App\User::class);
+$repository->setModel(\App\Models\User::class);
 
 // Get the repository model
 $repositoryModel = $repository->getModel();
@@ -361,6 +370,7 @@ $repositoryModel = $repository->getModel();
 #### `setRepositoryId()`, `getRepositoryId()`
 
 The `setRepositoryId` method sets the repository identifier, while `getRepositoryId` returns it (it could be anything you want, but must be **unique per repository**):
+
 ```php
 // Set the repository identifier
 $repository->setRepositoryId('rinvex.repository.uniqueid');
@@ -372,6 +382,7 @@ $repositoryId = $repository->getRepositoryId();
 #### `setCacheLifetime()`, `getCacheLifetime()`
 
 The `setCacheLifetime` method sets the repository cache lifetime, while `getCacheLifetime` returns it:
+
 ```php
 // Set the repository cache lifetime
 $repository->setCacheLifetime(123);
@@ -383,6 +394,7 @@ $cacheLifetime = $repository->getCacheLifetime();
 #### `setCacheDriver()`, `getCacheDriver()`
 
 The `setCacheDriver` method sets the repository cache driver, while `getCacheDriver` returns it:
+
 ```php
 // Set the repository cache driver
 $repository->setCacheDriver('redis');
@@ -394,6 +406,7 @@ $cacheDriver = $repository->getCacheDriver();
 #### `enableCacheClear()`, `isCacheClearEnabled()`
 
 The `enableCacheClear` method enables repository cache clear, while `isCacheClearEnabled` determines it's state:
+
 ```php
 // Enable repository cache clear
 $repository->enableCacheClear(true);
@@ -408,6 +421,7 @@ $cacheClearStatus = $repository->isCacheClearEnabled();
 #### `createModel()`
 
 The `createModel()` method creates a new repository model instance:
+
 ```php
 $repositoryModelInstance = $repository->createModel();
 ```
@@ -415,6 +429,7 @@ $repositoryModelInstance = $repository->createModel();
 #### `forgetCache()`
 
 The `forgetCache()` method forgets the repository cache:
+
 ```php
 $repository->forgetCache();
 ```
@@ -422,13 +437,19 @@ $repository->forgetCache();
 #### `with()`
 
 The `with` method sets the relationships that should be eager loaded:
+
 ```php
-$repository->with(['relationship']);
+// Pass a string
+$repository->with('relationship');
+
+// Or an array
+$repository->with(['relationship1', 'relationship2']);
 ```
 
 #### `where()`
 
-The `with` method adds a basic where clause to the query:
+The `where` method adds a basic where clause to the query:
+
 ```php
 $repository->where('slug', '=', 'example');
 ```
@@ -436,22 +457,37 @@ $repository->where('slug', '=', 'example');
 #### `whereIn()`
 
 The `whereIn` method adds a "where in" clause to the query:
+
 ```php
-$repository->whereIn('id', [1, 2, 5, 8);
+$repository->whereIn('id', [1, 2, 5, 8]);
 ```
 
 #### `whereNotIn()`
 
 The `whereNotIn` method adds a "where not in" clause to the query:
+
 ```php
-$repository->whereNotIn('id', [1, 2, 5, 8);
+$repository->whereNotIn('id', [1, 2, 5, 8]);
 ```
 
-> **Note:** All of the `where`, `whereIn`, and `whereNotIn` methods are chainable & could be called multiple times in a single request. It will hold all where clauses in an array internally and apply them all before executing the query.
+#### `whereHas()`
+
+The `whereHas` method adds a "where has relationship" clause to the query:
+
+```php
+use Illuminate\Database\Eloquent\Builder;
+
+$repository->whereHas('attachments', function (Builder $builder) use ($attachment) {
+    $builder->where('attachment_id', $attachment->id);
+});
+```
+
+> **Note:** All of the `where*` methods are chainable & could be called multiple times in a single request. It will hold all where clauses in an array internally and apply them all before executing the query.
 
 #### `offset()`
 
 The `offset` method sets the "offset" value of the query:
+
 ```php
 $repository->offset(5);
 ```
@@ -459,6 +495,7 @@ $repository->offset(5);
 #### `limit()`
 
 The `limit` method sets the "limit" value of the query:
+
 ```php
 $repository->limit(9);
 ```
@@ -466,6 +503,7 @@ $repository->limit(9);
 #### `orderBy()`
 
 The `orderBy` method adds an "order by" clause to the query:
+
 ```php
 $repository->orderBy('id', 'asc');
 ```
@@ -473,20 +511,47 @@ $repository->orderBy('id', 'asc');
 #### `find()`
 
 The `find` method finds an entity by it's primary key:
+
 ```php
 $entity = $repository->find(1);
+```
+
+#### `findOrFail()`
+
+The `findOrFail()` method finds an entity by its primary key or throw an exception:
+
+```php
+$entity = $repository->findOrFail(1);
+```
+
+#### `findOrNew()`
+
+The `findOrNew()` method finds an entity by its primary key or return fresh entity instance:
+
+```php
+$entity = $repository->findOrNew(1);
 ```
 
 #### `findBy()`
 
 The `findBy` method finds an entity by one of it's attributes:
+
 ```php
 $entity = $repository->findBy('id', 1);
+```
+
+#### `findFirst()`
+
+The `findFirst` method finds first entity:
+
+```php
+$firstEntity = $repository->findFirst();
 ```
 
 #### `findAll()`
 
 The `findAll` method finds all entities:
+
 ```php
 $allEntities = $repository->findAll();
 ```
@@ -494,6 +559,7 @@ $allEntities = $repository->findAll();
 #### `paginate()`
 
 The `paginate` method paginates all entities:
+
 ```php
 $entitiesPagination = $repository->paginate(15, ['*'], 'page', 2);
 ```
@@ -502,6 +568,7 @@ As you can guess, this query the first 15 records, in the second page.
 #### `simplePaginate()`
 
 The `simplePaginate` method paginates all entities into a simple paginator:
+
 ```php
 $entitiesSimplePagination = $repository->simplePaginate(15);
 ```
@@ -509,6 +576,7 @@ $entitiesSimplePagination = $repository->simplePaginate(15);
 #### `findWhere()`
 
 The `findWhere` method finds all entities matching where conditions:
+
 ```php
 // Matching values with equal '=' operator
 $repository->findWhere(['slug', '=', 'example']);
@@ -517,29 +585,52 @@ $repository->findWhere(['slug', '=', 'example']);
 #### `findWhereIn()`
 
 The `findWhereIn` method finds all entities matching whereIn conditions:
+
 ```php
-$includedEntities = $repository->findwhereIn('id', [1, 2, 5, 8);
+$includedEntities = $repository->findwhereIn(['id', [1, 2, 5, 8]]);
 ```
 
 #### `findWhereNotIn()`
 
 The `findWhereNotIn` method finds all entities matching whereNotIn conditions:
+
 ```php
-$excludedEntities = $repository->findWhereNotIn('id', [1, 2, 5, 8);
+$excludedEntities = $repository->findWhereNotIn(['id', [1, 2, 5, 8]]);
+```
+
+#### `findWhereHas()`
+
+The `findWhereHas` method finds all entities matching whereHas conditions:
+
+```php
+use Illuminate\Database\Eloquent\Builder;
+
+$entities = $repository->findWhereHas(['attachments', function (Builder $builder) use ($attachment) {
+    $builder->where('attachment_id', $attachment->id);
+}]);
 ```
 
 > **Notes:**
+> - The `findWhereHas` method will return a collection of entities that match the condition inside the closure. If you need to embed the `attachments` relation, in this case, you'll need to call `with()` method before calling `findWhereHas()` like this: `$repository->with('attachments')->findWhereHas([...]);`
 > - Signature of all of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods has been changed since **v2.0.0**.
 > - All of the `findWhere`, `findWhereIn`, and `findWhereNotIn` methods utilize the `where`, `whereIn`, and `whereNotIn` methods respectively, and thus takes first argument as an array of same parameters required by the later ones.
+> - All of the `find*` methods are could be filtered with preceding `where` clauses, which is chainable by the way. All `where` clauses been hold in an array internally and applied before executing the query. Check the following examples:
+
+Example of filtered `findAll` method:
+```php
+$allFilteredEntities = $repository->where('slug', '=', 'example')->findAll();
+```
+
+Another example of filtered `findFirst` method with chained clauses:
+```php
+$allFilteredEntities = $repository->where('name', 'LIKE', '%TEST%')->where('slug', '=', 'example')->findFirst();
+```
 
 #### `create()`
 
 The `create` method creates a new entity with the given attributes:
 ```php
 $createdEntity = $repository->create(['name' => 'Example']);
-
-// Assign created entity status and instance variables
-list($status, $instance) = $createdEntity;
 ```
 
 #### `update()`
@@ -547,19 +638,47 @@ list($status, $instance) = $createdEntity;
 The `update` method updates an entity with the given attributes:
 ```php
 $updatedEntity = $repository->update(1, ['name' => 'Example2']);
-
-// Assign updated entity status and instance variables
-list($status, $instance) = $updatedEntity;
 ```
+
+#### `store()`
+
+The `store` method stores the entity with the given attributes:
+```php
+// Existing Entity
+$storedEntity = $repository->store(1, ['name' => 'Example2']);
+
+// New Entity
+$storedEntity = $repository->store(null, ['name' => 'Example2']);
+```
+
+> **Note:** This method is just an alias for both `create` & `update` methods. It's useful in case where single form is used for both create & update processes.
 
 #### `delete()`
 
 The `delete` method deletes an entity with the given id:
 ```php
 $deletedEntity = $repository->delete(1);
+```
 
-// Assign deleted entity status and instance variables
-list($status, $instance) = $deletedEntity;
+#### `beginTransaction()`
+
+The `beginTransaction` method starts a database transaction:
+```php
+$repository->beginTransaction();
+```
+
+#### `commit()`
+
+The `commit` method commits a database transaction:
+```php
+$repository->commit();
+```
+
+#### `rollBack()`
+
+The `rollback` method rollbacks a database transaction:
+```php
+$repository->rollBack();
 ```
 
 > **Notes:**
@@ -599,7 +718,7 @@ $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class)
 ```
 This way we don't have to instantiate the repository manually, and it's easy to switch between multiple implementations. The IoC Container will take care of the required dependencies.
 
-> **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/5.2/providers) and [Service Container](https://laravel.com/docs/5.2/container) documentation for further details.
+> **Note:** Checkout Laravel's [Service Providers](https://laravel.com/docs/master/providers) and [Service Container](https://laravel.com/docs/master/container) documentation for further details.
 
 ### Add Custom Implementation
 
@@ -644,6 +763,11 @@ Here some conventions important to know while using this package. This package a
 |   └── lang
 |       └── en              --> English language files
 |
+├── routes                  --> Routes files
+|   ├── api.php
+|   ├── console.php
+|   └── web.php
+|
 ├── src                     --> self explanatory directories
 |   ├── Console
 |   |   └── Commands
@@ -651,8 +775,7 @@ Here some conventions important to know while using this package. This package a
 |   ├── Http
 |   |   ├── Controllers
 |   |   ├── Middleware
-|   |   ├── Requests
-|   |   └── routes.php
+|   |   └── Requests
 |   |
 |   ├── Events
 |   ├── Exceptions
@@ -689,7 +812,7 @@ Let's see what caching levels we can control:
 
 #### Whole Application Cache
 
-Checkout Laravel's [Cache](https://laravel.com/docs/5.2/cache) documentation for more details.
+Checkout Laravel's [Cache](https://laravel.com/docs/master/cache) documentation for more details.
 
 #### Individual Query Cache
 
@@ -738,6 +861,7 @@ Lastly, you can skip cache for an individual request by passing the following qu
 - **Rinvex Repository** follows the FIG PHP Standards Recommendations compliant with the [PSR-1: Basic Coding Standard](http://www.php-fig.org/psr/psr-1/), [PSR-2: Coding Style Guide](http://www.php-fig.org/psr/psr-2/) and [PSR-4: Autoloader](http://www.php-fig.org/psr/psr-4/) to ensure a high level of interoperability between shared PHP code.
 - I don't see the benefit of adding a more complex layer by implementing the **Criteria Pattern** for filtration at the moment, rather I'd prefer to keep it as simple as it is now using traditional where clauses since we can achieve same results. (do you've different thoughts? explain please)
 
+
 ## Changelog
 
 Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
@@ -759,14 +883,15 @@ Thank you for considering contributing to this project! The contribution guide c
 Bug reports, feature requests, and pull requests are very welcome.
 
 - [Versioning](CONTRIBUTING.md#versioning)
-- [Support Policy](CONTRIBUTING.md#support-policy)
-- [Coding Standards](CONTRIBUTING.md#coding-standards)
 - [Pull Requests](CONTRIBUTING.md#pull-requests)
+- [Coding Standards](CONTRIBUTING.md#coding-standards)
+- [Feature Requests](CONTRIBUTING.md#feature-requests)
+- [Git Flow](CONTRIBUTING.md#git-flow)
 
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within this project, please send an e-mail to help@rinvex.com. All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within this project, please send an e-mail to [help@rinvex.com](help@rinvex.com). All security vulnerabilities will be promptly addressed.
 
 
 ## About Rinvex
@@ -778,4 +903,4 @@ Rinvex is a software solutions startup, specialized in integrated enterprise sol
 
 This software is released under [The MIT License (MIT)](LICENSE).
 
-(c) 2016 Rinvex LLC, Some rights reserved.
+(c) 2016-2018 Rinvex LLC, Some rights reserved.
