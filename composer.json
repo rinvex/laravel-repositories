@@ -1,6 +1,7 @@
 {
-    "name": "rinvex/repository",
+    "name": "rinvex/laravel-repositories",
     "description": "Rinvex Repository is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system for Laravel, used to abstract the data layer, making applications more flexible to maintain.",
+    "type": "library",
     "keywords": [
         "rinvex",
         "laravel",
@@ -17,9 +18,9 @@
     "homepage": "https://rinvex.com",
     "support": {
         "email": "help@rinvex.com",
-        "issues": "https://github.com/rinvex/repository/issues",
-        "source": "https://github.com/rinvex/repository",
-        "docs": "https://github.com/rinvex/repository/blob/master/README.md"
+        "issues": "https://github.com/rinvex/laravel-repositories/issues",
+        "source": "https://github.com/rinvex/laravel-repositories",
+        "docs": "https://github.com/rinvex/laravel-repositories/blob/master/README.md"
     },
     "authors": [
         {
@@ -35,7 +36,7 @@
         },
         {
             "name": "The Generous Laravel Community",
-            "homepage": "https://github.com/rinvex/repository/contributors"
+            "homepage": "https://github.com/rinvex/laravel-repositories/contributors"
         }
     ],
     "require": {
@@ -47,7 +48,7 @@
         "illuminate/support": "~5.4.0|~5.5.0|~5.6.0"
     },
     "require-dev": {
-        "codedungeon/phpunit-result-printer": "^0.20.0",
+        "codedungeon/phpunit-result-printer": "^0.22.0",
         "illuminate/config": "~5.4.0|~5.5.0|~5.6.0",
         "phpunit/phpunit": "^7.0.0"
     },
@@ -64,15 +65,15 @@
             "Rinvex\\Repository\\Tests\\": "tests"
         }
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
     "config": {
         "sort-packages": true,
         "preferred-install": "dist",
         "optimize-autoloader": true
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "3.0-dev"
-        },
         "laravel": {
             "providers": [
                 "Rinvex\\Repository\\Providers\\RepositoryServiceProvider"
