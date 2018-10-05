@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v3.0.0] - 2018-10-01
+- Enforce Consistency
+- Support Laravel 5.7+
+- Rename package to rinvex/laravel-repositories
+
 ## [v2.0.3] - 2017-01-27
 - Revert "Add support for Laravel 5.4" (v2.x won't get Laravel 5.4 support #131)
 
@@ -69,12 +74,13 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Tag first release
 
-[v2.0.3]: https://github.com/rinvex/repository/compare/v2.0.2...v2.0.3
-[v2.0.2]: https://github.com/rinvex/repository/compare/v2.0.1...v2.0.2
-[v2.0.1]: https://github.com/rinvex/repository/compare/v2.0.0...v2.0.1
-[v2.0.0]: https://github.com/rinvex/repository/compare/v1.0.5...v2.0.0
-[v1.0.5]: https://github.com/rinvex/repository/compare/v1.0.4...v1.0.5
-[v1.0.4]: https://github.com/rinvex/repository/compare/v1.0.3...v1.0.4
-[v1.0.3]: https://github.com/rinvex/repository/compare/v1.0.2...v1.0.3
-[v1.0.2]: https://github.com/rinvex/repository/compare/v1.0.1...v1.0.2
-[v1.0.1]: https://github.com/rinvex/repository/compare/v1.0.0...v1.0.1
+[v3.0.0]: https://github.com/rinvex/laravel-repositories/compare/v2.0.3...v3.0.0
+[v2.0.3]: https://github.com/rinvex/laravel-repositories/compare/v2.0.2...v2.0.3
+[v2.0.2]: https://github.com/rinvex/laravel-repositories/compare/v2.0.1...v2.0.2
+[v2.0.1]: https://github.com/rinvex/laravel-repositories/compare/v2.0.0...v2.0.1
+[v2.0.0]: https://github.com/rinvex/laravel-repositories/compare/v1.0.5...v2.0.0
+[v1.0.5]: https://github.com/rinvex/laravel-repositories/compare/v1.0.4...v1.0.5
+[v1.0.4]: https://github.com/rinvex/laravel-repositories/compare/v1.0.3...v1.0.4
+[v1.0.3]: https://github.com/rinvex/laravel-repositories/compare/v1.0.2...v1.0.3
+[v1.0.2]: https://github.com/rinvex/laravel-repositories/compare/v1.0.1...v1.0.2
+[v1.0.1]: https://github.com/rinvex/laravel-repositories/compare/v1.0.0...v1.0.1
