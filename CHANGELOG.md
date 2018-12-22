@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v3.0.1] - 2018-12-22
+- Add Laravel v5.7 support
+- Update composer dependencies
+- Add PHP 7.3 support to travis
+
 ## [v3.0.0] - 2018-10-01
 - Enforce Consistency
 - Support Laravel 5.7+
@@ -74,6 +79,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Tag first release
 
+[v3.0.1]: https://github.com/rinvex/laravel-repositories/compare/v3.0.0...v3.0.1
 [v3.0.0]: https://github.com/rinvex/laravel-repositories/compare/v2.0.3...v3.0.0
 [v2.0.3]: https://github.com/rinvex/laravel-repositories/compare/v2.0.2...v2.0.3
 [v2.0.2]: https://github.com/rinvex/laravel-repositories/compare/v2.0.1...v2.0.2
