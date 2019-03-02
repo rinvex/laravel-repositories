@@ -275,7 +275,7 @@ return [
         | Cache Lifetime
         |--------------------------------------------------------------------------
         |
-        | Here you may specify the number of minutes that you wish the cache
+        | Here you may specify the number of seconds that you wish the cache
         | to be remembered before it expires. If you want the cache to be
         | remembered forever, set this option to -1. 0 means disabled.
         |
@@ -801,7 +801,7 @@ Here some conventions important to know while using this package. This package a
 While it's **recommended** to explicitly set IoC container, repository identifier, and repository model; This package is smart enough to guess any of these required data whenever missing.
 
 - **IoC Container** `app()` helper is used as a fallback if IoC container instance not provided explicitly.
-- **Repository Identifier** It's recommended to set repository identifier as a doted name like `rinvex.repository.uniqueid`, but if it's missing fully qualified repository class name will be used (actually the result of `get_called_class()` function).
+- **Repository Identifier** It's recommended to set repository identifier as a doted name like `rinvex.repository.uniqueid`, but if it's missing fully qualified repository class name will be used (actually the value of `static::class`).
 - **Repository Model** Conventionally repositories are namespaced like this `Rinvex\Demos\Repositories\ItemRepository`, so corresponding model supposed to be namespaced like this `Rinvex\Demos\Models\Item`. That's how this packages guess the model if it's missing according to the [Default Directory Structure](#mandatory-repository-conventions).
 
 ### Flexible & Granular Caching
@@ -818,7 +818,7 @@ Checkout Laravel's [Cache](https://laravel.com/docs/master/cache) documentation 
 
 Change cache per query or disable it:
 ```php
-// Set cache lifetime for this individual query to 123 minutes
+// Set cache lifetime for this individual query to 123 seconds
 $repository->setCacheLifetime(123);
 
 // Set cache lifetime for this individual query to forever
