@@ -15,12 +15,12 @@ class RepositoryEventListener
      */
     public function subscribe(Dispatcher $dispatcher)
     {
-        $dispatcher->listen('*.entity.creating', __CLASS__.'@entityCreating');
-        $dispatcher->listen('*.entity.created', __CLASS__.'@entityCreated');
-        $dispatcher->listen('*.entity.updating', __CLASS__.'@entityUpdating');
-        $dispatcher->listen('*.entity.updated', __CLASS__.'@entityUpdated');
-        $dispatcher->listen('*.entity.deleting', __CLASS__.'@entityDeleting');
-        $dispatcher->listen('*.entity.deleted', __CLASS__.'@entityDeleted');
+        $dispatcher->listen('*.entity.creating', self::class.'@entityCreating');
+        $dispatcher->listen('*.entity.created', self::class.'@entityCreated');
+        $dispatcher->listen('*.entity.updating', self::class.'@entityUpdating');
+        $dispatcher->listen('*.entity.updated', self::class.'@entityUpdated');
+        $dispatcher->listen('*.entity.deleting', self::class.'@entityDeleting');
+        $dispatcher->listen('*.entity.deleted', self::class.'@entityDeleted');
     }
 
     /**
