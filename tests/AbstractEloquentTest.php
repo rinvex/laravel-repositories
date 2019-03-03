@@ -22,7 +22,7 @@ abstract class AbstractEloquentTests extends TestCase
     protected $container;
 
     /** Setup the database schema. */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setupContainer();
         $this->setupDatabase(new Manager($this->getContainer()));
