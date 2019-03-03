@@ -310,7 +310,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function getRepositoryId(): string
     {
-        return $this->repositoryId ?: get_called_class();
+        return $this->repositoryId ?: static::class;
     }
 
     /**
@@ -330,7 +330,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     {
         $model = $this->getContainer('config')->get('rinvex.repository.models');
 
-        return $this->model ?: str_replace(['Repositories', 'Repository'], [$model, ''], get_called_class());
+        return $this->model ?: str_replace(['Repositories', 'Repository'], [$model, ''], static::class);
     }
 
     /**

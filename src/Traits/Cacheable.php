@@ -97,7 +97,7 @@ trait Cacheable
     protected function flushCacheKeys(): array
     {
         $flushedKeys = [];
-        $calledClass = get_called_class();
+        $calledClass = static::class;
         $config = $this->getContainer('config')->get('rinvex.repository.cache');
         $cacheKeys = $this->getCacheKeys($config['keys_file']);
 

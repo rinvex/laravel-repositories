@@ -41,7 +41,7 @@ class EloquentRepository extends BaseRepository
      */
     public function find($id, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($id, $attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($id, $attributes) {
             return $this->prepareQuery($this->createModel())->find($id, $attributes);
         });
     }
@@ -81,7 +81,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findBy($attribute, $value, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attribute, $value, $attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($attribute, $value, $attributes) {
             return $this->prepareQuery($this->createModel())->where($attribute, '=', $value)->first($attributes);
         });
     }
@@ -91,7 +91,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findFirst($attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($attributes) {
             return $this->prepareQuery($this->createModel())->first($attributes);
         });
     }
@@ -101,7 +101,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findAll($attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($attributes) {
             return $this->prepareQuery($this->createModel())->get($attributes);
         });
     }
@@ -113,7 +113,7 @@ class EloquentRepository extends BaseRepository
     {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, array_merge(func_get_args(), compact('page')), function () use ($perPage, $attributes, $pageName, $page) {
+        return $this->executeCallback(static::class, __FUNCTION__, array_merge(func_get_args(), compact('page')), function () use ($perPage, $attributes, $pageName, $page) {
             return $this->prepareQuery($this->createModel())->paginate($perPage, $attributes, $pageName, $page);
         });
     }
@@ -125,7 +125,7 @@ class EloquentRepository extends BaseRepository
     {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
 
-        return $this->executeCallback(get_called_class(), __FUNCTION__, array_merge(func_get_args(), compact('page')), function () use ($perPage, $attributes, $pageName, $page) {
+        return $this->executeCallback(static::class, __FUNCTION__, array_merge(func_get_args(), compact('page')), function () use ($perPage, $attributes, $pageName, $page) {
             return $this->prepareQuery($this->createModel())->simplePaginate($perPage, $attributes, $pageName, $page);
         });
     }
@@ -135,7 +135,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findWhere(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
             [$attribute, $operator, $value, $boolean] = array_pad($where, 4, null);
 
             $this->where($attribute, $operator, $value, $boolean);
@@ -149,7 +149,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findWhereIn(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
             [$attribute, $values, $boolean, $not] = array_pad($where, 4, null);
 
             $this->whereIn($attribute, $values, $boolean, $not);
@@ -163,7 +163,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findWhereNotIn(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
             [$attribute, $values, $boolean] = array_pad($where, 3, null);
 
             $this->whereNotIn($attribute, $values, $boolean);
@@ -177,7 +177,7 @@ class EloquentRepository extends BaseRepository
      */
     public function findWhereHas(array $where, $attributes = ['*'])
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($where, $attributes) {
             [$relation, $callback, $operator, $count] = array_pad($where, 4, null);
 
             $this->whereHas($relation, $callback, $operator, $count);
@@ -341,7 +341,7 @@ class EloquentRepository extends BaseRepository
      */
     public function count($columns = '*'): int
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($columns) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($columns) {
             return $this->prepareQuery($this->createModel())->count($columns);
         });
     }
@@ -351,7 +351,7 @@ class EloquentRepository extends BaseRepository
      */
     public function min($column)
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($column) {
             return $this->prepareQuery($this->createModel())->min($column);
         });
     }
@@ -361,7 +361,7 @@ class EloquentRepository extends BaseRepository
      */
     public function max($column)
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($column) {
             return $this->prepareQuery($this->createModel())->max($column);
         });
     }
@@ -371,7 +371,7 @@ class EloquentRepository extends BaseRepository
      */
     public function avg($column)
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($column) {
             return $this->prepareQuery($this->createModel())->avg($column);
         });
     }
@@ -381,7 +381,7 @@ class EloquentRepository extends BaseRepository
      */
     public function sum($column)
     {
-        return $this->executeCallback(get_called_class(), __FUNCTION__, func_get_args(), function () use ($column) {
+        return $this->executeCallback(static::class, __FUNCTION__, func_get_args(), function () use ($column) {
             return $this->prepareQuery($this->createModel())->sum($column);
         });
     }
