@@ -61,10 +61,10 @@ checks:
         no_non_implemented_abstract_methods: true
         no_property_on_interface: true
         no_short_method_names:
-            minimum: '3'
+            minimum: '0'
         no_short_open_tag: true
         no_short_variable_names:
-            minimum: '3'
+            minimum: '0'
         no_trailing_whitespace: true
         no_trait_type_hints: true
         no_underscore_prefix_in_methods: true
@@ -111,6 +111,9 @@ checks:
 
 filter:
     excluded_paths:
+        - 'build/*'
+        - 'resources/*'
+        - 'tests/*'
         - 'vendor/*'
 
 tools:
@@ -132,6 +135,9 @@ tools:
             standard:         PSR2
         filter:
             excluded_paths:
+                - 'build/*'
+                - 'resources/*'
+                - 'tests/*'
                 - 'vendor/*'
 
 
@@ -139,6 +145,9 @@ tools:
     php_cpd:
         enabled:              true
         excluded_dirs:
+            - 'build'
+            - 'resources'
+            - 'tests'
             - 'vendor'
 
 
@@ -146,7 +155,10 @@ tools:
     php_loc:
         enabled:              true
         excluded_dirs:
-            - vendor
+            - 'build'
+            - 'resources'
+            - 'tests'
+            - 'vendor'
 
 
     # PHP Mess Detector
@@ -161,6 +173,9 @@ tools:
                 - controversial
         filter:
             excluded_paths:
+                - 'build/*'
+                - 'tests/*'
+                - 'resources/*'
                 - 'vendor/*'
 
 
@@ -168,7 +183,10 @@ tools:
     php_pdepend:
         enabled:              true
         excluded_dirs:
-            - vendor
+            - 'build'
+            - 'resources'
+            - 'tests'
+            - 'vendor'
 
 
     # PHP Analyzer (https://scrutinizer-ci.com/docs/tools/php/php-analyzer/)
