@@ -50,6 +50,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $relations = [];
 
     /**
+     * Count relations to eager load on query execution.
+     *
+     * @var array
+     */
+    protected $countRelations = [];
+
+    /**
      * The query where clauses.
      *
      * @var array
@@ -155,6 +162,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected function resetRepository()
     {
         $this->relations = [];
+        $this->countRelations = [];
         $this->where = [];
         $this->whereIn = [];
         $this->whereNotIn = [];
@@ -185,6 +193,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         // Set the relationships that should be eager loaded
         if (! empty($this->relations)) {
             $model = $model->with($this->relations);
+        }
+
+        // Set the count relationships that should be eager loaded
+        if (! empty($this->countRelations)) {
+            $model = $model->withCount($this->countRelations);
         }
 
         // Add a basic where clause to the query
@@ -343,6 +356,20 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         }
 
         $this->relations = $relations;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withCount($countRelations)
+    {
+        if (is_string($countRelations)) {
+            $countRelations = func_get_args();
+        }
+
+        $this->countRelations = $countRelations;
 
         return $this;
     }

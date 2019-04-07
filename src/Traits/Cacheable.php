@@ -44,6 +44,7 @@ trait Cacheable
                 $this->getCacheDriver(),
                 $this->getCacheLifetime(),
                 $this->relations,
+                $this->countRelations,
                 $this->where,
                 $this->whereIn,
                 $this->whereNotIn,

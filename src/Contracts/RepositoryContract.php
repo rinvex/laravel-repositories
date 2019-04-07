@@ -94,6 +94,15 @@ interface RepositoryContract
     public function with($relations);
 
     /**
+     * Set count relationships that should be eager loaded.
+     *
+     * @param array|string $countRelations
+     *
+     * @return static
+     */
+    public function withCount($countRelations);
+
+    /**
      * Add a basic where clause to the query.
      *
      * @param string $attribute
