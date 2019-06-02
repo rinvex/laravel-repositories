@@ -91,6 +91,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Tag first release
 
+[v4.1.0]: https://github.com/rinvex/laravel-repositories/compare/v4.0.0...v4.1.0
 [v4.0.0]: https://github.com/rinvex/laravel-repositories/compare/v3.0.1...v4.0.0
 [v3.0.1]: https://github.com/rinvex/laravel-repositories/compare/v3.0.0...v3.0.1
 [v3.0.0]: https://github.com/rinvex/laravel-repositories/compare/v2.0.3...v3.0.0
