@@ -184,7 +184,7 @@ trait Cacheable
                 }
             }
 
-            $this->getContainer('events')->fire($this->getRepositoryId().'.entity.cache.flushed', [$this]);
+            $this->getContainer('events')->dispatch($this->getRepositoryId().'.entity.cache.flushed', [$this]);
         }
 
         return $this;
