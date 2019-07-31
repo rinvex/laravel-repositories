@@ -1,10 +1,20 @@
 <?php
 
-declare(strict_types=1);
+/*
+ * NOTICE OF LICENSE
+ *
+ * Part of the Rinvex Repository Package.
+ *
+ * This source file is subject to The MIT License (MIT)
+ * that is bundled with this package in the LICENSE file.
+ *
+ * Package: Rinvex Repository Package
+ * License: The MIT License (MIT)
+ * Link:    https://rinvex.com
+ */
 
 namespace Rinvex\Repository\Contracts;
 
-use Closure;
 use Illuminate\Contracts\Container\Container;
 
 interface RepositoryContract
@@ -14,41 +24,25 @@ interface RepositoryContract
      *
      * @param \Illuminate\Contracts\Container\Container $container
      *
-     * @return static
+     * @return $this
      */
     public function setContainer(Container $container);
 
     /**
-     * Get the IoC container instance or any of its services.
+     * Get the IoC container instance or any of it's services.
      *
      * @param string|null $service
      *
-     * @return mixed
+     * @return object
      */
     public function getContainer($service = null);
-
-    /**
-     * Set the connection associated with the repository.
-     *
-     * @param string $name
-     *
-     * @return static
-     */
-    public function setConnection($name);
-
-    /**
-     * Get the current connection for the repository.
-     *
-     * @return string
-     */
-    public function getConnection(): string;
 
     /**
      * Set the repository identifier.
      *
      * @param string $repositoryId
      *
-     * @return static
+     * @return $this
      */
     public function setRepositoryId($repositoryId);
 
@@ -57,14 +51,14 @@ interface RepositoryContract
      *
      * @return string
      */
-    public function getRepositoryId(): string;
+    public function getRepositoryId();
 
     /**
      * Set the repository model.
      *
      * @param string $model
      *
-     * @return static
+     * @return $this
      */
     public function setModel($model);
 
@@ -73,25 +67,25 @@ interface RepositoryContract
      *
      * @return string
      */
-    public function getModel(): string;
+    public function getModel();
 
     /**
      * Create a new repository model instance.
      *
      * @throws \Rinvex\Repository\Exceptions\RepositoryException
      *
-     * @return mixed
+     * @return object
      */
     public function createModel();
 
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param array|string $relations
+     * @param array $relations
      *
-     * @return static
+     * @return $this
      */
-    public function with($relations);
+    public function with(array $relations);
 
     /**
      * Add a basic where clause to the query.
@@ -101,7 +95,7 @@ interface RepositoryContract
      * @param mixed  $value
      * @param string $boolean
      *
-     * @return static
+     * @return $this
      */
     public function where($attribute, $operator = null, $value = null, $boolean = 'and');
 
@@ -113,7 +107,7 @@ interface RepositoryContract
      * @param string $boolean
      * @param bool   $not
      *
-     * @return static
+     * @return $this
      */
     public function whereIn($attribute, $values, $boolean = 'and', $not = false);
 
@@ -124,38 +118,16 @@ interface RepositoryContract
      * @param mixed  $values
      * @param string $boolean
      *
-     * @return static
+     * @return $this
      */
     public function whereNotIn($attribute, $values, $boolean = 'and');
-
-    /**
-     * Add a "where has relationship" clause to the query.
-     *
-     * @param string   $relation
-     * @param \Closure $callback
-     * @param string   $operator
-     * @param int      $count
-     *
-     * @return static
-     */
-    public function whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1);
-
-    /**
-     * Add a scope to the query.
-     *
-     * @param string $name
-     * @param array  $parameters
-     *
-     * @return static
-     */
-    public function scope($name, array $parameters = []);
 
     /**
      * Set the "offset" value of the query.
      *
      * @param int $offset
      *
-     * @return static
+     * @return $this
      */
     public function offset($offset);
 
@@ -164,7 +136,7 @@ interface RepositoryContract
      *
      * @param int $limit
      *
-     * @return static
+     * @return $this
      */
     public function limit($limit);
 
@@ -174,93 +146,30 @@ interface RepositoryContract
      * @param string $attribute
      * @param string $direction
      *
-     * @return static
+     * @return $this
      */
     public function orderBy($attribute, $direction = 'asc');
 
     /**
-     * Add a "group by" clause to the query.
-     *
-     * @param array|string $column
-     *
-     * @return static
-     */
-    public function groupBy($column);
-
-    /**
-     * Add a "having" clause to the query.
-     *
-     * @param string $column
-     * @param string $operator
-     * @param string $value
-     * @param string $boolean
-     *
-     * @return static
-     */
-    public function having($column, $operator = null, $value = null, $boolean = 'and');
-
-    /**
-     * Add a "or having" clause to the query.
-     *
-     * @param string $column
-     * @param string $operator
-     * @param string $value
-     *
-     * @return static
-     */
-    public function orHaving($column, $operator = null, $value = null);
-
-    /**
-     * Find an entity by its primary key.
+     * Find an entity by it's primary key.
      *
      * @param int   $id
      * @param array $attributes
      *
-     * @return mixed
+     * @return object
      */
     public function find($id, $attributes = ['*']);
 
     /**
-     * Find an entity by its primary key or throw an exception.
-     *
-     * @param mixed $id
-     * @param array $attributes
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
-     */
-    public function findOrFail($id, $attributes = ['*']);
-
-    /**
-     * Find an entity by its primary key or return fresh entity instance.
-     *
-     * @param mixed $id
-     * @param array $attributes
-     *
-     * @return mixed
-     */
-    public function findOrNew($id, $attributes = ['*']);
-
-    /**
-     * Find an entity by one of its attributes.
+     * Find an entity by one of it's attributes.
      *
      * @param string $attribute
      * @param string $value
      * @param array  $attributes
      *
-     * @return mixed
+     * @return object
      */
     public function findBy($attribute, $value, $attributes = ['*']);
-
-    /**
-     * Find the first entity.
-     *
-     * @param array $attributes
-     *
-     * @return mixed
-     */
-    public function findFirst($attributes = ['*']);
 
     /**
      * Find all entities.
@@ -327,132 +236,32 @@ interface RepositoryContract
     public function findWhereNotIn(array $where, $attributes = ['*']);
 
     /**
-     * Find all entities matching whereHas conditions.
-     *
-     * @param array $where
-     * @param array $attributes
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function findWhereHas(array $where, $attributes = ['*']);
-
-    /**
      * Create a new entity with the given attributes.
      *
      * @param array $attributes
-     * @param bool  $syncRelations
      *
-     * @return mixed
+     * @return array
      */
-    public function create(array $attributes = [], bool $syncRelations = false);
+    public function create(array $attributes = []);
 
     /**
      * Update an entity with the given attributes.
      *
      * @param mixed $id
      * @param array $attributes
-     * @param bool  $syncRelations
      *
-     * @return mixed
+     * @return array
      */
-    public function update($id, array $attributes = [], bool $syncRelations = false);
-
-    /**
-     * Store the entity with the given attributes.
-     *
-     * @param mixed $id
-     * @param array $attributes
-     * @param bool  $syncRelations
-     *
-     * @return mixed
-     */
-    public function store($id, array $attributes = [], bool $syncRelations = false);
+    public function update($id, array $attributes = []);
 
     /**
      * Delete an entity with the given id.
      *
      * @param mixed $id
      *
-     * @return mixed
+     * @return array
      */
     public function delete($id);
-
-    /**
-     * Restore an entity with the given id.
-     *
-     * @param mixed $id
-     *
-     * @return mixed
-     */
-    public function restore($id);
-
-    /**
-     * Start a new database transaction.
-     *
-     * @throws \Exception
-     *
-     * @return void
-     */
-    public function beginTransaction(): void;
-
-    /**
-     * Commit the active database transaction.
-     *
-     * @return void
-     */
-    public function commit(): void;
-
-    /**
-     * Rollback the active database transaction.
-     *
-     * @return void
-     */
-    public function rollBack(): void;
-
-    /**
-     * Retrieve the "count" result of the query.
-     *
-     * @param string $columns
-     *
-     * @return int
-     */
-    public function count($columns = '*'): int;
-
-    /**
-     * Retrieve the minimum value of a given column.
-     *
-     * @param string $column
-     *
-     * @return mixed
-     */
-    public function min($column);
-
-    /**
-     * Retrieve the maximum value of a given column.
-     *
-     * @param string $column
-     *
-     * @return mixed
-     */
-    public function max($column);
-
-    /**
-     * Retrieve the average value of a given column.
-     *
-     * @param string $column
-     *
-     * @return mixed
-     */
-    public function avg($column);
-
-    /**
-     * Retrieve the sum of the values of a given column.
-     *
-     * @param string $column
-     *
-     * @return mixed
-     */
-    public function sum($column);
 
     /**
      * Dynamically pass missing static methods to the model.

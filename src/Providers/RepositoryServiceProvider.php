@@ -1,6 +1,17 @@
 <?php
 
-declare(strict_types=1);
+/*
+ * NOTICE OF LICENSE
+ *
+ * Part of the Rinvex Repository Package.
+ *
+ * This source file is subject to The MIT License (MIT)
+ * that is bundled with this package in the LICENSE file.
+ *
+ * Package: Rinvex Repository Package
+ * License: The MIT License (MIT)
+ * Link:    https://rinvex.com
+ */
 
 namespace Rinvex\Repository\Providers;
 
@@ -9,13 +20,6 @@ use Rinvex\Repository\Listeners\RepositoryEventListener;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
-    /**
-     * The repository alias pattern.
-     *
-     * @var string
-     */
-    protected $repositoryAliasPattern = '{{class}}Contract';
-
     /**
      * {@inheritdoc}
      */
@@ -33,12 +37,21 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
-            // Publish config
-            $this->publishes([realpath(__DIR__.'/../../config/config.php') => config_path('rinvex.repository.php')], 'rinvex-repository-config');
-        }
+        // Publish Resources
+        $this->publishResources();
 
         // Subscribe the registered event listener
         $this->app['events']->subscribe('rinvex.repository.listener');
+    }
+
+    /**
+     * Publish resources.
+     */
+    protected function publishResources()
+    {
+        // Publish config
+        $this->publishes([
+            realpath(__DIR__.'/../../config/config.php') => config_path('rinvex.repository.php'),
+        ], 'config');
     }
 }

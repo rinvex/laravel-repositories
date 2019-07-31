@@ -1,10 +1,22 @@
 <?php
 
-declare(strict_types=1);
+/*
+ * NOTICE OF LICENSE
+ *
+ * Part of the Rinvex Repository Package.
+ *
+ * This source file is subject to The MIT License (MIT)
+ * that is bundled with this package in the LICENSE file.
+ *
+ * Package: Rinvex Repository Package
+ * License: The MIT License (MIT)
+ * Link:    https://rinvex.com
+ */
 
 namespace Rinvex\Repository\Listeners;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Rinvex\Repository\Contracts\RepositoryContract;
 
 class RepositoryEventListener
 {
@@ -15,101 +27,59 @@ class RepositoryEventListener
      */
     public function subscribe(Dispatcher $dispatcher)
     {
-        $dispatcher->listen('*.entity.creating', self::class.'@entityCreating');
-        $dispatcher->listen('*.entity.created', self::class.'@entityCreated');
-        $dispatcher->listen('*.entity.updating', self::class.'@entityUpdating');
-        $dispatcher->listen('*.entity.updated', self::class.'@entityUpdated');
-        $dispatcher->listen('*.entity.deleting', self::class.'@entityDeleting');
-        $dispatcher->listen('*.entity.deleted', self::class.'@entityDeleted');
-    }
-
-    /**
-     * Listen to entities being created.
-     *
-     * @param string $eventName
-     * @param array  $data
-     *
-     * @return void
-     */
-    public function entityCreating($eventName, $data): void
-    {
-        //
+        $dispatcher->listen('*.entity.created', __CLASS__.'@entityCreated');
+        $dispatcher->listen('*.entity.updated', __CLASS__.'@entityUpdated');
+        $dispatcher->listen('*.entity.deleted', __CLASS__.'@entityDeleted');
     }
 
     /**
      * Listen to entities created.
      *
-     * @param string $eventName
-     * @param array  $data
+     * @param \Rinvex\Repository\Contracts\RepositoryContract $repository
+     * @param mixed                                           $entity
      *
      * @return void
      */
-    public function entityCreated($eventName, $data): void
+    public function entityCreated(RepositoryContract $repository, $entity)
     {
-        $clearOn = $data[0]->getContainer('config')->get('rinvex.repository.cache.clear_on');
+        $clearOn = $repository->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
-        if ($data[0]->isCacheClearEnabled() && in_array('create', $clearOn)) {
-            $data[0]->forgetCache();
+        if ($repository->isCacheClearEnabled() && in_array('create', $clearOn)) {
+            $repository->forgetCache();
         }
-    }
-
-    /**
-     * Listen to entities being updated.
-     *
-     * @param string $eventName
-     * @param array  $data
-     *
-     * @return void
-     */
-    public function entityUpdating($eventName, $data): void
-    {
-        //
     }
 
     /**
      * Listen to entities updated.
      *
-     * @param string $eventName
-     * @param array  $data
+     * @param \Rinvex\Repository\Contracts\RepositoryContract $repository
+     * @param mixed                                           $entity
      *
      * @return void
      */
-    public function entityUpdated($eventName, $data): void
+    public function entityUpdated(RepositoryContract $repository, $entity)
     {
-        $clearOn = $data[0]->getContainer('config')->get('rinvex.repository.cache.clear_on');
+        $clearOn = $repository->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
-        if ($data[0]->isCacheClearEnabled() && in_array('update', $clearOn)) {
-            $data[0]->forgetCache();
+        if ($repository->isCacheClearEnabled() && in_array('update', $clearOn)) {
+            $repository->forgetCache();
         }
-    }
-
-    /**
-     * Listen to entities being deleted.
-     *
-     * @param string $eventName
-     * @param array  $data
-     *
-     * @return void
-     */
-    public function entityDeleting($eventName, $data): void
-    {
-        //
     }
 
     /**
      * Listen to entities deleted.
      *
-     * @param string $eventName
-     * @param array  $data
+     * @param \Rinvex\Repository\Contracts\RepositoryContract $repository
+     * @param mixed                                           $entity
      *
      * @return void
      */
-    public function entityDeleted($eventName, $data): void
+    public function entityDeleted(RepositoryContract $repository, $entity)
     {
-        $clearOn = $data[0]->getContainer('config')->get('rinvex.repository.cache.clear_on');
+        $clearOn = $repository->getContainer('config')->get('rinvex.repository.cache.clear_on');
 
-        if ($data[0]->isCacheClearEnabled() && in_array('delete', $clearOn)) {
-            $data[0]->forgetCache();
+        if ($repository->isCacheClearEnabled() && in_array('delete', $clearOn)) {
+            $repository->forgetCache();
         }
     }
 }

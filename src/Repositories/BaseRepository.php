@@ -1,6 +1,17 @@
 <?php
 
-declare(strict_types=1);
+/*
+ * NOTICE OF LICENSE
+ *
+ * Part of the Rinvex Repository Package.
+ *
+ * This source file is subject to The MIT License (MIT)
+ * that is bundled with this package in the LICENSE file.
+ *
+ * Package: Rinvex Repository Package
+ * License: The MIT License (MIT)
+ * Link:    https://rinvex.com
+ */
 
 namespace Rinvex\Repository\Repositories;
 
@@ -20,13 +31,6 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      * @var \Illuminate\Contracts\Container\Container
      */
     protected $container;
-
-    /**
-     * The connection name for the repository.
-     *
-     * @var string
-     */
-    protected $connection;
 
     /**
      * The repository identifier.
@@ -71,20 +75,6 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $whereNotIn = [];
 
     /**
-     * The query whereHas clauses.
-     *
-     * @var array
-     */
-    protected $whereHas = [];
-
-    /**
-     * The query scopes.
-     *
-     * @var array
-     */
-    protected $scopes = [];
-
-    /**
      * The "offset" value of the query.
      *
      * @var int
@@ -106,20 +96,6 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     protected $orderBy = [];
 
     /**
-     * The column to order results by.
-     *
-     * @var array
-     */
-    protected $groupBy = [];
-
-    /**
-     * The query having clauses.
-     *
-     * @var array
-     */
-    protected $having = [];
-
-    /**
      * Execute given callback and return the result.
      *
      * @param string   $class
@@ -138,7 +114,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
             return $this->cacheCallback($class, $method, $args, $closure);
         }
 
-        // Cache disabled, just execute query & return result
+        // Cache disabled, just execute qurey & return result
         $result = call_user_func($closure);
 
         // We're done, let's clean up!
@@ -148,27 +124,19 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * Reset repository to its defaults.
+     * Reset repository to it's defaults.
      *
      * @return $this
      */
     protected function resetRepository()
     {
-        $this->relations = [];
-        $this->where = [];
-        $this->whereIn = [];
+        $this->relations  = [];
+        $this->where      = [];
+        $this->whereIn    = [];
         $this->whereNotIn = [];
-        $this->whereHas = [];
-        $this->scopes = [];
-        $this->offset = null;
-        $this->limit = null;
-        $this->orderBy = [];
-        $this->groupBy = [];
-        $this->having = [];
-
-        if (method_exists($this, 'flushCriteria')) {
-            $this->flushCriteria();
-        }
+        $this->offset     = null;
+        $this->limit      = null;
+        $this->orderBy    = [];
 
         return $this;
     }
@@ -178,7 +146,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      *
      * @param object $model
      *
-     * @return mixed
+     * @return object
      */
     protected function prepareQuery($model)
     {
@@ -189,35 +157,23 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
 
         // Add a basic where clause to the query
         foreach ($this->where as $where) {
-            [$attribute, $operator, $value, $boolean] = array_pad($where, 4, null);
+            list($attribute, $operator, $value, $boolean) = array_pad($where, 4, null);
 
             $model = $model->where($attribute, $operator, $value, $boolean);
         }
 
         // Add a "where in" clause to the query
         foreach ($this->whereIn as $whereIn) {
-            [$attribute, $values, $boolean, $not] = array_pad($whereIn, 4, null);
+            list($attribute, $values, $boolean, $not) = array_pad($whereIn, 4, null);
 
             $model = $model->whereIn($attribute, $values, $boolean, $not);
         }
 
         // Add a "where not in" clause to the query
         foreach ($this->whereNotIn as $whereNotIn) {
-            [$attribute, $values, $boolean] = array_pad($whereNotIn, 3, null);
+            list($attribute, $values, $boolean) = array_pad($whereNotIn, 3, null);
 
             $model = $model->whereNotIn($attribute, $values, $boolean);
-        }
-
-        // Add a "where has" clause to the query
-        foreach ($this->whereHas as $whereHas) {
-            [$relation, $callback, $operator, $count] = array_pad($whereHas, 4, null);
-
-            $model = $model->whereHas($relation, $callback, $operator, $count);
-        }
-
-        // Add a "scope" to the query
-        foreach ($this->scopes as $scope => $parameters) {
-            $model = $model->{$scope}(...$parameters);
         }
 
         // Set the "offset" value of the query
@@ -231,36 +187,21 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         }
 
         // Add an "order by" clause to the query.
-        foreach ($this->orderBy as $orderBy) {
-            [$attribute, $direction] = $orderBy;
+        if (! empty($this->orderBy)) {
+            list($attribute, $direction) = $this->orderBy;
 
             $model = $model->orderBy($attribute, $direction);
-        }
-
-        // Add an "group by" clause to the query.
-        if (! empty($this->groupBy)) {
-            foreach ($this->groupBy as $group) {
-                $model = $model->groupBy($group);
-            }
-        }
-
-        // Add a "having" clause to the query
-        foreach ($this->having as $having) {
-            [$column, $operator, $value, $boolean] = array_pad($having, 4, null);
-
-            $model = $model->having($column, $operator, $value, $boolean);
-        }
-
-        // Apply all criteria to the query
-        if (method_exists($this, 'applyCriteria')) {
-            $model = $this->applyCriteria($model, $this);
         }
 
         return $model;
     }
 
     /**
-     * {@inheritdoc}
+     * Set the IoC container instance.
+     *
+     * @param \Illuminate\Contracts\Container\Container $container
+     *
+     * @return $this
      */
     public function setContainer(Container $container)
     {
@@ -270,7 +211,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Get the IoC container instance or any of it's services.
+     *
+     * @param string|null $service
+     *
+     * @return object
      */
     public function getContainer($service = null)
     {
@@ -278,25 +223,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setConnection($name)
-    {
-        $this->connection = $name;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConnection(): string
-    {
-        return $this->connection;
-    }
-
-    /**
-     * {@inheritdoc}
+     * Set the repository identifier.
+     *
+     * @param string $repositoryId
+     *
+     * @return $this
      */
     public function setRepositoryId($repositoryId)
     {
@@ -306,15 +237,21 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Get the repository identifier.
+     *
+     * @return string
      */
-    public function getRepositoryId(): string
+    public function getRepositoryId()
     {
-        return $this->repositoryId ?: static::class;
+        return $this->repositoryId ?: get_called_class();
     }
 
     /**
-     * {@inheritdoc}
+     * Set the repository model.
+     *
+     * @param string $model
+     *
+     * @return $this
      */
     public function setModel($model)
     {
@@ -324,31 +261,40 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Get the repository model.
+     *
+     * @return string
      */
-    public function getModel(): string
+    public function getModel()
     {
         $model = $this->getContainer('config')->get('rinvex.repository.models');
 
-        return $this->model ?: str_replace(['Repositories', 'Repository'], [$model, ''], static::class);
+        return $this->model ?: str_replace(['Repositories', 'Repository'], [$model, ''], get_called_class());
     }
 
     /**
-     * {@inheritdoc}
+     * Set the relationships that should be eager loaded.
+     *
+     * @param array $relations
+     *
+     * @return $this
      */
-    public function with($relations)
+    public function with(array $relations)
     {
-        if (is_string($relations)) {
-            $relations = func_get_args();
-        }
-
         $this->relations = $relations;
 
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * Add a basic where clause to the query.
+     *
+     * @param string $attribute
+     * @param string $operator
+     * @param mixed  $value
+     * @param string $boolean
+     *
+     * @return $this
      */
     public function where($attribute, $operator = null, $value = null, $boolean = 'and')
     {
@@ -359,7 +305,14 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Add a "where in" clause to the query.
+     *
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     * @param bool   $not
+     *
+     * @return $this
      */
     public function whereIn($attribute, $values, $boolean = 'and', $not = false)
     {
@@ -370,7 +323,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Add a "where not in" clause to the query.
+     *
+     * @param string $attribute
+     * @param mixed  $values
+     * @param string $boolean
+     *
+     * @return $this
      */
     public function whereNotIn($attribute, $values, $boolean = 'and')
     {
@@ -381,28 +340,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1)
-    {
-        // The last `$operator` & `$count` expressions are intentional to fix list() & array_pad() results
-        $this->whereHas[] = [$relation, $callback, $operator ?: '>=', $count ?: 1];
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function scope($name, array $parameters = [])
-    {
-        $this->scopes[$name] = $parameters;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
+     * Set the "offset" value of the query.
+     *
+     * @param int $offset
+     *
+     * @return $this
      */
     public function offset($offset)
     {
@@ -412,7 +354,11 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Set the "limit" value of the query.
+     *
+     * @param int $limit
+     *
+     * @return $this
      */
     public function limit($limit)
     {
@@ -422,53 +368,27 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Add an "order by" clause to the query.
+     *
+     * @param string $attribute
+     * @param string $direction
+     *
+     * @return $this
      */
     public function orderBy($attribute, $direction = 'asc')
     {
-        $this->orderBy[] = [$attribute, $direction ?: 'asc'];
+        $this->orderBy = [$attribute, $direction];
 
         return $this;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function groupBy($column)
-    {
-        $this->groupBy = array_merge((array) $this->groupBy, is_array($column) ? $column : [$column]);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function having($column, $operator = null, $value = null, $boolean = 'and')
-    {
-        $this->having[] = [$column, $operator, $value, $boolean ?: 'and'];
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function orHaving($column, $operator = null, $value = null, $boolean = 'and')
-    {
-        return $this->having($column, $operator, $value, 'or');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function store($id, array $attributes = [], bool $syncRelations = false)
-    {
-        return ! $id ? $this->create($attributes, $syncRelations) : $this->update($id, $attributes, $syncRelations);
-    }
-
-    /**
-     * {@inheritdoc}
+     * Dynamically pass missing static methods to the model.
+     *
+     * @param $method
+     * @param $parameters
+     *
+     * @return mixed
      */
     public static function __callStatic($method, $parameters)
     {
@@ -476,16 +396,17 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
     }
 
     /**
-     * {@inheritdoc}
+     * Dynamically pass missing methods to the model.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
      */
     public function __call($method, $parameters)
     {
-        if (method_exists($model = $this->createModel(), $scope = 'scope'.ucfirst($method))) {
-            $this->scope($method, $parameters);
+        $model = $this->model;
 
-            return $this;
-        }
-
-        return call_user_func_array([$this->createModel(), $method], $parameters);
+        return call_user_func_array([$model, $method], $parameters);
     }
 }
