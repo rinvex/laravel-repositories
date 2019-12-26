@@ -1,6 +1,7 @@
 {
-    "name": "rinvex/repository",
+    "name": "rinvex/laravel-repositories",
     "description": "Rinvex Repository is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system for Laravel, used to abstract the data layer, making applications more flexible to maintain.",
+    "type": "library",
     "keywords": [
         "rinvex",
         "laravel",
@@ -14,12 +15,12 @@
         "cache"
     ],
     "license": "MIT",
-    "homepage": "https://rinvex.com/marketplace/rinvex-repository/",
+    "homepage": "https://rinvex.com",
     "support": {
         "email": "help@rinvex.com",
-        "issues": "https://github.com/rinvex/repository/issues",
-        "source": "https://github.com/rinvex/repository",
-        "docs": "https://github.com/rinvex/repository/blob/master/README.md"
+        "issues": "https://github.com/rinvex/laravel-repositories/issues",
+        "source": "https://github.com/rinvex/laravel-repositories",
+        "docs": "https://github.com/rinvex/laravel-repositories/blob/master/README.md"
     },
     "authors": [
         {
@@ -34,17 +35,23 @@
             "role": "Project Lead"
         },
         {
-            "name": "The Generous PHP Community",
-            "homepage": "https://github.com/rinvex/repository/contributors"
+            "name": "The Generous Laravel Community",
+            "homepage": "https://github.com/rinvex/laravel-repositories/contributors"
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "illuminate/events": "5.1.*|5.2.*|5.3.*",
-        "illuminate/support": "5.1.*|5.2.*|5.3.*",
-        "illuminate/database": "5.1.*|5.2.*|5.3.*",
-        "illuminate/container": "5.1.*|5.2.*|5.3.*",
-        "illuminate/contracts": "5.1.*|5.2.*|5.3.*"
+        "php": "^7.2.0",
+        "illuminate/container": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0.0",
+        "illuminate/contracts": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0.0",
+        "illuminate/database": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0.0",
+        "illuminate/events": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0.0",
+        "illuminate/support": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0.0",
+        "laravel/helpers": "^1.1.0"
+    },
+    "require-dev": {
+        "codedungeon/phpunit-result-printer": "^0.26.0",
+        "illuminate/config": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0.0",
+        "phpunit/phpunit": "^8.3.0"
     },
     "suggest": {
         "illuminate/pagination": "Required to paginate the result set."
@@ -54,9 +61,24 @@
             "Rinvex\\Repository\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Rinvex\\Repository\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "optimize-autoloader": true
+    },
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.0-dev"
+        "laravel": {
+            "providers": [
+                "Rinvex\\Repository\\Providers\\RepositoryServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
