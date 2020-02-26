@@ -274,7 +274,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function getContainer($service = null)
     {
-        return is_null($service) ? ($this->container ?: app()) : ($this->container[$service] ?: app($service));
+        return is_null($service) ? ($this->container ?: app()) : ($this->container[$service] ?? app($service));
     }
 
     /**
