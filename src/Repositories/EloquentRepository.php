@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rinvex\Repository\Repositories;
 
+use Illuminate\Support\Arr;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Rinvex\Repository\Exceptions\RepositoryException;
 use Rinvex\Repository\Exceptions\EntityNotFoundException;
 
