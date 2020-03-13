@@ -39,18 +39,18 @@ trait Cacheable
     protected function generateCacheHash($args): string
     {
         return md5(json_encode($args + [
-                $this->getRepositoryId(),
-                $this->getModel(),
-                $this->getCacheDriver(),
-                $this->getCacheLifetime(),
-                $this->relations,
-                $this->where,
-                $this->whereIn,
-                $this->whereNotIn,
-                $this->offset,
-                $this->limit,
-                $this->orderBy,
-            ]));
+            $this->getRepositoryId(),
+            $this->getModel(),
+            $this->getCacheDriver(),
+            $this->getCacheLifetime(),
+            $this->relations,
+            $this->where,
+            $this->whereIn,
+            $this->whereNotIn,
+            $this->offset,
+            $this->limit,
+            $this->orderBy,
+        ]));
     }
 
     /**
