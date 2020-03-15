@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v6.0.0] - 2020-03-15
+- Upgrade to Laravel v7.1.x & PHP v7.4.x
+
 ## [v5.0.2] - 2020-03-13
 - Tweak TravisCI config
 - Drop using global helpers
@@ -102,6 +105,8 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v1.0.0 - 2016-06-18
 - Tag first release
 
+[v6.0.0]: https://github.com/rinvex/laravel-repositories/compare/v5.0.2...v6.0.0
+[v5.0.2]: https://github.com/rinvex/laravel-repositories/compare/v5.0.1...v5.0.2
 [v5.0.1]: https://github.com/rinvex/laravel-repositories/compare/v5.0.0...v5.0.1
 [v5.0.0]: https://github.com/rinvex/laravel-repositories/compare/v4.1.0...v5.0.0
 [v4.1.0]: https://github.com/rinvex/laravel-repositories/compare/v4.0.0...v4.1.0
