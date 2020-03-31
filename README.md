@@ -6,7 +6,6 @@
 
 [![Packagist](https://img.shields.io/packagist/v/rinvex/laravel-repositories.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/laravel-repositories)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/laravel-repositories.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/laravel-repositories/)
-[![Code Climate](https://img.shields.io/codeclimate/github/rinvex/laravel-repositories.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/laravel-repositories)
 [![Travis](https://img.shields.io/travis/rinvex/laravel-repositories.svg?label=TravisCI&style=flat-square)](https://travis-ci.org/rinvex/laravel-repositories)
 [![StyleCI](https://styleci.io/repos/61269204/shield)](https://styleci.io/repos/61269204)
 [![License](https://img.shields.io/packagist/l/rinvex/laravel-repositories.svg?label=License&style=flat-square)](https://github.com/rinvex/laravel-repositories/blob/develop/LICENSE)
@@ -903,4 +902,4 @@ Rinvex is a software solutions startup, specialized in integrated enterprise sol
 
 This software is released under [The MIT License (MIT)](LICENSE).
 
-(c) 2016-2019 Rinvex LLC, Some rights reserved.
+(c) 2016-2020 Rinvex LLC, Some rights reserved.

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Repository\Repositories;
 
+use Illuminate\Support\Arr;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Rinvex\Repository\Exceptions\RepositoryException;
@@ -200,7 +201,7 @@ class EloquentRepository extends BaseRepository
         // Extract relationships
         if ($syncRelations) {
             $relations = $this->extractRelations($entity, $attributes);
-            array_forget($attributes, array_keys($relations));
+            Arr::forget($attributes, array_keys($relations));
         }
 
         // Fill instance with data
@@ -238,7 +239,7 @@ class EloquentRepository extends BaseRepository
             // Extract relationships
             if ($syncRelations) {
                 $relations = $this->extractRelations($entity, $attributes);
-                array_forget($attributes, array_keys($relations));
+                Arr::forget($attributes, array_keys($relations));
             }
 
             // Fill instance with data
