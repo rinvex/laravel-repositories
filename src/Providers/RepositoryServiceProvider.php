@@ -6,9 +6,12 @@ namespace Rinvex\Repository\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Rinvex\Repository\Listeners\RepositoryEventListener;
+use Rinvex\Support\Traits\ConsoleTools;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
+    use ConsoleTools;
+
     /**
      * The repository alias pattern.
      *
@@ -33,10 +36,8 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
-            // Publish config
-            $this->publishes([realpath(__DIR__.'/../../config/config.php') => config_path('rinvex.repository.php')], 'rinvex-repository-config');
-        }
+        // Publish config
+        $this->publishesConfig('rinvex/repositories');
 
         // Subscribe the registered event listener
         $this->app['events']->subscribe('rinvex.repository.listener');
