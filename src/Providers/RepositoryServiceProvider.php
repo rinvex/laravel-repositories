@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rinvex\Repository\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Rinvex\Repository\Listeners\RepositoryEventListener;
 use Rinvex\Support\Traits\ConsoleTools;
+use Rinvex\Repository\Listeners\RepositoryEventListener;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
