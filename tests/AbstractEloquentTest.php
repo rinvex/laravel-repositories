@@ -68,17 +68,17 @@ abstract class AbstractEloquentTests extends TestCase
     protected function migrate()
     {
         $this->schema()->create('users', function ($table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('name')->nullable();
             $table->string('email');
-            $table->bigInteger('age');
+            $table->integer('age');
             $table->timestamps();
         });
 
         $this->schema()->create('posts', function ($table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->bigInteger('parent_id')->nullable();
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->integer('parent_id')->nullable();
             $table->string('name');
             $table->timestamps();
         });
