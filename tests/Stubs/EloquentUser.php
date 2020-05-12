@@ -12,6 +12,6 @@ class EloquentUser extends \Illuminate\Database\Eloquent\Model
 
     public function posts()
     {
-        return $this->hasMany(EloquentPost::class, 'user_id');
+        return $this->hasMany(EloquentPost::class, 'user_id', 'id');
     }
 }

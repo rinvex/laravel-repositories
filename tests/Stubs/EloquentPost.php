@@ -12,6 +12,6 @@ class EloquentPost extends \Illuminate\Database\Eloquent\Model
 
     public function user()
     {
-        $this->belongsTo(EloquentUser::class);
+        $this->belongsTo(EloquentUser::class, 'user_id', 'id', 'user');
     }
 }
