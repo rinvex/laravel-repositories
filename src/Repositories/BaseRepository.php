@@ -216,8 +216,10 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
         }
 
         // Add a "scope" to the query
-        foreach ($this->scopes as $scope => $parameters) {
-            $model = $model->{$scope}(...$parameters);
+        foreach ($this->scopes as $name => $scopes) {
+            foreach ($scopes as $parameters) {
+                $model = $model->{$name}(...$parameters);
+            }
         }
 
         // Set the "offset" value of the query
@@ -396,7 +398,7 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
      */
     public function scope($name, array $parameters = [])
     {
-        $this->scopes[$name] = $parameters;
+        $this->scopes[$name][] = $parameters;
 
         return $this;
     }
