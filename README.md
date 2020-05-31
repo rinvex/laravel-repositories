@@ -2,7 +2,7 @@
 
 ⚠️ **This package is abandoned and no longer maintained. No replacement package was suggested.** ⚠️
 
-👉 [Contact me if you are interested in maintaining it!](https://github.com/rinvex/laravel-repositories/issues/156)
+👉 [Contact me if you are interested in maintaining it!](https://twitter.com/Omranic)
 
 
 ![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.diagram.png)
