@@ -1,5 +1,10 @@
 # Rinvex Repository
 
+⚠️ **This package is abandoned and no longer maintained. No replacement package was suggested.** ⚠️
+
+👉 [Contact me if you are interested in maintaining it!](https://github.com/rinvex/laravel-repositories/issues/156)
+
+
 ![Rinvex Repository Diagram](https://rinvex.com/assets/frontend/layout/img/products/rinvex.repository.v2.diagram.png)
 
 **Rinvex Repository** is a simple, intuitive, and smart implementation of Active Repository with extremely flexible & granular caching system for Laravel, used to abstract the data layer, making applications more flexible to maintain.
@@ -12,9 +17,6 @@
 
 
 💡 If you are looking for **Laravel 5.5** support, use the `dev-develop` branch. It's stable but not tagged yet since test suites isn't complete. 💡
-
-
-⚠️ [This package is looking for new maintainer, read details or takeover if interested!](https://github.com/rinvex/laravel-repositories/issues/156) ⚠️
 
 
 ## Features
