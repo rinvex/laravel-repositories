@@ -135,7 +135,13 @@ abstract class BaseRepository implements RepositoryContract, CacheableContract
 
         // Check if cache is enabled
         if ($this->getCacheLifetime() && ! $this->getContainer('request')->has($skipUri)) {
-            return $this->cacheCallback($class, $method, $args, $closure);
+            //call closure when redis throw a throwable
+            try {
+                $result = $this->cacheCallback($class, $method, $args, $closure);
+            } catch (\Throwable $throwable){
+                $result = call_user_func($closure);
+            }
+            return $result;
         }
 
         // Cache disabled, just execute query & return result
