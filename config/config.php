@@ -74,6 +74,24 @@ return [
             'delete',
         ],
 
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Cache driver
+        |--------------------------------------------------------------------------
+        |
+        | Here you may specify the cache driver that you wish the cache
+        | to user.
+        |
+        | Default: array
+        |
+        */
+
+
+
+        'driver' => env('CACHE_DRIVER', 'array'),
+
         /*
         |--------------------------------------------------------------------------
         | Cache Skipping URI
